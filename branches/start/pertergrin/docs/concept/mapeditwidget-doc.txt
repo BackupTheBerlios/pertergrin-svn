@@ -1,0 +1,763 @@
+
+               File: mapeditclass.doc
+        Description: MapEditClass widget documentation.
+          Copyright: (C) Copyright 1996-2001 Reinhard Katzmann.
+            Authors: Reinhard Katzmann <suamor@gmx.net>
+            License: GPL
+
+    This program and it's documentation is free software; you can 
+    redistribute it and/or modify it under the terms of the GNU General
+    Public License as published by the Free Software Foundation; either 
+    version 2 of the License,  or (at your option) any later version. 
+    You should have received a copy of the GNU General Public License
+    along with this program. If not contact one the AUTHORS.
+
+------------------------------------------------------------------------------
+
+TABLE OF CONTENTS
+
+mapeditclass/--background--
+mapeditclass/MAP_GetXYPiece
+mapeditclass/MAP_Clear
+mapeditclass/MAP_Set
+mapeditclass/MAP_Fill
+mapeditclass/MAP_Undo
+mapeditclass/MAP_Delete
+mapeditclass/MAPEDIT_MapPieces
+mapeditclass/MAPEDIT_PWidth
+mapeditclass/MAPEDIT_PLength
+mapeditclass/MAPEDIT_Default
+mapeditclass/MAPEDIT_NoCopy
+mapeditclass/MAPEDIT_Map
+mapeditclass/MAPEDIT_MapWidth
+mapeditclass/MAPEDIT_MapLength
+mapeditclass/MAPEDIT_MapLayer
+mapeditclass/MAPEDIT_GetPieces
+mapeditclass/MAPEDIT_Frame
+mapeditclass/MAPEDIT_FrameSpace
+mapeditclass/MAPEDIT_CurrPiece
+mapeditclass/MAPEDIT_Grid
+mapeditclass/MAPEDIT_GridPen
+mapeditclass/MAPEDIT_SelectX
+mapeditclass/MAPEDIT_SelectY
+mapeditclass/MAPEDIT_SelectL
+mapeditclass/MAPEDIT_BoxWidth
+mapeditclass/MAPEDIT_BoxHeight
+mapeditclass/MAPEDIT_ScaleWidth
+mapeditclass/MAPEDIT_ScaleHeight
+
+mapeditclass/--background--                        mapeditclass/--background--
+
+    NAME
+    Class:          magnifyclass
+    Superclass:     gtkwidget
+    Include File:   "mapeditclass.h"
+
+    FUNCTION
+    To provide  you  with a  Map(Edit) widget which uses a pixbuf for its
+    map pieces and an array for the map itself (i.e. qudrangular). The
+    map itself is not stored as pixbuf but with numbers which have to
+    correspond the map pieces (uncompressed). Every number corresponds a
+    structure which can be easily expanded by the program using the class.
+    The pixbuf has to be provided by the application. The map pieces are
+    numbered from left upper to right lower. The Map (i.e. the 2D Array)
+    is based on these numbers.
+
+    This class requires GTK+-1.2.8 or later for operation. I haven't
+    tested it with GTK+-1.3.x (aka GTK2) up to now.
+
+    Objects  from  this  class  send  out  the  following  attribute pairs
+    in their notification messages (gtk_signal_emit_by_name):
+
+    MAPEDIT_CurrPiece     - The currently selected map piece (see below)
+    MAPEDIT_Map           - The map in its current state
+    MAPEDIT_SelectX       - The current X-Position of the Map
+    MAPEDIT_SelectY       - The current Y-Position of the Map
+    MAPEDIT_SelectL       - The currently selected map layer
+
+    MAPEDIT_CurrPiece is a structure defined like this:
+
+    struct MapPiece
+    {
+        ULONG           mp_Number;        /* Number of map piece */
+        UWORD           mp_PixbufNumber;  /* The pixbuf number of this map piece */
+        COORD           mp_Coordinates;   /* Coordinates of the map piece inside map */
+        COORD           mp_PBCoord;       /* Coordinates of the map piece inside Pixbuf */
+	COORD		mp_PieceSize;     /* Size of this pieece in column/row number */
+        size_t          mp_Size;          /* Size of the MapPiece structure */
+        BOOL            mm_Copy;          /* Is this a map copy or not ? */
+        void           *mp_User;          /* User extensions to this structure */
+    } sMapPiece;
+
+    If mp_Size is set to 0, the class uses the standard sizeof(struct MapPiece) size.
+    Except mp_User all other values are ignored and should be treated as read-only.
+
+    MAPEDIT_Map is a structure defined like this:
+
+    struct MCMap
+    {
+        ULONG            *mm_Columns;       /* Columns store all the rows */
+        struct MapPiece  *mm_Rows;          /* Rows store the map pieces itself */
+        COORD             mm_MapSize;       /* Size of the map (width, height, layers) */
+        size_t            mm_Size;          /* Size of the MCMap structure */
+        void             *mm_User;          /* User extensions to this structure */
+        struct MCMap     *mm_NextLayer;     /* Pointer to next layer if any */
+    } sMCMap;
+
+    If the class allocates its own map, the default values of mm_Columns and
+    mm_Rows are defined by the MAPEDIT_Default values. If mp_Size is set to 0,
+    the class uses the standard sizeof(struct MapPiece) size. If the map contains
+    several layers mm_NextLayer points to them (like a linked list).
+
+    Coordinates (MAPEDIT\_Select?) of the map are defined like this:
+
+    struct {
+        UWORD x;
+        UWORD y;
+        UBYTE l;
+    } COORD;
+
+    x and y are width and length (in tiles) and l is the layer of the map piece.
+
+    NOTE
+    This class is provided as source code. To make use of this class you
+    have to compile it into an object module and link it with your main
+    program. Alternatively you may use the shared library version of the
+    class. I don't provide include files other than for C up to now.
+    You are free to convert the include files for any language and send
+    it to me if it should be distributed with the next update of the class.
+
+mapeditclass/MAP_GetXYPiece                        mapeditclass/MAP_GetXYPiece
+
+
+    NAME
+    MAP_GetXYPiece -- Get map piece number from Map position
+
+    SYNOPSIS
+    (old/BGUI style: err = DoMethod( obj, MAP_GetXYPiece, win, Xpos, Ypos, LayerNum, PieceNum );)
+    gtk_signal_emitv_by_name (GTK_OBJECT (mapedit), MAP_Set, GtkArg *params);
+
+    FUNCTION
+    To get the map piece number from a Map position (and Layer if
+    map has additional layers). Usually you will won't need to call
+    this method directly if you want to keep track changes of the
+    map. This can be esier done with notification messages.
+
+    PARAMETERS
+
+    UWORD, "Xpos"             \\ X position in the Map (-1 = last position)
+    UWORD, "Ypos"             \\ Y position in the Map (-1 = last position)
+    UBYTE, "LayerNum"         \\ the layer number of the map
+    struct MapPiece *, "PieceNum"  \\ Pointer to a struct MapPiece.
+                                   \\ Result will be stored here.
+
+    RESULTS
+    err - Any of the following errors:
+
+        MAPERR_NoLayer - map has no additional layers. Usually you can
+                         ignore this error (you get the correct number).
+
+        MAPERR_OutOfBounds - the coordinate pair you have specified is not
+                             within the range of the map.
+
+        MAPERR_UnknownLayer - the layer number was higher than the maximum
+                              layer numbers specified at startup.
+
+        MAPERR_Ok           - No problems appeared.
+
+    SEE ALSO
+    MAPEDIT_SelectX/Y, MAPEDIT_SelectL, MAPEDIT_CurrPiece, MAPEDIT_Map
+
+mapeditclass/MAP_Clear                                  mapeditclass/MAP_Clear
+
+    NAME
+    MAP_Clear -- Clear the map
+
+    SYNOPSIS
+    (old/BGUI style: DoGadgetMethod(obj,win,req,MAP_Clear);)
+    gtk_signal_emit_by_name (GTK_OBJECT (mapedit), MAP_Clear);
+
+    FUNCTION
+    Fills the map with the default value (which may be specified by
+    MAPEDIT_Default at startup). Only an immediate MAP_Undo gets
+    back the deleted map.
+
+    RESULTS
+    None
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_Default, MAP_Undo, gtk_signal_emit_by_name
+
+mapeditclass/MAP_Delete                                  mapeditclass/MAP_Delete
+
+    NAME
+    MAP_Delete -- Delete the map
+
+    SYNOPSIS
+    (old/BGUI style: DoGadgetMethod(obj,win,req,MAP_Delete);)
+    gtk_signal_emit_by_name (GTK_OBJECT (mapedit), MAP_Delete);
+
+    FUNCTION
+    Delete the map from memory if it was allocated by the MapEditClass Objekt.
+    Set the pointer to the map to NULL if the map should not be copied by
+    the class. This function must (!!) be called before disposing the class
+    when you allocate and free a map by your own. See testmapeditclass.c
+    for an example how to do this.
+
+    RESULTS
+    None
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_Default, MAP_Undo, gtk_signal_emit_by_name
+
+mapeditclass/MAP_Set                                      mapeditclass/MAP_Set
+
+    NAME
+    MAP_Set -- Set one map piece in the map
+
+    SYNOPSIS
+    (old/BGUI style: err=DoGadgetMethod(obj,win,req,MAP_Set,win,XPos,YPos,LayerNum);)
+    gtk_signal_emitv_by_name (GTK_OBJECT (mapedit), MAP_Set, GtkArg *params);
+
+    PARAMETERS
+    UWORD, "Xpos" // -1: Use last selected X-position
+    UWORD, "Ypos" // -1: Use last selected Y-position
+    UBYTE, "LayerNum"
+
+    FUNCTION
+    To set the specified map coordinate with the map piece specified by the
+    attribute MAPEDIT_CurrPiece.
+    This method equals setting of map pieces with the left mouse button.
+    Only an immediate MAP_Undo gets back the overwritten map part.
+
+    RESULTS
+    err - Any of the following errors:
+
+        MAPERR_NoLayer - map has no additional layers. Usually you can
+                         ignore this error (layer 0 is filled instead).
+
+        MAPERR_OutOfBounds - the coordinate pair added by Width or Length
+                             is not inside the range of the map.
+
+        MAPERR_UnknownLayer - the layer number was higher than the maximum
+                              layer numbers specified at startup.
+
+        MAPERR_Ok           - No problems appeared.
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_Default, MAP_Undo, MAPEDIT_SelectX/Y,
+    MAPEDIT_SelectL, MAPEDIT_CurrPiece, gtk_signal_emitv_by_name
+
+mapeditclass/MAP_Fill                                    mapeditclass/MAP_Fill
+
+    NAME
+    MAP_FILL -- Fill map section
+
+    SYNOPSIS
+    (old/BGUI style: err=DoGadgetMethod(obj,win,req,MAP_Fill,XPos,YPos,LayerNum,Width,Length);)
+    gtk_signal_emitv_by_name (GTK_OBJECT (mapedit), MAP_Set, GtkArg *params);
+
+    PARAMETERS
+    UWORD, "Xpos" // -1: Use last selected X-position
+    UWORD, "Ypos" // -1: Use last selected Y-position
+    UBYTE, "LayerNum"
+    UWORD, "Width   // -1 means whole Width
+    UWORD, "Length" // -1 means whole Length
+
+    FUNCTION
+    To fill the specified map section with the map piece specified by the
+    attribute MAPEDIT_CurrPiece. 
+    This method should be directly supported inside the class somehow
+    (f.e. using shift or ctrl key + left mouse button for a range).
+    Only an immediate MAP_Undo gets back the overwritten map part.
+
+    RESULTS
+    err - Any of the following errors:
+
+        MAPERR_NoLayer - map has no additional layers. Usually you can
+                         ignore this error (layer 0 is filled instead).
+
+        MAPERR_OutOfBounds - the coordinate pair added by Width or Length
+                             is not inside the range of the map.
+
+        MAPERR_UnknownLayer - the layer number was higher than the maximum
+                              layer numbers specified at startup.
+
+        MAPERR_Ok           - No problems appeared.
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_Default, MAP_Undo, MAPEDIT_SelectX/Y,
+    MAPEDIT_SelectL, MAPEDIT_CurrPiece, DoGadgetMethodA
+
+mapeditclass/MAP_Undo                                    mapeditclass/MAP_Undo
+
+    NAME
+    MAP_Undo -- Undo Operation
+
+    SYNOPSIS
+    (old/BGUI style: err=DoMethod(obj, MAP_Undo);)
+    gtk_signal_emit_by_name (GTK_OBJECT (mapedit), MAP_Undo);
+
+    FUNCTION
+    Undo's the last "paint" operation (similar to pressing the right mouse
+    button while "painting"). Only one undo step is supported. Undoing
+    twice restores the "paint" operation.
+
+    RESULT
+    err - Any of the following errors:
+
+        MAPERR_NoChange     - Nothing has changed in the map
+
+        MAPERR_Ok           - No problems appeared.
+
+    SEE ALSO
+    MAPEDIT_Map
+
+mapeditclass/MAPEDIT_MapPieces                   mapeditclass/MAPEDIT_MapPieces
+
+
+    NAME
+    MAPEDIT_MapPieces -- ( GdkPixbuf * )
+
+    FUNCTION
+    Set the pixbuf for the map pieces. The pixbuf consists of quadrangular
+    map pieces which all have the same width and height (that doesn't mean
+    width and height must be the same!). No space may be between the map
+    pieces. The program assumes that the left upper map piece has number 0
+    and the right lower map piece has number (columns-1)*(rows-1). The pixbuf
+    should not be wider (longer) than x*rows (y*columns), where x (y) is
+    the width (Length) of one Map Piece specified by md_PWidth (md_PLength).
+
+    APPLICABILITY
+    (I).
+
+    NOTE
+    You must set this attribute at startup
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_PWidth, MAPEDIT_PHeight
+
+mapeditclass/MAPEDIT_PWidth                         mapeditclass/MAPEDIT_PWidth
+
+    NAME
+    MAPEDIT_PWidth -- ( UWORD )
+
+    FUNCTION
+    Set the width of one map piece.
+
+    APPLICABILITY
+    (I).
+
+    NOTE
+    You must set this attribute at startup
+
+    SEE ALSO
+    MAPEDIT_MapPieces
+
+mapeditclass/MAPEDIT_PLength                      mapeditclass/MAPEDIT_PLength
+
+    NAME
+    MAPEDIT_PLength -- ( UWORD )
+
+    FUNCTION
+    Set the length of one map piece.
+
+    APPLICABILITY
+    (I).
+
+    NOTE
+    You must set this attribute at startup
+
+    SEE ALSO
+    MAPEDIT_MapPieces
+
+mapeditclass/MAPEDIT_Default                      mapeditclass/MAPEDIT_Default
+
+    NAME
+    MAPEDIT_Default -- ( struct MapPiece * )
+
+    FUNCTION
+    Map piece number which is used to fill the map when creating it.
+    Also used for clearing the whole map. Structure is not copied
+    but only the pointer. If you set mp_Number of the structure to
+    a value different from 0 the class will only only use the first
+    mp_Number pieces for the Map, else it calculates the number from
+    the size of the Pixbuf and MAPEDIT_PWidth/MAPEDIT_PLength attributes.
+    You have to specify mp_PixbufNumber (even if you only set it to 0).
+    The Initialization will fail if this number is greater than mp_Number.
+
+    APPLICBILITY
+    (I).
+
+    NOTE
+    You must set this attribute at startup.
+
+    SEE ALSO
+    MAPEDIT_Map, MAP_Clear, MAPEDIT_PWidth, MAPEDIT_PLength
+
+mapeditclass/MAPEDIT_NoCopy                        mapeditclass/MAPEDIT_NoCopy
+
+    NAME
+    MAPEDIT_NoCopy -- ( BOOL )
+
+    FUNCTION
+    By default, the class copies the pixbuf of the map pieces and operates
+    only with it's copy (though it does not make changes to it). If you
+    want to avoid this extra copy, specify this attribute, but be sure to
+    not release the pixbuf before the class is disposed.
+
+    APPLICABIKITY
+    (I),
+
+    DEFAULT
+    FALSE
+
+    SEE ALSO
+    MAPEDIT_MapPieces
+
+mapeditclass/MAPEDIT_Map                              mapeditclass/MAPEDIT_Map
+
+    NAME
+    MAPEDIT_Map -- ( struct MCMap * )
+
+    FUNCTION
+    The map itself. As explained in the background it consist of an array
+    potentially supported by layers. If you want to initialize or set a map,
+    you give a pointer to your map array. The map size is specified by the
+    attributes MAPEDIT_MapWidth*MAPEDIT_MapLength[*MAPEDIT_SelectL] and
+    allocated by the program in the same way (thus fixed). The class copies
+    the whole map into it's own data structure and also copies it back into
+    your memory block (which your program has to allocate for itself). The
+    class checks for NULL-pointers and truncates larger maps automatically,
+    if and only if the last element of your map array is NULL, else it uses
+    the full width/height/Layer. The whole map is stored like this:
+      Layer 1
+        Line 1 (MAPEDIT_MapWidth unsigned words)
+        Line 2
+        .
+        .
+        Line n (MAPEDIT_MapLength lines)
+      Layer 2
+        Line 1
+        .
+       .
+      .
+      Layer n (MAPEDIT_SelectL layers)
+
+    If you did not specify a map on initialization the class makes a copy of
+    your map you specify with this attribute, else it just copies the pointer.
+    Important: If you do not let copy the map by the class you must call the
+               MAP_Delete method before disposing the class.
+
+    APPLICABIKITY
+    (ISGNU),
+
+    DEFAULT
+    map allocated with MEMF_CLEAR.
+
+    SEE ALSO
+    MAPEDIT_Width, MAPEDIT_Length, MAPEDIT_SelectX/Y, MAPEDIT_SelectL
+
+mapeditclass/MAPEDIT_MapWidth                    mapeditclass/MAPEDIT_MapWidth
+
+    NAME
+    MAPEDIT_MapWidth -- ( UWORD )
+
+    FUNCTION
+    To set the Width of the map itself at startup.
+
+    APPLICABILITY
+    (IG).
+
+    NOTE
+    You must set this attribute at startup.
+
+    SEE ALSO
+    MAPEDIT_Map
+
+mapeditclass/MAPEDIT_MapLength                  mapeditclass/MAPEDIT_MapLength
+
+    NAME
+    MAPEDIT_MapLength -- ( UWORD )
+
+    FUNCTION
+    To set the Length of the map itself at startup.
+
+    APPLICABILITY
+    (IG).
+
+    NOTE
+    You must set this attribute at startup.
+
+    SEE ALSO
+    MAPEDIT_Map
+
+mapeditclass/MAPEDIT_MapLayer                    mapeditclass/MAPEDIT_MapLayer
+
+    NAME
+    MAPEDIT_MapLayer -- ( UBYTE )
+
+    FUNCTION
+    To set the number of Layers of the map itself at startup (if any)
+
+    APPLICABILITY
+    (IG).
+
+    DEFAULT
+    0
+
+    NOTE
+    You must set this attribute at startup if you want to use layers.
+
+    SEE ALSO
+    MAPEDIT_Map
+
+mapeditclass/MAPEDIT_GetPieces                  mapeditclass/MAPEDIT_GetPieces
+
+    NAME
+    MAPEDIT_GetPieces -- ( BOOL )
+
+    FUNCTION
+    To prevent the user to set Map Pieces in the map using the mouse. This
+    function may be useful when you want to have a select-only "MAP". If you
+    set MAPEDIT_Frame, this frame is drawn around the map pieces.
+
+    APPLICABILITY
+    (I).
+
+    DEFAULT
+    FALSE
+
+    NOTE
+    You must set this attribute at startup if want to use it.
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_Frame, MAPEDIT_FrameSpace
+
+mapeditclass/MAPEDIT_Frame                          mapeditclass/MAPEDIT_Frame
+
+    NAME
+    MAPEDIT_Frame -- ( Object * )
+
+    FUNCTION
+    To draw a frame around each of the map pieces when MAPEDIT_GetPieces is set.
+    This must be an object derived from the BGUI frameclass. Also spacing of the
+    "group" is used when a frame is set (and only if you set a frame). When the
+    user presses on a map piece it's frame is toggled.
+
+    APPLICABILITY
+    (I).
+
+    DEFAULT
+    NULL (no frame)
+
+    NOTE
+    You must set this attribute at startup if want to use it.
+
+    SEE ALSO
+    MAPEDIT_GetPieces, MAPEDIT_FrameSpace
+
+mapeditclass/MAPEDIT_FrameSpace                mapeditclass/MAPEDIT_FrameSpace
+
+    NAME
+    MAPEDIT_FrameSpace -- ( UBYTE )
+
+    FUNCTION
+    To add additional space between framed map pieces (in pixels)
+
+    APPLICABILITY
+    (I)
+
+    DEFAULT
+    0
+
+    SEE ALSO
+    MAPEDIT_Frame. MAPEDIT_GetPieces
+
+
+mapeditclass/MAPEDIT_CurrPiece                  mapeditclass/MAPEDIT_CurrPiece
+
+    NAME
+    MAPEDIT_CurrPiece -- ( struct MapPiece * )
+
+    FUNCTION
+    To set or get (or notify) the number of map piece which should be used
+    for the next "paint" operation (such as a simple set, a fill of a region).
+    Especially useful if you want to automatically update the number set
+    when the user selects a piece from a "list object" of map pieces.
+
+    APPLICABILITY
+    (ISGNU)
+
+    SEE ALSO
+    MAPEDIT_MapPieces
+
+mapeditclass/MAPEDIT_Grid                            mapeditclass/MAPEDIT_Grid
+
+    NAME
+    MAPEDIT_Grid -- ( BOOL )
+
+    FUNCTION
+    To set or remove a grid for the map. The width and height of a grid
+    square depends to the width and length of the map pieces. Currently it
+    is not possible to change the width of the frame around a square. It
+    uses the color set by MAPEDIT_GridPen. You can not set this Attribute
+    when MAPEDIT-GetPieces is set.
+
+    APPLICABILITY
+    (ISGNU)
+
+    DEFAULT
+    FALSE
+
+    SEE ALSO
+    MAPEDIT_MapPieces, MAPEDIT_PWidth/Length, MAPEDIT_GridPen
+
+mapeditclass/MAPEDIT_GridPen                      mapeditclass/MAPEDIT_GridPen
+
+    NAME
+    MAPEDIT_GridPen -- ( UBYTE )
+
+    FUNCTION
+    To set the Pen color of the grid. This only works if MAPEDIT_Grid is set
+    to TRUE.
+
+    WARNING
+    24 Bit Palettes or HAM Mode are not supported by this class directly.
+
+    APPLICABILITY
+    (ISGNU)
+
+    DEFAULT
+    0
+
+    SEE ALSO
+    MAPEDIT_Grid
+
+mapeditclass/MAPEDIT_SelectX                      mapeditclass/MAPEDIT_SelectX
+
+    NAME
+    MAPEDIT_SelectX -- ( UWORD )
+
+    FUNCTION
+    To set the current X coordinate of the map (i.e. map coordinates, not absolute
+    values!!) at which the map piece(s) is/are drawn or to get it. The value must
+    not be larger than MAPEDIT_MapWidth.
+
+    APPLICABILITY
+    (ISGNU)
+
+    DEFAULT
+    0
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_MapWidth
+
+mapeditclass/MAPEDIT_SelectY                      mapeditclass/MAPEDIT_SelectY
+
+    NAME
+    MAPEDIT_SelectY -- ( UWORD )
+
+    FUNCTION
+    To set the current Y coordinate of the map (i.e. map coordinates, not absolute
+    values!!) at which the map piece(s) is/are drawn or to get it. The value must
+    not be larger than MAPEDIT_MapLength.
+
+    APPLICABILITY
+    (ISGNU)
+
+    DEFAULT
+    0
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_MapLength
+
+mapeditclass/MAPEDIT_SelectL                      mapeditclass/MAPEDIT_SelectL
+
+    NAME
+    MAPEDIT_SelectL -- ( BOOL )
+
+    FUNCTION
+    To set the current Layer or to get it. The value must not be larger than
+    MAPEDIT_MapLayer.
+
+    APPLICABILITY
+    (ISGNU)
+
+    DEFAULT
+    0
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_MapLayer
+
+mapeditclass/MAPEDIT_BoxWidth                    mapeditclass/MAPEDIT_BoxWidth
+
+    NAME
+    MAPEDIT_BoxWidth -- ( UWORD )
+
+    FUNCTION
+    To notify when the width size of the magnify object changes. This usually
+    only happens when the window is resized. Useful when you make a map
+    combining a scroller and one these attributes.
+
+    APPLICABILITY
+    (N)
+
+    SEE ALSO
+    baseclass/OM_NOTIFY, baseclass/BASE_ADDMAP
+mapeditclass/MAPEDIT_BoxHeight                  mapeditclass/MAPEDIT_BoxHeight
+
+    NAME
+    MAPEDIT_BoxHeight -- ( UWORD )
+
+    FUNCTION
+    To notify when the height size of the magnify object changes. This usually
+    only happens when the window is resized. Useful when you make a map
+    combining a scroller and one these attributes.
+
+    APPLICABILITY
+    (N)
+
+    SEE ALSO
+    baseclass/OM_NOTIFY, baseclass/BASE_ADDMAP
+
+mapeditclass/MAPEDIT_ScaleWidth                mapeditclass/MAPEDIT_ScaleWidth
+
+    NAME
+    MAPEDIT_ScaleWidth -- ( UBYTE )
+
+    FUNCTION
+    To set the miminum width dimension to the width of the map. This is a per
+    cent value (0..100) of the width of the map, so you can exactly specify
+    specify which percentage of the map you want to view. A value of 100 means
+    that the whole map is shown in the object you have specified.
+
+    APPLICABILITY
+    (I)
+
+    DEFAULT
+    0, i.e. one pixel on the map is also one pixel on the screen.
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_MapWidth
+
+mapeditclass/MAPEDIT_ScaleHeight              mapeditclass/MAPEDIT_ScaleHeight
+
+    NAME
+    MAPEDIT_ScaleHeight -- ( UBYTE )
+
+    FUNCTION
+    To set the miminum height dimension to the height of the map. This is a per
+    cent value (0..100) of the length of the map, so you can exactly specify
+    specify which percentage of the map you want to view. A value of 100 means
+    that the whole map is shown in the object you have specified.
+
+    APPLICABILITY
+    (I)
+
+    DEFAULT
+    0, i.e. one pixel on the map is also one pixel on the screen.
+
+    SEE ALSO
+    MAPEDIT_Map, MAPEDIT_MapLength
+

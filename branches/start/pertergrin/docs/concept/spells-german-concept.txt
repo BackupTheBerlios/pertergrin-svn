@@ -1,0 +1,321 @@
+            Zauber/Gläubigersprüche
+            -----------------------
+
+Um eine möglichst große Flexibilität zu haben, werden alle Sprüche,
+die ich im Originalkonzept eingabaut habe analysiert nach den Basis-
+elementen, die sie beeinflußen. Ich werde die Elemente, wie sie uns
+bekannt sind (Feuer, Wasser, Erde, Luft) als Basis nehmen, aber mit
+anderen Namen versehen, die passender sind für die Magiewissenschaft.
+
+Basiselemente
+-------------
+Materie: Eigtl. Erde. Alles, was in festem Zustand ist (chemisch
+         gesehen).
+
+Flüssigkeit: Eigtl. Wasser. Alles, was in flüssigem Zustand ist.
+
+Gas: Eigtl. Luft. Alles, was im gasförmigen Zustand ist.
+
+Energie: Eigtl. Feuer. Alles, was sich zum Ändern der Zustände
+         eignet (Feuer, Licht, Wärme, Kälte, Bewegung, Leben).
+
+
+Jeder Spruch beeinflußt mindestens zwei der Basiselemente: Energie
+und einen der Zustände. Da Energie ein sehr komplexes Basiselement
+ist, wird dieses als erstes in verschiedene Kategorien eingeteilt:
+
+Wärme: Energie wird zum erwärmen/erhitzen verwendet. Auch Feuer
+       gehört in diese Kategorie (z.B. Feuerball).
+
+Kälte: Umkehrprozess, Energie wird abgezogen: Abkühlen, einfrieren.
+       Bsp: Schneeball, Eisblöcke.
+
+Anmerkung: Die abgezogene Energie kann normalerweise nicht wieder ver-
+           wendet werden (es soll aber Wärmeenergieabsorptionswesen geben).
+
+
+Licht: Energie zum Erhellen oder Blenden. Auch geeignet zum Sehen von
+       normalerweise nicht sichtbaren Dingen.
+
+Dunkelheit: Umkehrprozess, setzt keine Energie frei.
+
+Anmerkung: Da auch die Wärmeenergie Licht erzeugt (für Menschen nicht
+           immer wahrnehmbar), ist dies eine rein magische Lichtquelle,
+           die keine Wärme erzeugt.
+
+
+Kinetik: Alles, was Bewegungsabläufe beschleunigt, z.B. Telekinese, 
+         Geh/Reitgeschwindigkeit.
+
+Inertie: Alles, was Bewegungsabläufe verlangsamt, z.B. Kampfgeschwindig-
+         keit.
+
+Anmerkung: Diese Energieform könnte auch auf den Zeitablauf einwirken.
+
+
+Leben: Alles, was das (Gefühls)Leben positiv beeinflußt. z.B. Heilung,
+       pos. Einfluß auf Attribute und Teile der besonderen Fähigkeiten.
+
+Tod: Alles, was das Leben negativ beeinflußt: z.B: Krankheit, Willens-
+     schwäche, Versklavung
+
+Anmerkung: Diese Energieform ist die mächtigste und am schwierigsten
+           beherschbare Energieform, die auch sehr stark den Charakter
+           (Gesinnung) des Zauberkundigen beeinflußen kann.
+
+
+Umwandlung: Alles, was sich durch Energie verformen läßt. Bsp: Wasser
+	    zu Wein, Blei zu Gold.
+
+Anmerkung: Diese Energieform hat ihre Umkehrform in sich selbst. Sie
+	   ist nicht beschränkt auf ein Zustandselement (oder mehrere),
+	   sondern kann auch aus Energie etwas umwandeln. Die Energie-
+	   form ist dann normalerweise Leben.
+
+
+Auch die Zustände müssen in Untergruppen eingeiteilt werden. Diese
+richten sich sehr stark nach den Dingen, die im Spiel vorhanden sind.
+Lebewesen (Menschen u.a. Rassen, Tiere, Pflanzen) sind dabei eine
+Mischform aus allen drei Zuständen.
+
+Materie: Erde, Stein, Metall (Schlösser, Waffen, Rüstung), Fell
+
+Flüssigkeit: Wasser, Honig
+
+Gas: Luft
+
+
+Gläubigersprüche
+----------------
+Im Gefecht gilt: Wird die Konzentration gestört, mißlingt der Spruch,
+aber ohne Abzug der AK. Eine Runde sind 20 Sp (Gefechtsspanne)
+Umkehrbare Sprüche verwenden normalerweise die ihr entgegengesetzte
+Energieform, im Spiel sollte der Spruch extra definiert werden.
+
+1) Wunden heilen:
+RW: Berührung; D: Permanent (P); W: Heilt LP=(AK+/-(50-St*2)%.
+KZ: 2 Sp (1/4); E: Leben (LP), Lebewesen (alle!); Probe: -
+Anmerkung: Je höher die Stufe, desto besser die Beherschung des
+           Spruches. Die abgezogenen AK sind diejenigen, die beim
+           Ergebnis herauskommen, nicht die eingesetzten. Maximal
+           jedoch die (noch) vorhandenen AKs
+2) Von Furcht erlösen
+RW: B/15 ps; D: p/15 R; W: macht Opfer mutig (1%/20%) ; K: 20AK/10AK
+KZ: 1Sp/1R (1/4); E: Leben (Mut), Lebewesen; P: 0/(40-St)%
+Anmerkung: Der Spruch ist umkehrbar, kostet aber doppelt soviel
+           AKs. Die permanente Version braucht pro Prozentpunkt 1 Runde!
+	   Bei Scheitern ist die Wirkung genau umgekehrt!
+3) Blindheit heilen
+RW: B; D: p; W: heilt Opfer von temp. Blindheit; K: 15AK
+KZ: 2Sp (1/4); E: Leben (Wahrnehmung), Lebewesen; P: 0
+Anmerkung: Der Spruch ist umkehrbar (25AK). Bei Scheitern der
+           Probe wird das Opfer erst nach 15 Runden wieder
+	   voll sehen können (langsam ansteigende Heilung).
+           (umgekehrt: langsam eintretende Blindheit).
+4) Licht
+RW: Wie Lampe; D: St*5 R; W: erschafft mag. Licht; K: 2 AK
+KZ: 1 Sp (1/4); E: Licht, Gas (Luft); P: -
+Anmerkung: Umkehrbar (4 AK), unter Wasser verdrängt das Licht
+	   einen Teil des Wassers
+5) Krankheiten beenden
+RW: B; D:p; W: heilt beliebige Krankheiten; K: (30AK-St)*KrankheitsStufe
+KZ: 1 R (10 Sp/5 R); E: Leben (Gesundheit), Lebewesen; P: -5%*KS
+Anmerkung: Umkehrbar (50AK-(St/2))*KS), KS liegt zwischen 1 und 30. Krankheiten
+           mit KS über 20 ist nicht mit alleiniger Wirkung des Spruchs
+	   heilbar sondern nur linderbar. Fehlschlag hat keine neg.
+           (bzw. positive) Wirkung. Bei KS<Wille des Opfers verläuft
+           die Krankheit nicht tödlich. Minimum Ak: 10 (neg: 20)
+6) Wasser erschaffen
+RW: 30m; D: p; W: erschafft Quelle bzw. kleinen See in 2 ps Entfernung
+K: 5 Ak; KZ: 1 R (10 Sp/4 R); E: Umwandlung (Leben), Flüssigkeit (Wasser); P: 0
+Anmerkung: Die Menge reicht aus, um eine Gruppe 1 Woche lang in der
+           Wüste mit Wasser zu versorgen. (Tiefe: knietief).
+7) Kälte abwehren
+RW: 15 Ps; D: 5 Sp*St; W: Wehrt Kälte im Umkreis v. 15 Ps ab; K: 10 Ak
+KZ: 2 Sp (1/4); E: Wärme, Luft oder Flüssigkeit (Kreis); P: 0
+Anmerkung: Umkehrbar (Kälteangriff) mit Schaden 10*St pro Opfer.
+	   In kalter Umgebung halbiert sich der Schaden, das das
+	   Opfer an Kälte gewöhnt ist und warme Kleidung trägt.
+	   In sehr heißer Umgebung kostet der Spruch 15 Ak
+8) Schlangenspruch
+RW: 5 Ps; D: 5 Sp; W: hält Schlangen zurück; K: 5Ak/Schlange
+KZ: 1 Sp (1/2); E: Inertia (Geschw: halt), Lebewesen (Schlange); P: -
+9) Feuerschutz
+RW: 15 Ps; D: 5 Sp*St; W: Wehrt Feuer im Umkreis von 15 Ps ab; K: 10 Ak
+KZ: 2 Sp (1/4); E: Kälte, Luft oder Flüssigkeit (Kreis); P: 0
+Anmerkung: Umkehrbar (Feuerball) mit Schaden 15*St pro Opfer.
+	   In sehr kalter Umgebung kostet der Spruch 15 Ak, in sehr heißer
+	   Umgebung 5 Ak, in sehr heißer Umgebung richtet der Spruch
+	   aber auch nur 10*St Schaden an, da das Opfer schon an stärkere
+	   Hitze gewöhnt ist.
+10) Nahrung erschaffen
+RW: 30 Ps; D: p; W: erschafft Nahrung aus bel. Materie; K: 1Ak/Unze
+KZ: 5 Sp (2/10); E: Umwandlung (Materie), Materie (Essen); P: 0
+Anmerkung: Dies ist ein Spruch, der einen Gegenstand benötigt!
+11) Segnen
+RW: 10 Ps; D: 5Sp*St; W: erhöht Mut+Geschick um 5% u. A/V-Chance; K: 5Ak
+KZ: 1 Sp (1/1); E: Leben (s.o.), Lebewesen (nur Rassen ?); P: +5%*St
+Anmerkung: Umkehrbar (verfluchen), Wirkung genau umgekehrt.
+12) Böse Lebewesen wahrnehmen
+RW: 100 g; D: 2 Sp; W: Gläubiger nimmt böse Lebensformen wahr; K: 10 Ak
+KZ: 1 Sp (1/1); E: Leben (Personen), Lebewesen; P: 0
+Anmerkung: Umkehrbar (Gutes + Neutrales wahrnehmen). Nur potientiell
+	   nützlich/gefährliche Lebensformen werden angezeigt (also kein
+	   Gras auf einer Wiese oder "tote" Bäume im Wald.)
+13) Tiersprache, Pflanzensprache
+RW: 30g; D: 5 R; W: Gläubiger versteht oben genannte Sprache; K: 15 Ak
+KZ: 2 Sp (1/4); E: Leben (Sprache), Lebewesen (k. Rassen); P: 0
+Anmerkung: Ähnliche Wirkung wie bei 12), also nur bei potentielll
+	   nützlichen/gefährlichen Lebensformen.
+14) Mit Toten reden
+RW: B; D: -; W: Gläubiger bekommt Infos von Toten; K: 35 Ak
+KZ: 4 Sp (2/8); E: Tod (Sprache), Lebewesen; P: -30+St
+Anmerkung: Die Informationen sind normalerweise die Todesursache
+	   und der (potentielle) Mörder, je nach Wunsch aber auch
+	   eingebaute Texte. Leichen verwesen nach 60 Runden.
+15) Stein in Fleisch verwandeln
+RW: B; D: p; W: Gläubiger verwandelt versteinerte Kreaturen; K: 50 Ak
+KZ: 4 Sp (2/8); E: Leben (Fleisch), Lebewesen; P: -30+St/2
+Anmerkung: In Stein verwandelte Lebensformen sterben normalerweise
+	   nach 1 Woche (Ausnahmen erlaubt). Sie sterben sofort, falls
+	   man deren Statuen zerstört (nach Ablauf der Wochenfrist
+	   zerfällt die Statue von selbst). Umkehrbar, Kosten: 100 Ak
+16) Ortsfinder
+RW: 0; D: 5 Sp+St; W: zeigt Ort und Richtung; K: 40Ak-St
+KZ: 2 Sp (1/4); E: Licht (Ort), Materie (Kompass); P: 0
+Anmerkung: Jeder Raum o.ä. hat einen Namen. Wenn dieser bekannt ist,
+	   kann man ihn mit Hilfe des Spruches ausfindig machen.
+	   Bei gleichen Namen wird der am nächsten liegende Ort
+	   aufgespürt. Der Spruch ist begrenzt auf die aktuelle
+	   Ebene eines Dungeon oder einer Stadt. Ist man in der
+	   Wildnis, so kann man keine Räume, sondern nur Städte,
+	   Gebiete oder Flüsse entdecken (jeder Wildnispunkt,
+	   der einen Namen bekommen hat).
+17) Zuflucht
+RW: 0; D: p; W: teleportiert Gläubiger an sicheren Ort; K: 50 Ak-St
+KZ: 2 Sp (1/4); E: Kinetik, Luft(Wasser); P: 0
+Anmerkung: Sichere Orte sind solche, wo es keine Zufallsbegegnung
+	   gibt und auch kein Monster vorbeiläuft (spezielle Markierung).
+	   Räume können sicher/unsicher gemacht werden durch bestimmte
+	   Aktionen (z.B. Tür abschließen).
+18) Fragen an die Macht
+RW: 0 ; D: p; W: Gläubiger darf Frage an seine Macht stellen ; K: 5 Ak
+KZ: 10 Sp (5/20); E: Tod (Gott), Fragenkatalog (s.u.); P: 0
+Anmerkung: Da allgemeine Fragen vermieden werden sollten ;) darf der
+	   Gläubige aus Fragenkatalog auswählen, der z.B. Orte,
+	   Gegenstände (Wirkung), etc. Der Spruch kann dann 1440 R
+	   nicht mehr benutzt werden (falls doch, wird er verflucht
+	   von seiner Macht (Stufe 50!), s. Segnen-Spruch).
+19) Mächtiges Wort
+RW: 10+5*St Ps; D: 1440 R; W: Böse Wesen werden 1 Tag betäubt; K: 10 Ak/Wesen
+KZ: 2 Sp (1/4); E: Tod (Lähmung), Lebewesen (Gesinnung: Böse); P: -10%
+Anmerkung: Umkehrbar (Mächtig böses Wort), das gute + neutrale Lebewesen
+	   betäubt. Angegriffene betäubte Lebewesen, verlieren ihre Betäubung
+	   nach 5 Sp, in denen sie sich nur verteidigen können.
+20) Zeichen der Vertreibung
+RW: 30 g; D: 2*St Sp; W: böse Monster vertreiben (Mutprobe); K: 5Ak/Opfer
+KZ: 1 Sp (1/2); E: Leben (Mut), Lebewesen (böse); P: -5%
+Anmerkung: Die Mutprobe hat ein Minus von 5%/St. des Gläubiger. Auch hier
+	   wie oben Umkehrung möglich (Spiegel der Vertreibung)
+21) Gebetskraft
+RW: B; D: 4Sp+St; W: erhöht 1 Attribut um 5%; K: 30 Ak
+KZ: 2 Sp (1/4); E: Leben (Attribut), Lebewesen; P: 0
+Anmerkung: Umkehrbar, Wirkung dann 8Sp+2*St. Nach Ablauf erfolt
+	   schrittweise (1%/Sp) Angleichung an alten Wert.
+22) Spracheingebung
+RW: -; D: 5 R; W: Gläubiger versteht eine bel. Sprache; K: 15 Ak
+KZ: 2 SP (1/4); E: Leben (Sprache), Lebewesen(Rassen); P: 0
+Anmerkung: Gläubiger wählt Sprache aus einer Liste aus. Jeder Mit-
+	   spieler beherrscht die Gemeine Sprache und die Sprache
+	   seiner Rasse (Mensch, Elb, Zwerg, Gnom, Patran etc.)
+23) Opfer
+RW: -; D: -; W: Erhöht die AK-Anzahl; K: -
+KZ: 10 Sp (5/20); E: Leben (Ak), Lebewesen; P: -
+Anmerkung: Lebende Opfer dürfen nicht die Gesinnung des Gläubigen
+	   haben. Opfer kann nur an bestimmten, heiligen Orten
+	   geschehen. Materialien können nicht geopfert werden.
+	   Anzahl der gewonnen (nicht-permanenten) Ak entspricht
+	   Stufe des Opfers*2 (*4 wenn lebendig). Opfern bringt
+	   keine Erfahrungspunkte!!
+24) Beten
+RW: -; D: 5 Sp*St; W: Erhöht Feilschen, Mut+St um 5%, A/Vch. um 10%;
+K: 15 Ak; KZ: 1 Sp (1/2); E: Leben (s.o.), Lebewesen (selbst); P: 0
+Anmerkung: Im Gegensatz zum Segnen nicht umkehrbar!
+25) Entgiften
+RW: B; D: p; W: Entfernt Gift aus Lebewesen; K: 10Ak/Giftstufe
+KZ: 2 Sp (1/4); E: Leben(Gift), Lebewesen; P: -5*Giftstufe+Stufe
+Anmerkung: Umkehrbar, Kosten hier: 20Ak/Giftstufe. 7 Giftstufen
+	   sind vorhanden, 5 anwendbar. Bei der Heilwirkung ver-
+	   langsamt sich bei Stufe 6,7 die Wirkung des Giftes
+	   auf Geschwindigkeit entspr. 1 bzw. 2. Gifte können in
+	   jeder Stufe tödlich sein, aber sie haben nur eine
+	   zeitlich begrenzte Wirkung.
+
+Zaubersprüche
+-------------
+1) Wunden heilen
+Wie entspr. Gläubigerspruch
+2) künstl. Licht
+Wie Lichtspruch des Gläubiger
+3) Zauberschloß
+RW: B; D: -; W: öffnet oder verschließt Türen magisch; K: 10 Ak
+KZ: 2 Sp (1/4); E: Umwandeln(Magiestufe), Materie(Schloß): P: -5*Magiestufe
+Anmerkung: Je höher die Stufe des Magiers, umso besser ist das Schloß
+	   versperrt. Ab Magiestufe 5 können Diebe magische Schlösser
+	   nicht mehr öffnen. Beim Schließen gilt max. Magiestufe=Stufe
+	   des Zauberers
+4) Zauberlanze
+RW: 30 g; D: -; W: Schleudert magische Feuerlanze gegen ein Ziel; K: 2Ak/Sp
+KZ: 2 Sp (1/4); E: Kinetic(Telekinese), Wärme(Feuer); P: -5
+Anmerkung: Umkehrung möglich, neutralisiert mag. Feuerlanze (bis 5 Sp
+	   später volle Neutralisation, bis 10 Sp halbierter Schaden).
+	   Auch eine Teilneutralisation der Lanze ist möglich.
+5) Gedanken lesen.
+RW: 15 Ps; D: 5 Sp; W: Liest Gedanken des Opfers; K: 15 Ak
+KZ: 4 Sp (2/8); E: Licht(Telepathie), Lebewesen; P: -5*St d. Opfers
+Anmerkung: Jedes Monster hat "Standard"-Gedanken, die normalerweise
+	   gelesen werden. Jedem Monster könne spezielle Gedanken
+	   zugewiesen werden. Die Umkehrung ist möglich und schirmt
+	   D: 5 Sp*St lang vor Gedanken lesen ab.
+6) Feuerexplosion
+Wirkung wie Umkehrung des Feuerschutzes beim Gläubiger, allerdings mit
+doppelter Reichweite. Der Zauberer kann auch Lebewesen vom der magischen
+Feuerexplosion ausschließen, wenn er sich 1 Sp/3 Lebewesen darauf
+konzentriert. Die Umkehrung bewirkt  keinen Feuerschutz der ganzen
+Gruppe sondern wie bei der Feuerlanze die  Neutralisation. Hier muß aber
+in 2 Sp die volle bzw. in 4 Sp. die halbe Neutralisation erfolgen, die
+Teilneutralisation ist auch hier möglich. Kosten: 20 Ak+St/5 (aufgerundet!)
+7) Unsichtbarkeit
+RW: 1 Ps; D: 1Sp*St; W: Alle im Umkreis werden unsichtbar; K: 15 Ak 
+KZ: 2 Sp (1/4); E: Dunkelheit(Verschiebung), Lebewesen; P: 0
+Anmerkung: Unsichtbarkeit im Kampf ? Umkehrung möglich (Unsichtbarkeit
+	   aufheben), wirkt auch für die Dauer auf "permanent" unsicht-
+	   bare Lebewesen.
+8) Unsichtbares sehen
+RW: 50 g; D: 1 Sp*St; W: Z. sieht Unsichtbare; K: 12 Ak
+KZ: 2 Sp (1/4); E: Licht(Verschiebung), Lebewesen; P: 0
+Anmerkung: Umkehrung möglich, hebt für die Dauer die Fähigkeit
+	   eines Wesens (!) auf, Unsichtbares zu sehen.
+9) Magischer Ortswechsel
+RW: B; D: p; W: Mittels magischem Tor Ortswechsel an best. Ziel; K: 5Ak/Ps
+KZ: 3 Sp (2/6); E: Kinetic(Ortswechsel), Lebewesen; P:0
+Anmerkung: Sollte versucht werden, in fester Materie zu landen, so
+	   scheitert der Ortswechsel und es werden 1Sp/Ps dem "Opfer"
+	   zugefügt.
+10) Magische Bewegung
+RW: 30 Ps; D: 2Sp*St; W: Z. kann Gegenstände durch Gedankenkraft bewegen;
+K: (2 Ak*Unze)/St; KZ: 2 Sp (1/4); E: Kinetic(Ortswechsel); P: 0
+Anmerkung: Gegenstände, die auf Gegner geschleudert werden verursachen
+	   je nach Größe Schaden: 10 Unzen=1Sp (oder der max. Schaden der
+	   entspr. Wurfwaffe). Der gleiche Spruch kann auch einen solchen
+	   Spruch (teil)neutralisieren bzw. einen Angriff erfolgreich ab-
+	   wehren (Kosten: Gewicht des abzuwehrenden Gegenstands).
+11) Freier Blick
+RW: 2g; D: 5 Sp; W: Zauber kann durch feste Materie sehen; K: 2 Ak
+KZ: 1 Sp (1/2); E: Licht(Wahrnehmung), Materie; P: 0
+Anmerkung: Der Blick durchdringt nur 1 mal Materie, stößt er dann
+	   auf ein anderes Zustandselement, ist die Wirkung vorbei.
+	   Dafür ist die Wahrnehmung immer perfekt, auch wenn der
+	   dahinterliegende (Hohl)raum dunkel sein sollte.
+12) Mag. Schutzwall
+RW: 

@@ -1,0 +1,177 @@
+                   Concept for the MapEdit widget class
+                   ************************************
+
+Fundamental:
+============
+
+map structure: 4 edges (sexkant maps (6 edges) possible as alternative class)
+--------------
+ _ _ _ _
+|_|_|_|_|
+|_|_|_|_|
+|_|_|_|_|
+
+map will not (!) be saved as Pixbuf but with numbers, which correspond the
+map pieces, uncompressed at the moment.
+
+map is useable in several layers (f.e. river, street, bridge etc. on different
+grounds like meadow, desert, swamp)
+
+map is filled with default map piece.
+
+there is always made a copy of the map itself by the class. (?? really ??).
+Every map section (i.e. the number) is a structure which can be easily
+expanded by the program using the class.
+
+map pieces: 4 edges (look above), provided in a Pixbuf.
+----------
+application has to read the map pieces into a Pixbuf (does not need to ba a
+screen) i.e. allocate a Pixbuf nd provide it to the class. The class makes
+a copy of it by default but this can be omitted.
+
+Option: Pick map pieces from a map, useful for easily create an overview of
+all map pieces. (division into several groups possible)
+
+Control
+-------
+With the mouse. Pressing left mouse button: Drawing with the actually selected
+map piece. Right mouse button aborts drawing (i.e restores old state of map),
+if we are drawing at the moment.
+Evt.: Control with cursor + cursor keys + return (zum set a point)
+
+Basis:
+-----
+bgui.library V41
+MagnifyClass as frame for mapedit class
+
+Instance Data
+==============
+
+GtkWidget      *child;            - object data
+GdkPixbuf      *md_MapPieces      - Pixbuf with all map pieces
+BOOL            md_Copy;          - Copy BitMap or not
+UWORD           md_MapWidth       - width of the map
+UWORD           md_MapLength      - length of the map
+UBYTE           md_MapLayer       - number of layers
+struct MapPiece md_CurrPiece      - map piece which is used to be set
+                                   on the map or which is to be used to fill (a
+                                   part of) the map. Can be expanded.
+BOOL             md_GetPieces;    - Edit mode/map piece get mode
+struct MapPiece *md_Default;      - Default map piece (for clearing the whole map)
+struct MCMap   *md_Map            - actual map (similar structure like bitmaps)
+struct MapPiece *md_AllPieces;    - For building map pieces for maps
+UBYTE           md_PWidth         - width of a map piece
+UBYTE           md_PLength        - length of a map piece
+BOOL            md_Frame          - frame around map pieces
+UBYTE           md_FrameSpace;    - Space between framed map pieces
+COORD           md_FrameToggle;   - Absolute position of toggled frame
+BOOL            md_Grid;          - If TRUE Grid around map pieces
+UBYTE           md_GridPen        - Color of the grid (around the map pieces)
+COORD           md_Select         - Selected map position (x,y,l)
+struct IBox     md_GraphBox       - bounds of the objects without frame
+UWORD           md_BoxWidth       - current width of the object
+UWORD           md_BoxHeight      - current height of the object
+UBYTE           md_ScaleWidth     - show width percentage of the map
+UBYTE           md_ScaleHeight    - show height percentage of the map
+UWORD          *md_UndoBuffer     - undo buffer for application
+UWORD          *md_InitialBuffer  - initial buffer (f. renderering method)
+BOOL            md_ResetBuffer;   - Immediate Undo
+
+Boolean instance data is not listed here, see attributes
+
+COORD structure:
+
+struct {
+        UWORD x;
+        UWORD y;
+        UBYTE l;
+} COORD;
+
+sMapPiece Structure:
+
+struct MapPiece
+{
+    ULONG           mp_Number;        /* Unique Number of map piece in the map */
+    UWORD           mp_PixbufNumber;  /* The bitmap number of this map piece */
+    COORD           mp_Coordinates;   /* Coordinates of the map piece inside map */
+    COORD           mp_PBCoord;       /* Coordinates of the map piece inside Pixbuf */
+    size_t          mp_Size;          /* Size of the MapPiece structure */
+    BOOL            mm_Copy;          /* Is this a map copy or not ? */
+    void           *mp_User;          /* User extensions to this structure */
+} sMapPiece;
+
+sMCMap Structure:
+
+struct MCMap
+{
+    ULONG            *mm_Columns;       /* Columns store all the rows */
+    struct MapPiece  *mm_Rows;          /* Rows store the map pieces itself */
+    COORD             mm_MapSize;       /* Size of the map (width, height, layers) */
+    size_t            mm_Size;          /* Size of the MCMap structure */
+    void             *mm_User;          /* User extensions to this structure */
+    BOOL              mm_Copy;          /* Is this a map copy or not ? */
+    struct MCMap     *mm_NextLayer;     /* Pointer to next layer if any */
+} sMCMap;
+
+Attributes
+==========
+
+GtkArg Arguments The commentary show when the args can be used
+I: new, S: set_arg, G: get_arg, S: set_arg, N: Notify, U: Update
+
+MAPEDIT_Map         (ISGNU)
+MAPEDIT_MapPieces   (I----)
+MAPEDIT_MapWidth    (I-G--)
+MAPEDIT_MapLength   (I-G--)
+MAPEDIT_MapLayer    (I-G--)
+MAPEDIT_CurrPiece   (ISGNU)
+MAPEDIT_Default     (I----)  - map piece to be used to fill the map at startup
+MAPEDIT_NoCopy      (I----)  - make no copy of the pixbuf of the map pieces
+MAPEDIT_GetPieces   (I----)  - map pieces get frames (if set) and can only be
+                               selected, not set (passiv, i.e. no OM_UPDATE)
+MAPEDIT_Grid        (I----)  - grid in the map (not with MAPEDIT_GetPieces)
+MAPEDIT_GridPen     (I-G--)
+MAPEDIT_PWidth      (I----)
+MAPEDIT_PLength     (I----)
+MAPEDIT_Frame       (I----)
+MAPEDIT_FrameSpace  (I----)
+MAPEDIT_SelectX     (ISGNU)
+MAPEDIT_SelectY     (ISGNU)
+MAPEDIT_SelectL     (ISGNU)
+MAPEDIT_BoxWidth    (---N-)
+MAPEDIT_BoxHeight   (---N-)
+MAPEDIT_ScaleWidth  (I----)
+MAPEDIT_ScaleHeight (I----)
+
+Methods
+=======
+
+MAP_GetXYPiece,X,Y,Layer: Get x/y/l map piece at corresponding position
+MAP_Clear:                Fill map piece with default.
+MAP_Fill,X,Y,Layer,W,L    Fill map section with current map piece
+MAP_Undo:                 Undo lasat action (fill/set)
+OM_NEW:                   Initialisation privided that certain attributes
+                          have to be set. Allocate memory for the map and
+                          evt. for the BitMap as well.
+OM_DISPOSE                Free memory of the map and evt. of the BitMap
+OM_GET/SET/UPDATE         Get/Set attributes (see above)
+GM_RENDER                 Redraw map at the selected map position
+GM_GOACTIVE               Draw map piece after examinations
+GM_HANDLEINPUT            Draw map piece, examine mouse input
+GM_GOINACTIVE             When canceling (right mouse button) restore map
+
+Demo
+====
+
+Breakout-Editor:
+L - Long knob
+E - Extra Life
+F - Fire weapon
+S - Slow
+D - Death
+R - Random select when creating level
+N - Next Level
+B - Barrier
+* - Random when picked up
+
+Map pieces for the demo editor are partly drawn (with DPaint).
