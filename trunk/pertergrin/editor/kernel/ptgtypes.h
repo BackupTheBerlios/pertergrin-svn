@@ -20,10 +20,19 @@
 /* Attention: The Pertergrin types make use of several glib types    */
 /*            This way memory problems are largely reduced!          */
 
+#ifndef PTG_TYPES_H
+#define PTG_TYPES_H
+
 #include <glibmm.h>
 #include <vector>
 #include <string>
 using namespace std;
+
+// defines
+// Do never ever use #defines for configuration things
+// As there is no configuration class I don't use a method
+//    to find which version of Pertergrin is used.
+#define PTG_PROTOTYPE 1
 
 /* data types: 0 = boolean
  *             1 = integer
@@ -94,6 +103,7 @@ typedef struct ptg_world
 {
   Glib::ustring              oName;        /* Name of the world                   */
   Glib::ustring              oDescription; /* Description of the world            */
+  Glib::ustring              oWorldType;   /* World type of the world             */
   int                        iXSize;       /* Number of Columns in the world map  */
   int                        iYSize;       /* Number of Rows in the world map     */
   vector< vector<plpart_t> > vecoColumns;  /* Columns consist of rows             */
@@ -104,3 +114,5 @@ typedef struct ptg_world
   int                        iWidth;       /* width of one graphic tile           */
   int                        iHeight;      /* height of one graphic tile          */
 } pworld_t;
+
+#endif // PTG_TYPES_H
