@@ -12,6 +12,8 @@
        extern "C" {
 #endif /* __cplusplus */
 
+typedef int             BOOL;       /* 0=false, <>0 true */
+
 /* Prototypes */
 //BOOL FreeMapEditClass( Class * );
 
@@ -19,14 +21,14 @@
 **  Koordinate pair structure (including layer)
 */
 typedef struct COORD {
-        UWORD x;
-        UWORD y;
-        UBYTE l;
+        guint x;
+        guint y;
+        guchar l;
 } COORD;
 
 typedef struct PBCoord {
-    ULONG    MethodID;   /* MAP_BitmapCoord */
-    UWORD    PixbufNumber;
+    gulong    MethodID;   /* MAP_BitmapCoord */
+    guint    PixbufNumber;
     COORD    Coord;
 } PBCoord;
 
@@ -35,8 +37,8 @@ typedef struct PBCoord {
 */
 typedef struct MapPiece
 {
-    ULONG           mp_Number;        /* Number of map piece */
-    UWORD           mp_PixbufNumber;  /* The pixbuf number of this map piece */
+    gulong          mp_Number;        /* Number of map piece */
+    guint           mp_PixbufNumber;  /* The pixbuf number of this map piece */
     COORD           mp_Coordinates;   /* Coordinates of the map piece inside map */
     COORD           mp_PBCoord;       /* Coordinates of the map piece inside Pixbuf */
     size_t          mp_Size;          /* Size of the MapPiece structure */
@@ -48,7 +50,7 @@ typedef struct MapPiece
 */
 typedef struct MCMap
 {
-    ULONG            *mm_Columns;       /* Columns store all the rows */
+    gulong           *mm_Columns;       /* Columns store all the rows */
     struct MapPiece  *mm_Rows;          /* Rows store the map pieces itself */
     COORD             mm_MapSize;       /* Size of the map (width, height, layers) */
     size_t            mm_Size;          /* Size of the MCMap structure */
@@ -64,23 +66,23 @@ typedef struct _GtkMapData {
     GtkWidget        *child;           /* object data */
     struct MCMap     *md_Map;          /* map data (2D, BMap-like w. layers) */
     GdkPixbuf        *md_MapPieces;    /* PixBuf containing all map pieces   */
-    UWORD             md_PWidth;       /* Width of one map piece             */
-    UWORD             md_PLength;      /* Length of one map piece            */
+    guint             md_PWidth;       /* Width of one map piece             */
+    guint             md_PLength;      /* Length of one map piece            */
     BOOL              md_Copy;         /* Copy BitMap or not                 */
     struct MapPiece   md_CurrPiece;    /* Currently selected map piece       */
     struct MapPiece  *md_Default;      /* Default map piece (for clearing)   */
     struct MapPiece  *md_AllPieces;    /* For building map pieces for maps   */
     BOOL              md_Frame;        /* Frame (shadow) around map pieces   */
-    UBYTE             md_FrameSpace;   /* Space between framed map pieces    */
+    guchar            md_FrameSpace;   /* Space between framed map pieces    */
     COORD             md_FrameToggle;  /* Position of toggled frame          */
     BOOL              md_GetPieces;    /* Edit mode/map piece get mode       */
     BOOL              md_Grid;         /* If TRUE Grid around map pieces     */
-    UBYTE             md_GridPen;      /* Selected GridPen.                  */
+    guchar            md_GridPen;      /* Selected GridPen.                  */
     COORD             md_Select;       /* Selected map position              */
-//  UWORD             md_BoxWidth;     /* current width of the object        */
-//  UWORD             md_BoxHeight;    /* current height of the object       */
-    UBYTE             md_ScaleWidth;   /* show width percentage of the map   */
-    UBYTE             md_ScaleHeight;  /* show height percentage of the map  */
+//  guint             md_BoxWidth;     /* current width of the object        */
+//  guint             md_BoxHeight;    /* current height of the object       */
+    guchar            md_ScaleWidth;   /* show width percentage of the map   */
+    guchar            md_ScaleHeight;  /* show height percentage of the map  */
     struct MCMap     *md_UndoBuffer;   /* UndoBuffer, for application        */
     struct MCMap     *md_InitialBuffer;/* Initial Buffer (Rendering)         */
 } MD;
@@ -151,27 +153,27 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args);
 #define MAP_Delete        "mapdelete"
 
 struct mapSelect {
-    ULONG       MethodID;   /* MAGM_GetXYPiece, MAP_Set */
+    gulong   MethodID;   /* MAGM_GetXYPiece, MAP_Set */
     struct GadgetInfo *mslInfo;  /* ignored by MAGM_GetXYPiece */
-    UWORD    Xpos;
-    UWORD    Ypos;
-    UWORD    LayerNum;
+    guint    Xpos;
+    guint    Ypos;
+    guint    LayerNum;
     struct MapPiece *PieceNum;
 };
 
 typedef struct mapSection {
-    ULONG       MethodID;   /* MAP_Fill */
+    gulong   MethodID;   /* MAP_Fill */
     struct WidgetInfo *mstInfo;
-    UWORD    Xpos;
-    UWORD    Ypos;
-    UWORD    LayerNum;
-    UWORD    Width;
-    UWORD    Length;
+    guint    Xpos;
+    guint    Ypos;
+    guint    LayerNum;
+    guint    Width;
+    guint    Length;
 } mapSection;
 
 struct WidgetMsg
 {
-    ULONG       MethodID;
+    gulong   MethodID;
     struct WidgetInfo *wInfo;
 };
 

@@ -11,8 +11,11 @@
 #include <glib.h>
 #include <gtk/gtkmain.h>
 #include <gtk/gtksignal.h>
-#include <gtk/gdktypes.h>
+#include <gtk/gtkfilesel.h>
+#include <gtk/gtkframe.h>
+#include <gdk/gdktypes.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <glade/glade.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -22,6 +25,9 @@
 
 #define SELXSIZE 4
 #define SELYSIZE 4
+
+#define DEBUGLEV 5       /* Must be the same as in mapeditclass.c!!! */
+
 /*
 **  Object IDs.
 */
@@ -36,12 +42,19 @@ enum
     WO_NUMGADS
 };
 
+// Name of Glade GUI file name, Graphic File name
+#define TESTMAPEDITFILE "testmapedit.glade"
+#define PIXBUFFILE "breakout.png"
+
+// Mapedit custom ids
+enum { MPGR1, MPGR2, MPGR3, MPEDIT };
+
 GtkMapEditClass *MapEditClass;
-GtkObject TestMEdWindowObjs[WO_NUMGADS];
-GdkWindow *window;
+GtkWidget *TestMEdWindowObjs[WO_NUMGADS], *WO_Window;;
+GtkFileSelection *filereq;
 GdkPixbuf *mMapPieces = NULL;
 
-UBYTE *WO_MXGAD1Labels[] =
+guchar *WO_MXGAD1Labels[] =
 {
     "MPG1",
     "MPG2",
@@ -49,187 +62,186 @@ UBYTE *WO_MXGAD1Labels[] =
     NULL
 };
 
-/*
- *      Map-lists.
- */
-ULONG e2rx[] = { MAPEDIT_BoxWidth, PGA_Visible, TAG_END };
-ULONG e2ry[] = { MAPEDIT_BoxHeight, PGA_Visible, TAG_END };
+void InitSelectGroup (struct MCMap *SelectGroup, gint start);
+char *getLogfile();
 
-GdkObject       *WO_Window;
-GdkObject       *filereq;
-void *dtobject=NULL; /* Pointer to a datatypes object */
+char *getLogfile()
+{
+    return "testmapedit.log";
+}
 
 void CloseAll(void)
 {
-    char z[256];
     struct MCMap *SelectGroup = NULL;
-    ULONG pt=0;
+    GtkArg mapedarg;
+    guchar i;
 
-    if (dtobject) DisposeDTObject(dtobject);
-    if (filereq) DisposeObject( filereq);
-    if (TestMEdWindowObjs[WO_MPGRP1])
-    {
-        GetAttr(MAPEDIT_Map, (Object *)TestMEdWindowObjs[WO_MPGRP1], &pt);
-        SelectGroup = (struct MCMap *)pt;
-        sprintf(z,"CloseAll start: Map=%x, pt=%x, SelectGroup=%x\n", (Object *)TestMEdWindowObjs[WO_MPGRP1], pt, SelectGroup);
-        KPrintF(z);
+    errormsg(MAPDEBUG1,"CloseAll: Entered");
+
+    if (mMapPieces) gdk_pixbuf_unref(mMapPieces);
+    //if (filereq) DisposeObject( filereq);
+    for (i=0; i<3; i++)
+      if (TestMEdWindowObjs[WO_MPGRP1+i])
+      {
+        mapedarg.type = MAPEDIT_Map;
+        gtk_object_getv(GTK_OBJECT(TestMEdWindowObjs[WO_MPGRP1+i]), 1, 
+			&mapedarg);
+        SelectGroup = (struct MCMap *) GTK_VALUE_POINTER(mapedarg);
+#if DEBUGLEV > 2
+        errormsg(MAPDEBUG3,"CloseAll: Map=%x, pt=%x, SelectGroup=%x",
+		 (struct MCMap *)TestMEdWindowObjs[WO_MPGRP1+i], 
+		 mapedarg.d.pointer_data, SelectGroup);
+#endif
         if (SelectGroup)
         {
             do
             {
                 struct MCMap *tmap=NULL;
-                sprintf(z,"CloseAll do: SelectGroup=%x, SelectGroup->mm_Columns=%x\n", SelectGroup, SelectGroup->mm_Columns);
-                KPrintF(z);
+#if DEBUGLEV > 2
+		errormsg(MAPDEBUG3,"CloseAll: SelectGroup=%x, "
+			 "SelectGroup->mm_Columns=%x", SelectGroup, 
+			 SelectGroup->mm_Columns);
+#endif
                 if (SelectGroup->mm_Columns)
                 {
                     int i;
                     for (i=0; i< SELYSIZE;i++) // All columns have to be freed
                     {
-                        sprintf(z,"CloseAll for: SelectGroup=%x, SelectGroup->mm_Columns[%d]=%x\n", SelectGroup, i, SelectGroup->mm_Columns[i]);
-                        KPrintF(z);
+#if DEBUGLEV > 2
+		      errormsg(MAPDEBUG3,"CloseAll: SelectGroup->mm_Columns"
+			       "[%d]=%x", i, SelectGroup->mm_Columns[i]);
+#endif
                         if (SelectGroup->mm_Columns[i])
-                            FreeVec((APTR)SelectGroup->mm_Columns[i]);
+                            g_free((void *)SelectGroup->mm_Columns[i]);
                         SelectGroup->mm_Columns[i]=0;
                     }
-                    FreeVec(SelectGroup->mm_Columns);
+                    g_free(SelectGroup->mm_Columns);
                     SelectGroup->mm_Columns=NULL;
                 }
-                sprintf(z,"CloseAll Layer: SelectGroup=%x, SelectGroup->mm_NextLayer=%x\n", SelectGroup, SelectGroup->mm_NextLayer);
-                KPrintF(z);
+#if DEBUGLEV > 2
+		errormsg(MAPDEBUG3,"CloseAll: SelectGroup->mm_NextLayer=%x",
+			 SelectGroup->mm_NextLayer);
+#endif
                 tmap = SelectGroup->mm_NextLayer; // Get pointer to next layer
                 SelectGroup->mm_NextLayer = NULL; // Do not reference it again!
-                FreeVec(SelectGroup);        // Free this layer
+                g_free(SelectGroup);        // Free this layer
                 SelectGroup=tmap;     // Set new current layer
             } while (SelectGroup);
         }
-        DoGadgetMethod((struct Gadget *)TestMEdWindowObjs[WO_MPGRP1],window,NULL,MAP_Delete);
     }
-    if (TestMEdWindowObjs[WO_MPGRP2])
-    {
-    // Up to now only one SelectGroup, will be more later
-        /* GetAttr(MAPEDIT_Map, (Object *)TestMEdWindowObjs[WO_MPGRP2], &pt);
-        SelectGroup = (struct MCMap *)pt;
-        if (SelectGroup)
-        {
-            do
-            {
-                struct MCMap *tmap=NULL;
-                if (SelectGroup->mm_Columns)
-                {
-                    int i;
-                    for (i=0; i< SELYSIZE;i++) // All columns have to be freed
-                    {
-                        if (SelectGroup->mm_Columns[i])
-                            FreeVec((APTR)SelectGroup->mm_Columns[i]);
-                        SelectGroup->mm_Columns[i]=0;
-                    }
-                    FreeVec(SelectGroup->mm_Columns);
-                    SelectGroup->mm_Columns=NULL;
-                }
-                tmap = SelectGroup->mm_NextLayer; // Get pointer to next layer
-                SelectGroup->mm_NextLayer = NULL; // Do not reference it again!
-                FreeVec(SelectGroup);        // Free this layer
-                SelectGroup=tmap;     // Set new current layer
-            } while (SelectGroup);
-        } */
-        DoGadgetMethod((struct Gadget *)TestMEdWindowObjs[WO_MPGRP2],window,NULL,MAP_Delete);
-    }
-    if (TestMEdWindowObjs[WO_MPGRP3])
-    {
-    // Up to now only one SelectGroup, will be more later
-        /* GetAttr(MAPEDIT_Map, (Object *)TestMEdWindowObjs[WO_MPGRP3], &pt);
-        SelectGroup = (struct MCMap *)pt;
-        if (SelectGroup)
-        {
-            do
-            {
-                struct MCMap *tmap=NULL;
-                if (SelectGroup->mm_Columns)
-                {
-                    int i;
-                    for (i=0; i< SELYSIZE;i++) // All columns have to be freed
-                    {
-                        if (SelectGroup->mm_Columns[i])
-                            FreeVec((APTR)SelectGroup->mm_Columns[i]);
-                        SelectGroup->mm_Columns[i]=0;
-                    }
-                    FreeVec(SelectGroup->mm_Columns);
-                    SelectGroup->mm_Columns=NULL;
-                }
-                tmap = SelectGroup->mm_NextLayer; // Get pointer to next layer
-                SelectGroup->mm_NextLayer = NULL; // Do not reference it again!
-                FreeVec(SelectGroup);        // Free this layer
-                SelectGroup=tmap;     // Set new current layer
-            } while (SelectGroup);
-        } */
-        DoGadgetMethod((struct Gadget *)TestMEdWindowObjs[WO_MPGRP3],window,NULL,MAP_Delete);
-    }
-    if (WO_Window) DisposeObject( WO_Window );
-#ifndef __SLIB
-    if (MapEditClass) FreeMapEditClass( MapEditClass );
-#else
-    if (BGUIMapEditBase)    CloseLibrary( BGUIMapEditBase );
-#endif
+
+    errormsg(MAPDEBUG1,"CloseAll: Finished succesfully");
 }
 
 /*
-**      Put up a simple requester.
+**      Put up a simple dialog.
 **/
-ULONG Req( struct Window *win, UBYTE *gadgets, UBYTE *body, ... )
+gulong Req( char *text )
 {
-    struct bguiRequest      req = { NULL };
-
-    req.br_GadgetFormat     = gadgets;
-    req.br_TextFormat       = body;
-    req.br_Flags            = BREQF_CENTERWINDOW | BREQF_LOCKWINDOW;
-    req.br_Underscore       = '_';
-
-    return( BGUI_RequestA( win, &req, ( ULONG * )( &body + 1 )));
+  return 0L;
 }
 
+/*
+** Load the MapPieces Pixbuf 
+*/
 BOOL MapPicLoad(void)
-/* Load the MapPieces Bitmap using datatypes */
 {
-    struct ColorRegister *cmap;
-    struct dtFrameBox mydtFrameBox; /* Use this with DTM_FRAMEBOX method   */
-    struct FrameInfo myFrameInfo;   /* For info returned from DTM_FRAMEBOX */
-    struct gpLayout mygpLayout;     /* Use this with DTM_PROCLAYOUT method */
+    errormsg(MAPDEBUG1,"MapPicLoad: Entered");
 
-    if (!(dtobject = NewDTObject("Breakout", PDTA_Screen, scr,
-                     DTA_GroupID, GID_PICTURE,
-                     TAG_END) ))
-    {
-        printf("Couldn't create new datatype object or not a picture file\n");
-        return FALSE;
-    }
-    mydtFrameBox.MethodID         = DTM_FRAMEBOX;
-    mydtFrameBox.dtf_GInfo        = NULL;
-    mydtFrameBox.dtf_ContentsInfo = NULL;
-    mydtFrameBox.dtf_FrameInfo    = &myFrameInfo;
-    mydtFrameBox.dtf_SizeFrameInfo= sizeof (struct FrameInfo);
-    mydtFrameBox.dtf_FrameFlags   = 0L;
-    DoMethodA(dtobject, (Msg)&mydtFrameBox);
+    mMapPieces = gdk_pixbuf_new_from_file ("breakout.png");
+    g_assert (mMapPieces != NULL);
 
-    mygpLayout.MethodID   = DTM_PROCLAYOUT;
-    mygpLayout.gpl_GInfo  = NULL;
-    mygpLayout.gpl_Initial= 1L;
-
-    if(!(DoMethodA(dtobject, (Msg)&mygpLayout) )) {
-        printf("Couldn't perform PROC_LAYOUT\n");
-        return FALSE;
-    }
-    GetDTAttrs(dtobject, PDTA_DestBitMap, &mMapPieces,
-                                PDTA_ColorRegisters, &cmap,
-                                TAG_END);
+    errormsg(MAPDEBUG1,"MapPicLoad: Finished succesfully");
     return TRUE;
 }
 
-void InitSelectGroup (struct MCMap *SelectGroup)
+/*
+** GUI Handler: Called when "custom" mapedit widget should be created
+*/
+GtkWidget *mapedit_create_new(gchar *widget_name, gchar *string1, 
+			      gchar *string2, gint int1, gint int2)
 {
-    ULONG i,j;
-    char z[256];
-    sprintf(z,"InitSelectGroup start: SelectGroup=%x\n", SelectGroup);
-    KPrintF(z);
+    struct MCMap *mapeditmap;
+    GtkWidget *mapwidget=NULL;
+    GtkArg mapedarg[11], *args = mapedarg;
+
+    struct MapPiece mDefault = {50, 0, { 0, 0, 0 }, { 0, 0, 0 }, 0, NULL};
+    errormsg(MAPDEBUG1,"mapedit_create_new: Entered");
+
+    mapeditmap = g_malloc0(sizeof(struct MCMap));
+    mapeditmap->mm_NextLayer = g_malloc0(sizeof(struct MCMap));
+    if (!mapeditmap || !mapeditmap->mm_NextLayer)
+    {
+        printf("Could not allocate memory for mapeditmap\n");
+        CloseAll();
+        exit(20);
+    }
+#if DEBUGLEV > 2
+    errormsg(MAPDEBUG3,"mapedit_create_new: widget_name=%s, int1=%d, "
+	     "mapeditmap=%x, mapeditmap->mm_NextLayer=%x",widget_name, int1,
+	     mapeditmap, mapeditmap->mm_NextLayer);
+#endif
+    mapedarg[0].type = MAPEDIT_MapPieces;
+    GTK_VALUE_POINTER(mapedarg[0]) = mMapPieces;
+    mapedarg[1].type = MAPEDIT_PWidth;
+    GTK_VALUE_UINT(mapedarg[1]) = 36;
+    mapedarg[2].type = MAPEDIT_PLength;
+    GTK_VALUE_UINT(mapedarg[2]) = 12;
+    mapedarg[3].type = MAPEDIT_Default;
+    GTK_VALUE_POINTER(mapedarg[3]) = &mDefault;
+    mapedarg[4].type = MAPEDIT_MapWidth;
+    GTK_VALUE_UINT(mapedarg[4]) = SELXSIZE;
+    mapedarg[5].type = MAPEDIT_MapLength;
+    GTK_VALUE_UINT(mapedarg[5]) = SELYSIZE;
+    mapedarg[6].type = MAPEDIT_MapLayer;
+    GTK_VALUE_UCHAR(mapedarg[6]) = 2;
+    mapedarg[7].type = MAPEDIT_Map;
+    GTK_VALUE_POINTER(mapedarg[7]) = mapeditmap;
+    mapedarg[8].type = MAPEDIT_GetPieces;
+    GTK_VALUE_BOOL(mapedarg[8]) = TRUE;
+    mapedarg[9].type = MAPEDIT_Frame;
+    GTK_VALUE_BOOL(mapedarg[9]) = TRUE;
+    mapedarg[10].type = MAPEDIT_FrameSpace;
+    GTK_VALUE_UCHAR(mapedarg[10]) = 4;
+
+    errormsg(MAPDEBUG3,"mapedit_create_new: args=%x, args[0]=%x, args[1].type=%d",args,args[2].type,MAPEDIT_PWidth);
+
+    switch(int1)
+    {
+        case MPGR1:
+	    InitSelectGroup(mapeditmap,0);
+	    TestMEdWindowObjs[WO_MPGRP1]=MapEditClassNew(args, 11);
+	    mapwidget=TestMEdWindowObjs[WO_MPGRP1];
+	    break;
+        case MPGR2:
+	    InitSelectGroup(mapeditmap,SELXSIZE*SELYSIZE);
+	    TestMEdWindowObjs[WO_MPGRP2]=MapEditClassNew(args, 11);
+	    mapwidget=TestMEdWindowObjs[WO_MPGRP2];
+	    break;
+        case MPGR3:
+	    InitSelectGroup(mapeditmap,SELXSIZE*SELYSIZE*2);
+	    TestMEdWindowObjs[WO_MPGRP3]=MapEditClassNew(args, 11);
+	    mapwidget=TestMEdWindowObjs[WO_MPGRP3];
+        case MPEDIT:
+	    mapedarg[4].type = MAPEDIT_MapWidth;
+	    GTK_VALUE_UINT(mapedarg[4]) = 40;
+	    mapedarg[5].type = MAPEDIT_MapLength;
+	    GTK_VALUE_UINT(mapedarg[5]) = 80;
+	    TestMEdWindowObjs[WO_EDIT]=MapEditClassNew(args, 6);
+	    mapwidget=TestMEdWindowObjs[WO_EDIT];
+	    break;
+    }
+    errormsg(MAPDEBUG3,"mapedit_create_new: mapwidget=%x",mapwidget);
+
+    errormsg(MAPDEBUG1,"mapedit_create_new: Finished succesfully");
+    return mapwidget;
+}
+
+void InitSelectGroup (struct MCMap *SelectGroup, gint start)
+{
+    gulong i,j;
+
+    errormsg(MAPDEBUG1,"InitSelectGroup: Entered");
 
     SelectGroup->mm_MapSize.x = SELXSIZE;
     SelectGroup->mm_MapSize.y = SELYSIZE;
@@ -241,347 +253,127 @@ void InitSelectGroup (struct MCMap *SelectGroup)
     SelectGroup->mm_NextLayer->mm_MapSize.l = 1; // Important!
     SelectGroup->mm_NextLayer->mm_Copy = FALSE;
     SelectGroup->mm_NextLayer->mm_Size = sizeof(struct MCMap);
-    SelectGroup->mm_Columns = AllocVec(sizeof(ULONG)*SELYSIZE, MEMF_CLEAR);
-    SelectGroup->mm_NextLayer->mm_Columns = AllocVec(sizeof(ULONG)*SELYSIZE, MEMF_CLEAR);
-    sprintf(z,"InitSelectGroup Alloc: SelctGroup=%x, SelectGroup->mm_Columns=%x\n", SelectGroup, SelectGroup->mm_Columns);
-    KPrintF(z);
-    if (!SelectGroup->mm_Columns || !SelectGroup->mm_NextLayer->mm_Columns)
+    SelectGroup->mm_Columns = g_malloc0(sizeof(gulong)*SELYSIZE);
+    SelectGroup->mm_NextLayer->mm_Columns = g_malloc0(sizeof(gulong)*SELYSIZE);
+    if (!SelectGroup->mm_Columns||!SelectGroup->mm_NextLayer->mm_Columns)
     {
-        printf("Could not allocate memory for SelectGroup\n");
-        CloseAll();
-        exit(20);
+      printf("Could not allocate memory for SelectGroup\n");
+      CloseAll();
+      exit(20);
     }
+#if DEBUGLEV > 2
+    errormsg(MAPDEBUG3,"InitSelectGroup: SelectGroup->mm_Columns=%x, "
+	     "SelectGroup->mm_NextLayer->mm_Columns=%x",
+	     SelectGroup->mm_Columns, SelectGroup->mm_NextLayer->mm_Columns);
+#endif
+
     for(i=0;i<SELYSIZE;i++)
     {
-        SelectGroup->mm_Rows = AllocVec(sizeof(struct MapPiece)*SELXSIZE, MEMF_CLEAR);
-        SelectGroup->mm_NextLayer->mm_Rows = AllocVec(sizeof(struct MapPiece)*SELXSIZE, MEMF_CLEAR);
-        sprintf(z,"InitSelectGroup for: SelctGroup->mm_Rows=%x,SelectGroup->mm_NextLayer->mm_Rows=%x\n", SelectGroup->mm_Rows,SelectGroup->mm_NextLayer->mm_Rows);
-        KPrintF(z);
+        SelectGroup->mm_Rows = g_malloc0(sizeof(struct MapPiece)*SELXSIZE);
+        SelectGroup->mm_NextLayer->mm_Rows = g_malloc0(sizeof(struct MapPiece)*SELXSIZE);
+#if DEBUGLEV > 2
+	errormsg(MAPDEBUG3,"InitSelectGroup: i=%d, SelectGroup->mm_Rows=%x, "
+		 "SelectGroup->mm_NextLayer->mm_Rows=%x",i,
+		 SelectGroup->mm_Rows, SelectGroup->mm_NextLayer->mm_Rows);
+#endif
         if (!SelectGroup->mm_Rows && SelectGroup->mm_NextLayer->mm_Rows)
         {
             printf("Could not allocate memory for SelectGroup\n");
             CloseAll();
             exit(20);
         }
-        SelectGroup->mm_Columns[i] = (ULONG)SelectGroup->mm_Rows;
-        SelectGroup->mm_NextLayer->mm_Columns[i] = (ULONG)SelectGroup->mm_NextLayer->mm_Rows;
+        SelectGroup->mm_Columns[i] = (gulong)SelectGroup->mm_Rows;
+        SelectGroup->mm_NextLayer->mm_Columns[i] = (gulong)SelectGroup->mm_NextLayer->mm_Rows;
         for(j=0;j<SELXSIZE;j++)
         {
+#if DEBUGLEV > 4
+	    errormsg(MAPDEBUG5,"InitSelectGroup: j=%d",j);
+#endif
             SelectGroup->mm_Rows[j].mp_Coordinates.x = j * 36;
             SelectGroup->mm_Rows[j].mp_Coordinates.y = i * 12;
             SelectGroup->mm_Rows[j].mp_Coordinates.l = 0;
             SelectGroup->mm_NextLayer->mm_Rows[j].mp_Coordinates.x = j * 36;
             SelectGroup->mm_NextLayer->mm_Rows[j].mp_Coordinates.y = i * 12;
             SelectGroup->mm_NextLayer->mm_Rows[j].mp_Coordinates.l = 1;
-            SelectGroup->mm_Rows[j].mp_BitmapNumber = i*(j+1);
+            SelectGroup->mm_Rows[j].mp_PixbufNumber = start+i*(j+1);
             SelectGroup->mm_Rows[j].mp_Size = sizeof(struct MapPiece);
-            SelectGroup->mm_NextLayer->mm_Rows[j].mp_BitmapNumber = i*(j+1)+(SELXSIZE*SELYSIZE);
+            SelectGroup->mm_NextLayer->mm_Rows[j].mp_PixbufNumber = start+i*(j+1)+(SELXSIZE*SELYSIZE);
             SelectGroup->mm_NextLayer->mm_Rows[j].mp_Size = sizeof(struct MapPiece);
         }
     }
+
+    errormsg(MAPDEBUG1,"InitSelectGroup: Finished succesfully");
 }
 
-Object *InitTestMEdWindow( void )
+/*
+** Load and set up GUI with libglade
+*/
+GtkWidget *InitTestMEdWindow( void )
 {
-    GdkObject *win, *frobj;
-    GdkObject **ar = (Object **)&TestMEdWindowObjs;
-    struct MCMap *SelectGroup;
-    struct MapPiece mDefault = {50, 0, { 0, 0, 0 }, { 0, 0, 0 }, 0, NULL};
-    UBYTE numl = 7;
-    UBYTE *InfoTxt =  ISEQ_C  "You can edit the map in the lower big Gadget\n"
-                              "and select the map pieces in the upper big Gadget.\n"
-                      ISEQ_B  LIBSTRING;
+    GtkWidget *win=NULL, *frame=NULL;
+    GladeXML *xml=NULL;
+    char *rootnode=NULL;
 
-    SelectGroup = AllocVec(sizeof(struct MCMap), MEMF_CLEAR);
-    SelectGroup->mm_NextLayer = AllocVec(sizeof(struct MCMap), MEMF_CLEAR);
-    if (!SelectGroup || !SelectGroup->mm_NextLayer)
-    {
-        printf("Could not allocate memory for SelectGroup\n");
-        CloseAll();
-        exit(20);
+    errormsg(MAPDEBUG1,"InitTestMEdWindow: Entered");
+
+    glade_init();
+    errormsg(MAPDEBUG4,"InitTestMEdWindow: glade_init done");
+    xml = glade_xml_new(TESTMAPEDITFILE, rootnode);
+
+    errormsg(MAPDEBUG4,"InitTestMEdWindow: glade_xml_new done");
+
+    if (!xml) {
+        g_warning("something bad happened while creating the interface");
+	CloseAll();
+	exit(20);
     }
-    KPrintF("MapEdit Object");
-    ar[WO_EDIT] = NewObject( MapEditClass, NULL, FRM_Type, FRTYPE_BUTTON,
-                                                 MAPEDIT_MapPieces, mMapPieces,
-                                                 MAPEDIT_PWidth, 36,
-                                                 MAPEDIT_PLength, 12,
-                                                 MAPEDIT_Default, &mDefault,
-                                                 MAPEDIT_MapWidth, 40,
-                                                 MAPEDIT_MapLength, 80,
-                             TAG_DONE );
-    if (!ar[WO_EDIT])
+
+    if (rootnode) 
     {
-        printf("Could not create MapEdit Object\n");
-        FreeVec(SelectGroup->mm_NextLayer);
-        FreeVec(SelectGroup);
-        CloseAll();
-        exit(20);
+	GtkWidget *wid = glade_xml_get_widget(xml, rootnode);
+	if (!GTK_IS_WINDOW(wid))
+	{
+	    win = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	    errormsg(MAPDEBUG3,"InitTestMEdWindow: win=%x",win);
+	    gtk_signal_connect(GTK_OBJECT(win), "destroy",
+			       GTK_SIGNAL_FUNC(gtk_main_quit), NULL);
+	    gtk_container_set_border_width(GTK_CONTAINER(win), 5);
+	    frame = gtk_frame_new(NULL);
+	    gtk_container_set_border_width(GTK_CONTAINER(frame), 5);
+	    gtk_container_add(GTK_CONTAINER(win), frame);
+	    gtk_widget_show(frame);
+	    gtk_container_add(GTK_CONTAINER(frame), wid);
+	    gtk_widget_show(win);
+	}
+	else win=wid;
     }
-    frobj = FrameObject, ButtonFrame, EndObject;
-    InitSelectGroup(SelectGroup);
-    KPrintF("MapEdit Groups\n");
-    ar[WO_MPGRP1] = NewObject( MapEditClass, NULL, FRM_Type, FRTYPE_BUTTON,
-                                                 MAPEDIT_MapPieces, mMapPieces,
-                                                 MAPEDIT_PWidth, 36,
-                                                 MAPEDIT_PLength, 12,
-                                                 MAPEDIT_Default, &mDefault,
-                                                 MAPEDIT_MapWidth, SELXSIZE,
-                                                 MAPEDIT_MapLength, SELYSIZE,
-                                                 MAPEDIT_MapLayer, 2,
-                                                 MAPEDIT_Map, SelectGroup,
-                                                 MAPEDIT_GetPieces, TRUE,
-                                                 MAPEDIT_Frame, frobj,
-                                                 MAPEDIT_FrameSpace, 4,
-                             TAG_DONE );
-    ar[WO_MPGRP2] = NewObject( MapEditClass, NULL, FRM_Type, FRTYPE_BUTTON,
-                                                 MAPEDIT_MapPieces, mMapPieces,
-                                                 MAPEDIT_PWidth, 36,
-                                                 MAPEDIT_PLength, 12,
-                                                 MAPEDIT_Default, &mDefault,
-                                                 MAPEDIT_MapWidth, SELXSIZE,
-                                                 MAPEDIT_MapLength, SELYSIZE,
-                                                 MAPEDIT_MapLayer, 2,
-                                                 MAPEDIT_Map, SelectGroup,
-                                                 MAPEDIT_GetPieces, TRUE,
-                                                 MAPEDIT_Frame, frobj,
-                                                 MAPEDIT_FrameSpace, 4,
-                             TAG_DONE );
-    ar[WO_MPGRP3] = NewObject( MapEditClass, NULL, FRM_Type, FRTYPE_BUTTON,
-                                                 MAPEDIT_MapPieces, mMapPieces,
-                                                 MAPEDIT_PWidth, 36,
-                                                 MAPEDIT_PLength, 12,
-                                                 MAPEDIT_Default, &mDefault,
-                                                 MAPEDIT_MapWidth, SELXSIZE,
-                                                 MAPEDIT_MapLength, SELYSIZE,
-                                                 MAPEDIT_MapLayer, 2,
-                                                 MAPEDIT_Map, SelectGroup,
-                                                 MAPEDIT_GetPieces, TRUE,
-                                                 MAPEDIT_Frame, frobj,
-                                                 MAPEDIT_FrameSpace, 4,
-                             TAG_DONE );
 
-    if (!ar[WO_MPGRP1] || !ar[WO_MPGRP2] || !ar[WO_MPGRP3])
-    {
-        printf("Could not create MapPieces Select Object\n");
-        FreeVec(SelectGroup->mm_NextLayer);
-        FreeVec(SelectGroup);
-        CloseAll();
-        exit(20);
-    }
-    if(screen->Height<380) // Adaption for small screens (f.e. 640x256)
-    {
-       numl=1;
-       strcpy(InfoTxt,ISEQ_C ISEQ_B LIBSTRING);
-    }
-    UnlockPubScreen(NULL, screen);
+    // Connect signals
+    errormsg(MAPDEBUG3,"InitTestMEdWindow: win=%x",win);
+    glade_xml_signal_autoconnect(xml);
+    gtk_object_unref(GTK_OBJECT(xml));
+    errormsg(MAPDEBUG3,"InitTestMEdWindow: win=%x now!",win);
 
-    win = WindowObject,
-        WINDOW_Title, "MapEditClass Demo V1.0",
-        WINDOW_ScreenTitle, "MapEditClass Demo V1.0",
-        WINDOW_ScaleHeight, 30,
-        WINDOW_SmartRefresh, TRUE,
-        WINDOW_AutoAspect, TRUE,
-        WINDOW_ShowTitle, TRUE,
-        WINDOW_MasterGroup, ar[WO_MASTER] = VGroupObject,
-            Spacing (4),
-            GROUP_BackFill, SHINE_RASTER,
-            HOffset (4),
-            VOffset (4),
-            EqualWidth,EqualHeight,
-
-            StartMember, ar[WO_MEINFO] = InfoFixed( NULL, InfoTxt, NULL, numl ), FixMinHeight,
-            EndMember,
-
-            StartMember, HGroupObject,
-                Spacing (4),
-                HOffset (4),
-                VOffset (4),
-                ButtonFrame,
-                FRM_Flags, FRF_RECESSED,
-
-                StartMember, ar[WO_B] = ButtonObject,
-                    ButtonFrame,
-                    LAB_Label, "Map Edit Demo",
-                    LAB_Underscore, '_',
-                    GA_ID, WO_B,
-                EndObject, FixMinHeight, EndMember,
-            EndObject, Weight (1), FixHeight (1), EndMember,
-
-            StartMember, HGroupObject,
-                Spacing (4),
-                HOffset (4),
-                VOffset (4),
-
-                StartMember, ar[WO_GRID] = CheckBoxObject,
-                    ButtonFrame,
-                    LAB_Label, "Grid",
-                    LAB_Place, PLACE_LEFT,
-                    LAB_Underscore, '_',
-                    GA_ID, WO_GRID,
-                EndObject, FixMinWidth, FixMinHeight, EndMember,
-                VarSpace (10),
-
-                StartMember, ar[WO_FRAME] = CheckBoxObject,
-                    ButtonFrame,
-                    LAB_Label, "Frame",
-                    LAB_Place, PLACE_LEFT,
-                    LAB_Underscore, '_',
-                    GA_ID, WO_FRAME,
-                EndObject, FixMinWidth, FixMinHeight, EndMember,
-            EndObject, Weight (1), FixHeight (1), EndMember,
-
-            StartMember, HGroupObject,
-
-                StartMember, VGroupObject,
-                    Spacing (2),
-                    HOffset (4),
-                    VOffset (4),
-
-                    StartMember, ar[WO_REGX] = PropObject,
-                        PGA_Total, 25,
-                        PGA_Visible, 5,
-                        PGA_Top, 0,
-                        PGA_Total, 25,
-                        PGA_Freedom, FREEHORIZ,
-                        PGA_Arrows, TRUE,
-                        GA_ID, WO_REGX,
-                    EndObject, FixMinHeight, EndMember,
-
-                    StartMember, HGroupObject,
-                        Spacing (2),
-
-                        StartMember, ar[WO_EDIT] /* = Button( "Unused", WO_EDIT ) */,
-                        EndMember,
-
-                        StartMember, ar[WO_REGY] = PropObject,
-                            PGA_Total, 25,
-                            PGA_ArrowSize, 10,
-                            PGA_Visible, 5,
-                            PGA_Top, 0,
-                            PGA_Total, 25,
-                            PGA_Arrows, TRUE,
-                            GA_ID, WO_REGY,
-                        EndObject, FixMinWidth, EndMember,
-                    EndObject, Weight (100), EndMember,
-                EndObject, Weight (100), EndMember,
-
-                StartMember, VGroupObject,
-                    Spacing (2),
-                    HOffset (4),
-                    VOffset (4),
-                    NeXTFrame,
-                    FRM_Flags, FRF_RECESSED,
-
-                    StartMember, ar[WO_MXGAD1] = MxObject,
-                        MX_TabsObject, TRUE,
-                        MX_Labels, WO_MXGAD1Labels,
-                        MX_LabelPlace, PLACE_LEFT,
-                        GA_ID, WO_MXGAD1,
-                    EndObject, Weight (1), FixHeight (1), EndMember,
-
-                    StartMember, PageObject,
-
-                        PageMember, VGroupObject,
-                            VarSpace (10),
-
-                            StartMember, ar[WO_MPGRP1],
-                            Weight (100), EndMember,
-                        EndObject,
-
-                        PageMember, VGroupObject,
-                            VarSpace (10),
-
-                            StartMember, ar[WO_MPGRP2], 
-                            Weight (100), EndMember,
-                        EndObject,
-
-                        PageMember, VGroupObject,
-                            VarSpace (10),
-
-                            StartMember, ar[WO_MPGRP3],
-                            Weight (100), EndMember,
-                        EndObject,
-                    EndObject, EndMember,
-                EndObject, Weight (1), EndMember,
-            EndObject, EndMember,
-
-            StartMember, HGroupObject,
-                Spacing (4),
-                HOffset (4),
-                VOffset (4),
-
-                StartMember, ar[WO_LOAD] = ButtonObject,
-                    ButtonFrame,
-                    LAB_Label, "_Load",
-                    LAB_Underscore, '_',
-                    GA_ID, WO_LOAD,
-                EndObject, FixMinHeight, EndMember,
-
-                StartMember, ar[WO_SAVE] = ButtonObject,
-                    ButtonFrame,
-                    LAB_Label, "_Save",
-                    LAB_Underscore, '_',
-                    GA_ID, WO_SAVE,
-                EndObject, FixMinHeight, EndMember,
-
-                StartMember, ar[WO_QUIT] = ButtonObject,
-                    ButtonFrame,
-                    LAB_Label, "_Quit",
-                    LAB_Underscore, '_',
-                    GA_ID, WO_QUIT,
-                EndObject, FixMinHeight, EndMember,
-            EndObject, FixHeight (1), EndMember,
-        EndObject,
-    EndObject;
-
-    return( win );
+    errormsg(MAPDEBUG1,"InitTestMEdWindow: Finished succesfully");
+    return win;
 }
 
 int main( int argc, char **argv )
 {
-    ULONG            signal, rc, tmp = 0;
-    BOOL             running = TRUE;
-        /* struct Screen *screen = LockPubScreen(NULL); */
+    gtk_init(&argc, &argv);
 
-#ifndef __SLIB
-    if (! (MapEditClass = InitMapEditClass()) ) {
-#else
-    if ( ! (BGUIMapEditBase = OpenLibrary( "gadgets/mapedit_bgui.gadget", 39 )))
-    {
+#if DEBUGLEV > 4
+    errormsg(MAPMSG,"main: Trying to load MapPieces Pixbuf...");
 #endif
-        printf("Could not init Map Edit Class.\n");
-        CloseAll();
-        exit(20);
-    }
-#ifdef __SLIB
-    MapEditClass = MAPEDIT_GetClassPtr();
-#endif
-    /* if (!screen)
-    {
-        printf("Could not lock Public Screen.\n");
-        CloseAll();
-        exit(20);
-    }
-
-    KPrintF("Trying to allocate BitMap..");
-    mMapPieces = BGUI_AllocBitMap(680,480, 5, BMF_CLEAR | GetBitMapAttr(screen->RastPort.BitMap,BMA_FLAGS), NULL);
-    if (!mMapPieces)
-    {
-        printf("Could not allocate MapPieces Bitmap.\n");
-        CloseAll();
-        exit(20);
-    }
-    KPrintF(".Done\n");
-    UnlockPubScreen(NULL, screen); */
-
-    KPrintF("Trying to load MapPieces Bitmap..");
     if (!MapPicLoad())
     {
         printf("Could not load MapPieces Bitmap.\n");
         CloseAll();
         exit(20);
     }
-    KPrintF(".Done\nTrying to initialize Window..");
+#if DEBUGLEV > 4
+    errormsg(MAPMSG,".Done\nmain: Trying to initialize window..");
+#endif
 
     if (!(WO_Window=InitTestMEdWindow()))
     {
@@ -589,43 +381,20 @@ int main( int argc, char **argv )
         CloseAll();
         exit(20);
     }
-    KPrintF(".Done\n");
+#if DEBUGLEV > 4
+    errormsg(MAPMSG,".Done\nMain Loop\n");
+#endif
 
-    tmp += AddMap( (Object *)TestMEdWindowObjs[WO_EDIT], TestMEdWindowObjs[WO_REGX], e2rx);
-    tmp += AddMap( (Object *)TestMEdWindowObjs[WO_EDIT], TestMEdWindowObjs[WO_REGY], e2ry);
-    if (tmp < 2) {
-        printf("Could not assign Gadget map.\n");
-        CloseAll();
-        exit(20);
-    }
-    KPrintF("Trying to open window..");
-
-    if (!(window=WindowOpen(WO_Window))) {
-        printf("Could not open window\n");
-        CloseAll();
-        exit(20);
-    }
-    KPrintF(".Done\n");
     /* Main Loop */
 
-    KPrintF("Main Loop\n");
-    GetAttr(WINDOW_SigMask, WO_Window, &signal);
-    do
-    {
-         Wait(signal);
-         while ((rc=HandleEvent(WO_Window)) != WMHI_NOMORE) {
-             switch(rc) {
-                 case WMHI_CLOSEWINDOW:
-                 case WO_QUIT:
-                     running=FALSE;
-                     break;
-             }
-         }
-    } while(running);
+    gtk_main();
 
-    KPrintF("Exiting..");
+#if DEBUGLEV > 4
+    errormsg(MAPMSG,"Exiting..");
+#endif
     CloseAll();
-    KPrintF(".Done\n");
+#if DEBUGLEV > 4
+    errormsg(MAPMSG,".Done\n");
+#endif
     exit(0);
 }
-
