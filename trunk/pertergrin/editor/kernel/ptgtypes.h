@@ -106,8 +106,7 @@ typedef struct ptg_world
   Glib::ustring              oWorldType;   /* World type of the world             */
   int                        iXSize;       /* Number of Columns in the world map  */
   int                        iYSize;       /* Number of Rows in the world map     */
-  vector< vector<plpart_t> > vecoColumns;  /* Columns consist of rows             */
-  vector<plpart_t>           vecoRows;     /* Rows consist of landscape parts     */
+  vector< vector<plpart_t> > vecoWorldMap; /* Consists of rows of landscape parts */
   Glib::ustring              oStartDate;   /* Start date (cannot be a date type!) */
   int                        iRegionX;     /* Selected region column              */
   int                        iRegionY;     /* Selected region row                 */

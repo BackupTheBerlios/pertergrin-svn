@@ -69,8 +69,9 @@ void PtgWorld::mapClear()
 // sLPart  -  The landscape map part at position iXPos, iYPos
 void PtgWorld::mapSet(int iXPos, int iYPos, plpart_t sLPart)
 {
-  msWorldData.vecoRows = msWorldData.vecoColumns[iXPos];
-  msWorldData.vecoRows[iYPos] = sLPart;
+  // Get reference to row of the world map
+  vector<plpart_t> &vecoRow = msWorldData.vecoWorldMap[iXPos];
+  vecoRow[iYPos] = sLPart;
 }
 
 // Get a landscape map part from a given position
@@ -81,8 +82,9 @@ void PtgWorld::mapSet(int iXPos, int iYPos, plpart_t sLPart)
 // The landscape map part at position iXPos, iYPos
 plpart_t &PtgWorld::mapGet(int iXPos, int iYPos)
 {
-  msWorldData.vecoRows = msWorldData.vecoColumns[iXPos];
-  return msWorldData.vecoRows[iYPos];
+  // Get copy of row of the world map (so map cannot be directly modified)
+  vector<plpart_t> vecoRow = msWorldData.vecoWorldMap[iXPos];
+  return vecoRow[iYPos];
 }
 
 void PtgWorld::mapMove(int iDestXPos, int iDestYPos, int iSourceXPos, int SourceYPos, 
@@ -108,11 +110,12 @@ void PtgWorld::mapFill(int iXPos, int iYPos, int iWidth, int iHeight, plpart_t s
     iWidth = msWorldData.iYSize - iYPos;
   for( iXC=iXPos; iXC < iWidth; iXC++ )
   {
-    msWorldData.vecoRows = msWorldData.vecoColumns[iXC];
+    // Get reference to row of the world map
+    vector<plpart_t> &vecoRow = msWorldData.vecoWorldMap[iXC];
     for( iYC=iYPos; iYC < iHeight; iYC++ )
     {
       // Copy the landscape part data
-      msWorldData.vecoRows[iYC] = sLPart;
+      vecoRow[iYC] = sLPart;
     }
   }
 }
@@ -204,11 +207,11 @@ void PtgWorld::setSize(int iXSize, int iYSize)
   // Reserve size so vectors do not reallocate all the time
   // Attention: for real size maps > 1000 you may not use the complete
   // size but only the size which fits in memory!
-  msWorldData.vecoColumns.reserve(iXSize);
+  msWorldData.vecoWorldMap.reserve(iXSize);
   for(int i=0; i<iXSize; i++)
   {
-    msWorldData.vecoRows = msWorldData.vecoColumns[i];
-    msWorldData.vecoRows.reserve(iYSize);
+    vector<plpart_t> &vecoRow = msWorldData.vecoWorldMap[i];
+    vecoRow.reserve(iYSize);
   }  
 }
 
