@@ -68,7 +68,8 @@ public:
 protected:
   bool on_map_area_expose (GdkEventExpose *event);
   bool on_map_area_value_changed();
-  bool on_set_scroll_adjustments();
+  void on_set_scroll_adjustments(Gtk::Adjustment *opHadjustment,
+                                 Gtk::Adjustment *opVadjustment);
 
   void adjust_scrollbars (void);
 
@@ -77,9 +78,12 @@ private:
   Glib::RefPtr<Gdk::Pixbuf> moDrawPB;
   Gtk::ScrolledWindow       moScrollPane;
   Gtk::DrawingArea          moDrawingArea;
+  Gtk::Viewport             *mopParent;
   vector< Glib::RefPtr<Gdk::Pixbuf> > mopTilesets;
   cwtmap_t moTilesMap;
   cwtpos_t moDefaultTile;
+  int miDrawAreaX;
+  int miDrawAreaY;
 };
 
 #endif // MAPDRAWAREA_H
