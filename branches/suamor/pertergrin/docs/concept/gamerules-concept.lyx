@@ -1,0 +1,1511 @@
+#LyX 1.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 218
+\textclass scrartcl
+\language english
+\inputencoding latin1
+\fontscheme palatino
+\graphics default
+\paperfontsize 12
+\spacing single 
+\papersize a4paper
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation skip
+\defskip medskip
+\quotes_language polish
+\quotes_times 2
+\papercolumns 1
+\papersides 2
+\paperpagestyle default
+
+\layout Title
+
+
+\family roman 
+Pertergrin
+\family default 
+\size large 
+
+\newline 
+
+\family roman 
+\series medium 
+\size larger 
+A fantasy role playing game for one or more characters.
+\latex latex 
+
+\backslash 
+vfill
+\layout Author
+
+Author: (C) 1989 - 2001 Reinhard Katzmann
+\newline 
+License: This document is distributed under the GPL.
+\layout Date
+
+Last document update: 25.
+ 03.
+ 2001
+\latex latex 
+
+\backslash 
+newpage
+\layout Standard
+\align center 
+
+\series bold 
+\size larger 
+Abstract
+\layout Abstract
+\noindent 
+Pertergrin a fantasy role playing game.
+ As such it has certain known features of this type of games.
+ It has a freely invented historic background.
+ The player (i.e.
+ YOU) plays the role of a hero.
+ The computer plays the role of the master which controls the game.
+ Pertergrin is also a fantasy role playing game system.
+ As such you do not only play one game (or sequels) but you can create your
+ own games inside Pertergrin.
+ It has the potential to break the historic restriction (so you could theoretica
+lly invent a science fiction role playing game) but this is outside the
+ direct focus of the authors.
+ Pertergrin features an Editor where you can change the Per\SpecialChar \-
+tergrin World.
+ You can create the world, buildings, towns, NPCs, and other objects.
+ Pertergrin is an acronym for Per Terram Grinare.
+ Pertergrin is a game developed for Amiga and Linux.
+\layout Section*
+
+
+\family roman 
+Introduction into the role playing game
+\layout Standard
+
+A role playing game is a game where players perform the role of heroes.
+ This means that they act as if they were such a hero thereby making decisions
+ about acts.
+ Contrary to other games there are no direct rules which prevent the player
+ certain possibilities (except those which are not implemented, but this
+ can be changed, too).
+ The characteristics of a hero are determined when he is created and changed
+ by the experiences (s)he gains throughout teh game.
+ The basic characteristic values are random (or fate as the hero would call
+ it).
+ Additonal attributes based on these values can be influenced by the type
+ of hero the player choses.
+ In the classical role playing environment the creation is undertaken with
+ different dices and checked by a master.
+ The master also is the person who invents the adventures the heroes are
+ participating.
+ Nowadays the computer plays the part which controls the creation and controls
+ the game actions (especially the throws against attributes or a special
+ ability) as far as needed.
+ The advantages and disadvantages will not be discussed here.
+ Currently Pertergrin is only planned as a computer based game (though in
+ the beginning this was different).
+ 
+\layout Standard
+
+So the dices are replaced by number generators and many tasks of the master
+ are done by the computer.
+ The master in most computer based role playing games are the programmers
+ of the game.
+ Pertergrin is a bit different here.
+ Though it is basically like the other games it can be expanded by one or
+ several masters.
+ They can create new places (like dungeons, castles, towns or even changes
+ to the world Pertergrin itself), new non playable characters (NPCs), new
+ objects (like items, weapons, armours, scrolls) and more.
+ This is done inside the PtgEditor.
+\layout Standard
+
+The first part of this document describes the game basics (creation of character
+s, description of items, description of races and hero types).
+ The second part of this document explains the concept of the editor.
+ As the master is responsible for game balance for his adventures this part
+ also should be a help to make an adventure for a hero or a group of heroes
+ not too hard and not too easy.
+ The last part of this document contains several technical aspects of the
+ game and the editor.
+ This technical documentation should help expanding the game and the editor
+ further than the author had in mind when creating it.
+ This is possible through an high modularity.
+\layout Part*
+
+
+\family roman 
+Part I: Game Basics
+\layout Standard
+
+The first part has all the information a player needs for creating a character,
+ playing adventures and the basic actions the player can perform (like bying,
+ selling, fighting, casting spells, negotiating, using items).
+ Though these are mainly player informations the master should read them
+ to fully understand the Pertergrin concept.
+\layout Section*
+
+
+\family roman 
+1.
+ Creating a new character
+\layout Standard
+
+Before a game can be started, the player (i.e.
+ YOU) must create a character which is generally called hero throughout
+ this document.
+ At first the basic characteristic values must be determined.
+ Technical aspects about these and all other values described in this document
+ are in Part III which also contains information about the range where all
+ the values are.
+ The characteristic values are the base for all attributes, special abilities
+ and other values described in this section.
+ All other values can be influenced by the game play.
+ Every hero is armed and equipped with weapons armour and other equipment.
+ This stuff is either the possession of the player or has been bought in
+ shops with the money the character earned while he grew up.
+ Every hero has its own background story which is somewhat random but mainly
+ determined by the race and the hero type the player has chosen.
+\layout Standard
+
+The characteristic values which cannot be changed during game play are:
+ Force, Charisma, Intelligence, Will-Power, Reaction.
+ The attributes which somewhat correspond to these values are: Strength,
+ Wisdom, Courage, Dexterity, Beauty.
+ These values are influenced by the hero type the player can chose.
+ These types are a kind of profession the hero has learned during his education.
+ The following default hero types exist in the game: Knight, Sorcerer, Adventurer, Musician, Druid, Believer.
+ Hero types can also be a mixture of two basic hero types like Sorcerer-Knight
+ though there are no default types of this kind.
+ Every hero has one of these (default) races: Terranian (similar to humans
+ on earth), Elf, Fairy, Dwarf, Gnome, Diminan.
+ Races can be mixed as well (like TerrElf or TerrDiminan) though there are
+ no default races like this.
+ The details of the hero types and races are described in a later section.
+\layout Standard
+
+Several other important values describe a hero.
+ These are used for special complicated actions which a hero can perform.
+ These are based on the characteristic values or attributes but also have
+ a random factor.
+ The most important ones are the life points and the endurance points.
+ The life point get reduced through wounds or other effects while the endurance
+ points go down when certain actions like climbing, fighting or running
+ are performed.
+ Endurance point are restored much faster than life points.
+ If life points go down to zero, the character is dead.
+ If the endurance points go down to zero, the character is unconscious (and
+ remains until a certain number of endurance points is gained again).
+ The details about hit power, protection power, attack chance and defence
+ chance are explained in the fighting secion.
+\layout Standard
+
+The heroes which are able to cast spells have an additional power which
+ comes from the mind: astral power.
+ They concentrate this power to release a spoken magic formula or a spoken
+ prayer.
+ The success of this trial depends on the spell chance (or the dictum chance
+ of believers) they have.
+ The last missing values of a hero are weight, money, infravision and speed.
+ The weight determines how much the player can carry, the infravision gives
+ information how good the hero can see in the dark and the speed shows how
+ fast a player can run.
+ The other special abilities are discussed in the abilities chapter.
+ The next section explains how the character gains experience and how they
+ can be raised.
+\layout Section*
+
+
+\family roman 
+2.
+ Experience Levels of a character
+\layout Standard
+
+While playing the game the hero goes through adventures and gathers experiences.
+ This can happen by killing a monster, finding or disarming a trap (or using
+ other special abilities), solving puzzles or adventures and other things
+ which you need to find out.
+ If he has enough experience he gains a new experience level.
+ In this process the attribute values can be raised as well as the special
+ abilities.
+ All other abilities or values are recalculated.
+ When you gain a new level you have to decide which of the attributes you
+ want to raise by how many times.
+ The same happens for the special abilities.
+ The other values either raise dependant on the attributes which they're
+ basing or by a certain value which depends on the characteristic values.
+ By using special abilities succesfully you gain experience in the way that
+ you get a certain chance that this ability raises by a value calculated
+ by wisdom, the attributes which influence that ability and a random factor.
+ 
+\layout Standard
+
+All the adventures which you might want to play normally have a level restrictio
+n, which means that as long as you have not reached the low level limit
+ or if you are above the upper limit you cannot play this adventure.
+ The adventures which were created with the editor can only be loaded into
+ the game with a format which cannot read by the editor to avoid that the
+ player is cheating.
+ Usually even when you find a loadable adventure, it won't contain the quest
+ elements you are looking for.
+ To make the whole thing even more interesting there is an option in the
+ game which disables saving while you are playing an adventure.
+ Adventures played with this option get a higher experience reward than
+ adventure which were played with the save option switched on for the careful
+ player.
+ The first and simplest possibility to gain experience is fighting.
+\layout Section*
+
+
+\family roman 
+3.
+ How to fight, flee and other alternatives
+\layout Standard
+
+Usually fighting plays an important role in an role playing game.
+ Here you can force decisions which can not be reached otherwise.
+ In this game you have to be quite carful as if you just blindly attack
+ every NPC around you, you will either die quickly or make your adventure
+ unsolveable (except the master has taken some precautions against this).
+ Also it might be possible that some special abilities migh be influenced
+ in a way you do not want when attacking the wrong NPC.
+ If you are attacked there is a high chance that it won't have the described
+ negative effects.
+ Sometimes you even need to attack a NPC as part of the adventure.
+ As described later every character has a fundamental attitude when he starts
+ the game (and these convictions can chage).
+ This gets influenced by fighting as well.
+ You will have to learn in which situations you speak with weapons and in
+ which you communicate with the NPCs.
+ The positive side is that you gain experience as explained in the section
+ before.
+\layout Standard
+
+When the fight can not be avoided first the game checks out who of the opponents
+ has the initiative (depending on the courage attribute and a random factor).
+ The exception is the surprise attack (sleeping NPCs or such which did not
+ expect being attacked).
+ There is a chance that the surprise attack fails depending on the smartness
+ of the opponent.
+ In every round one character can attack and defend one time (ore more often
+ when gained experience in some special abilities).
+ If more then one NPC attacks you you can only attack or defend one (or
+ more depending to your special abilities).
+ Distant fights are possible as well (and require other special abilities
+ to attack more than one time in a round).
+ If the attack was succesful (i.e.
+ attack chance succesfull and defend chance of the opponent not succesfull)
+ the game checks if the opponent was hit.
+ This depends to your protection power.
+ If this is higher than the hit power (and a random factor influenced
+ by special abilities) the opponent did not get hurt.
+ If it is lower the the corresponding value gets substracted from your life
+ points.
+ Also your endurance points might get reduced (especially when using special
+ attack techniques, like a quick attack which of course had to be learned
+ previously).
+ Using these possibilities has also positive influence on the experience.
+ Usually you get little or no experience points while fighting and only
+ killing brings the real amount of experience value.
+\layout Standard
+
+If a character gets very low on life points there is a chance that it will
+ free from the fight.
+ The opponent has one free attack (similar to the surprise attack) if he
+ tries to do this.
+ The succes of a flight mainly depends on the speed an the weight of the
+ stuff he is carrying.
+ Also a flight can be done only a number of rounds as the endurance points
+ go down while fleeing.
+ As the endurance points are closely connected to the life points a flight
+ can come to an end much faster than you would expect.
+ If the character which tries to flee gets hit the courage values is temporarily
+ halfed (and the flight fails).
+ If the courage falls below a certain value the charactar surrenders.
+ If it falls down to zero the character tries to kill himself (self attack).
+ After the fight the courage value gets restored immediately.
+\layout Standard
+
+A fight usually lasts one span (10 minutes), while a round lasts one battle
+ span (3 seconds).
+ Other attack types than closeup fight are described in later sections of
+ this document.
+ For fighting you normally have weapons, armours.
+ These and other equipment items are described in the next section
+\layout Section*
+
+
+\family roman 
+4.
+ Weapons, Armours and other Equipment
+\layout Standard
+
+Every equipment item has the following basic attributes: Hit power value,
+ protection power value, weight, changed attribute values, time to load,
+ price.
+ The hit power value is usually used to show how strong weapons are while
+ protection power value shows how good the armour protects you from hits.
+ The weight of weapon or armour has influences the attack chance and the
+ defend chance.
+ A heavy armour might protect you better but your dexterity goes down as
+ well and this decreases your attack and your defend chance! The time to
+ load is needed for actions like lighting a candle or loading a shoot weapon
+ (bow or crossbow).
+\layout Standard
+
+The range of a weapon or spell is measured as well.
+ Half a metre corresponds a Passus (latin for 
+\begin_inset Quotes pld
+\end_inset 
+
+step
+\begin_inset Quotes prd
+\end_inset 
+
+) (ps).
+ Half a km corresponds a Kilopassus (kp).
+ More measure of length could be defined if needed in a similar way.
+ Speed can be measured in pserum per battle span (ps/bs) (This should satisfy
+ all the physicists out there...)
+\layout Standard
+
+The currency system in Petrergrin is defined as follows: The Pleron (P)
+ coin has the highest denomination.
+ It corresponds 100 gold pieces (G).
+ 1 gold piece is the same as 5 silver pieces or 2 etrum or 50 copper pieces
+ or 100 farthings.
+ The country Pertergrin itself accepts all these types of coins.
+ Other countries might only accept a subset of these coin types.
+ The weights are usually measures in ounces (100 gram).
+ The carrying capacity of a character is usually not more than the half
+ of his weight.
+ The strength and the endurance has a major influence how much the character
+ can carry around.
+ There are three types of character sizes: small, medium and large.
+ The Terranians are medium sized characters while the gnomes are small sized.
+ The game usually pays attention to the sizes of the character and filters
+ those which are too large or too small (as a game option: generally or
+ in shops only).
+ Also the character type might prevent using certain items or prefer certain
+ items (influencing the attribute values).
+ This can be filtered as well.
+\layout Standard
+
+The prices you see when bying or selling things in a shop depend on the
+ beauty value.
+ An average beauty value means that you get about the half of the price
+ shown in the shop when you sell things.
+ You can also let the shopkeeper identify certain items at a price.
+ Usually the shopkeeper is an specialist in a certain area and cannot identify
+ other types of items very well (if at all).
+ This is especially important when you try to identify items which might
+ be magically enhanced.
+ The shopkeeper tells you about the price to identiy an item (usually maximal
+ one tenth of the item value).
+ If you sell an item it is usally identifies by the shopkeeper.
+ Some rare, magic, special or artifact items might not be identified by
+ the shopkeeper though.
+ Like the shopkeeper is a character type with a certain race the heroes
+ are as well as described above.
+ The next two section look for these subjects.
+\layout Section*
+
+
+\family roman 
+5.
+ Hero Races
+\layout Standard
+
+The most important part of this document is belongs to the heroes.
+ A hero has as already described characteristic values and attributes as
+ well as special abilities.
+ The race the player chooses when starting a game influences the abilities
+ the hero gets.
+ Also the region where a new hero starts adventuring might depend on the
+ selected race.
+ The default races can be explained here, but there might be more races
+ added where you have to read extra documentation about the abilities.
+ First I will describe the abilities which every hero has from the beginning
+ before showing several additional abilities dependent to the race you chose.
+ 
+\layout Standard
+
+There are five immunity abilities in the game currently: Against casting,
+ poison, cursing, fire or paralyzing.
+ A Terrenian for example is quite good against casting but bad against fire.
+ Every special attacked is checked against an immunity so the effect might
+ be reduced.
+ Hiding is the ability to avoid to be seen by others and thus being able
+ to make surprise attacks.
+ Helpful in this regard is the ability Walk Silently.
+ If you are silent enough you might cross a dangerous foe without fighting.
+ Intuition is an ability where the hero gets suggestions by combining facts
+ subconsciously (usually in the form of tips).
+ Perception is a similar ability.
+ The hero gets information about his inner feeling in certain situations.
+\layout Standard
+
+When the player chooses a race he can select a number of abilities which
+ he could have learned.
+ The default abilities usually are Finding Traps, Unlock (with an appropriate
+ item), Removing Traps (items can be helpful here as well), Detection (finding
+ hidden objects), Climbing, Swimming, Riding, Haggling (in shops), Unarmed
+ Fighting, Reading & Writing, Music, Behaviour & Self-Control, Sailing
+\layout Standard
+
+Terranians are especially good in Justice and and can additionally learn
+ Cooking, Dress Wounds, Disguising, Detect Food, Convincing, Theft, Ancient
+ Tales, Farming
+\layout Standard
+
+Elfs have the Infravision ability, are especially good in Detection and
+ Hiding and can learn Archery, Detect Food, Explore Items, Herb Lore, Ancient
+ Tales
+\layout Standard
+
+Dwarfs have the Infravision ability, are escpecially good in Finding Traps
+ and Detection and can learn Smithing, Creating Traps, Bodybuilding, 
+\layout Standard
+
+Gnomes have the Infravision ability, are especially good in and and can
+ learn Disguising, Gem & Stone Lore, Illusionism, Alchemy (with appropriate
+ potions), Explore Items, Theft,
+\layout Standard
+
+Faries have the Floating ability, are especially good at Hiding and Walking
+ Silently and can learn Dress Wounds, Convincing, Illusionism, Herb Lore,
+ Nature Lore, Weather Forecast
+\layout Standard
+
+Diminans have the Explore Food ability, are especially good at Farming and
+ Nature Lore and can learn Detection, Weather Forecast, Cooking, Detect
+ Food, Theft, Justice, Hiding
+\layout Standard
+
+The details of the special abilities are described in skills section, as
+ this section does not include several of the hero type abilities.
+ Additional abilities might be learned by a player during the game play
+ though there is a high probability that it is more difficult for the player
+ to gain a high skill value than with the basic abilities which are a natural
+ feature of the race or were learned by training for a profession.
+\layout Standard
+
+The race the player chooses also influences the characteristic values of
+ a characters.
+ Diminians, Gnomes and Dwarves are small people.
+ Big races include dragons or giants.
+ While the big races usually are much stronger the small races have a higher
+ dexterity (imagine a giant picking a trapped door or chest).
+ Terranians are an average race and the characteristic values are random
+ (this reflects the randomly chosen personal interest of a character) or
+ can be influenced directly, though concentration on a certain attribute
+ makes other attributes weaker.
+ This is valid for the other races as well though they cannot become as
+ average as a terranian.
+ Elves are very intelligent and beautiful though not so strong.
+ They find it more difficult to gain experience as they are one of the oldest
+ folk on the Pertergrin world.
+ Dwarfs are strong but stubborn and very dextrous as well.
+ They are not very intelligent.
+ Gnomes are quite weak but very dextrous and smart.
+ They are not the beautiest race around but no one should dare to tease
+ them for their noses.
+ The faries are the most weak race around but they compensate this by an
+ extremely beauty which stuns and calms down many beings they meet.
+ They are connected to the nature and would never attack animals.
+ They also are very courageous.
+ More informations on the races still have to be written.
+\layout Section*
+
+
+\family roman 
+6.
+ Hero Types
+\layout Standard
+
+The hero type reflects the profession a character has chosen while he grew
+ up.
+ Usually the profession a player character can choose is independant of
+ the race he chooses.
+ But as the races have advantages in certain skills and attributes it useful
+ to avoid race/type combination which do not fit well together like a farie
+ fighter or a dwarven magician.
+ Similar to the races only the default types are explained in this section.
+ The hero type influences the attributes as well.
+ Every race has practice in one ore more weapons but not all of them have
+ practice with bows or shields as well.
+\layout Standard
+
+There are two types of profession.
+ One is the basic hero type which the player chooses when he starts playing.
+ As the played advances he might find interest in a certain area in his
+ profession where he wants to learn more.
+ Such a hero type can be choosen at a certain level defined within the advanced
+ hero type (recommanded at least five experience levels).
+ The default races explain the most common basic types and only few advanced
+ types.
+ The basic types should cover most hero types while I hope that many advanced
+ types will be added to the game.
+ These advanced types have many abilities which can only be learned by choosing
+ such an advanced hero types.
+ Several of these attributes can be found in different advanced hero types
+ especially in mixed types like the magician-fighter.
+\layout Standard
+
+Weapons are classified.
+ Each class has its own ability.
+ Some weapons like knives can be used in different ways so there can be
+ two categories for a class.
+ The generic abilities Improvised Fighting and Improvised Throwing include
+ all objects (this includes objects usually not used for fighting or throwing).
+ They improve fighting with every object though at a much lower degree than
+ with normal weapon.
+ Typical Weapon abilities are Sword Practice, Axe Practice, Knive Practice,
+ Mace Practice, Morning Star Practice, Two Handed Weapon Practice.
+ Typcial Thrown Weapon abilities are Bow Practice, Crossbow Practice, Sling
+ Practice, Thrown Rocks Practice, Thrown Knives Practice, Thrown Spears
+ practice, Thrown Axes Practice, Boomerang Practice.
+ Armours are classified as well.
+ The normal classes are body, helmet, cloak, gauntlet and boot armour.
+ Defending Abilities are Shield Practice, Body Practice, Dodge Practice,
+ Scare Practice, Confuse Practice, Disarm Practice.
+ Other fighting abilities include Unarmed Fighting (Advanced: Head/Body/Hand/Fee
+t Fighting), Bowyer/Fletcher, Sharping (requires a tool).
+\layout Standard
+
+The magicians additionally use spells for many actions.
+ These spells are classified: Healing Spells, Sorcerer Spells, Arcane Spells,
+ Fighting Spells, Defence Spells, Nature Spells, Illusion Spells, Priest
+ Spells.
+ A good player characteristic is the basis for healing spells and neutral
+ or good basis is needed for Nature and Defence Spell.
+ Fighting Spells can only be learned by neutral or chaotic characters.
+ Each spell class is represented by an ability which influences the spell
+ chance when casting a spell.
+ The abilities are Healing Casting, Sorcerer Casting, Arcane Casting, Fighting
+ Casting, Defence Casting, Nature Casting, Illusion Casting, Priest Casting.
+ Several spells for each class are documented in the spells section.
+ Other magic abilities include Alchemy, Create Magic <itemtype>, Improve
+ Magic <itemtype>, Recharge, Magically Enhance <itemtype>, Write Scroll.
+ Typical item types are rings, stuffs, <armour type>, <weapon type>, wands,
+ amulets, instruments, gems.
+\layout Standard
+
+When choosing a hero type the player can select several from the above type
+ depending of the type of profession he chooses.
+ Unarmed Fighting, Mace Practice, Sling Practice, Thrown Rocks Practice,
+ Dodge Practice, Body Practice are the abilities every hero type can choose
+ additionally to the abilities shown in the previous section.
+ The default hero types can learn the following extra attributes:
+\layout Standard
+
+The Fighter has two fighting, defence and one other ability.
+ He has no restriction in choosing one of the abilities.
+ This default hero type cannot learn any of the magician abilities.
+ Advanced fighter types don't have this restricion, like the paladin which
+ can learn Priest Casting or the Fighter-magician which can learn Fighting
+ and Defence Casting.
+ He is especially good in one fighting or defence ability.
+ He can additionally learn Archery, Behaviour & Self-Control, Bodybuilding,
+ Climbing, Dress Wounds, Riding.
+\layout Standard
+
+The Enchanter is the base magician class.
+ He can choose from two spell classes.
+ It is recommanded to use one of the generic classes Sorcerer or Arcane
+ Casting.
+ Advanced enchanters can choose the fighting way like fighters (though the
+ focus is more on the casting side) and get Magician-fighter.
+ Else they can either concentrate on the enchanter hero type or learn additional
+ spell classes.
+ The possibilities are quite large.
+ The Enchanter is especially good at one of the two chosen casting class.
+ He can additionally learn Alchemy, Ancient Tales, Convincing, Disguising,
+ Explore Items, Herb Lore.
+ The Enchanter cannot learn Two Handed Weapon Practice, Thrown Spears or
+ Axes Practice, Smithing, Disarm Practice.
+\layout Standard
+
+The Adventurer is the most common hero type.
+ Though he is quite average compared to the other hero types he has the
+ most rise possibilities.
+ He can either chose one Casting class and one Fighting and Defence ability
+ or Two Fighting and one Defence ability or One Fighting and two Defence
+ abilities or One Generic Ability and One Fighting and Defence ability.
+ The chosen type usually determines the direction in which the character
+ should be developed.
+ Typical classes are the Druid, the Ranger or the Vagabond.
+ He is especially good in one of the chosen abilities.
+ Additionally he can learn all (generic) abilities, recommanded are Ancient
+ Tales, Climbing, Cooking, Detect Food, Herb Lore, Nature Lore.
+\layout Standard
+
+The Believer is the basic religious type.
+ I have not yet determined if there will only be one god or a whole gods
+ club like in other role playing games.
+ For the moment I assume this basic type behaves similar like a christian
+ (ehrm better said like a crusader, as he is not that peaceful).
+ He posesses the Priest Casting ability and either one of the additional
+ generic Casting abilities and a generic Ability or one Fighting and Defence
+ Ability.
+ He is especially good in his Priest Casting ability.
+ He can additionally learn Convert, Dress Wounds, Nature Lore, Bless, Explore
+ Items, Justice.
+ He does not use weapons with a blade (knives, swords, axes) and armour
+ made out of animals (leather, fur, coat).
+ Paladins, Priests or Scouts are typical advanced hero types of a Believer.
+\layout Standard
+
+The Bard is the musical hero type of Pertergrin.
+ He posesses instruments which might incluence the behaviour of people.
+ Some of them have magical abilities.
+ His special ability is Music Lore and one instruments which acts like a
+ Casting ability.
+ Instead of astral power the instruments stores a number of charge which
+ gets recharged through training and care of the instrument.
+ Else the abilities are similar to an adventurer.
+ He can either chose one Fighting and Defence ability or chose to learn
+ an additional instrument (which improves the chosen casting ability) and
+ one generic ability.
+ Additionally he can learn Ancient Tales, Convert, Explore Items, Disguising,
+ Artistic Practice, Perception.
+ Possible advanced hero types could be the Rogue, Vagabond or Gipsy.
+\layout Standard
+
+The following hero types are advanced types: Thief, Paladin, Druid, Wizard,
+ Ranger, Priest, Smith, Farmer, Knight, Alchemist, Explorer, Rogue
+\layout Standard
+
+Ok, I think that should be enough of the shocking ability theory, you can
+ overlook the next chapter as it only contains all abilities again in alphabetic
+al order (and as you know, this is only a base ;-) we're happy if this all
+ works as intended)
+\layout Standard
+
+ToDo: Requirements for base classes ? Better: Requirements for advanced
+ classes; Restriction of number of abilities which can be learned; training
+ abilities (loosing ability value if untrained a longer time ?), restricted
+ number of skill places (depending on the number of available skills), gaining
+ one additional per each 5-10 Level.
+\layout Section*
+
+
+\family roman 
+7.
+ List of Abilities
+\layout Standard
+
+As I promised, here is the list of all abilities with some short descriptions.
+ They have to be improved of course.
+\layout Standard
+
+Alchemy - Knowledge about potions and (basic) chemistry, requires alchemy
+ tools 
+\layout Standard
+
+Ancient Tales - Knowledge about history and Practice in telling Tales 
+\layout Standard
+
+Archery - Knowledge about bows, slings and crossbows, requires one of those
+ thrown weapon (and missiles).
+ 
+\layout Standard
+
+Artistic Practice - Practice in making art object and cloning of objects
+ 
+\layout Standard
+
+Axe Practice - Practice about fighting with axes 
+\layout Standard
+
+Behaviour & Self-Control - Knowledge and Practice about yourself 
+\layout Standard
+
+Bless - Practice how to improve the right feeling or to remove curses (level
+ 1 curses)
+\layout Standard
+
+Bodybuilding - Practice in improving the shape of your body 
+\layout Standard
+
+Body Practice - Practice about body defence 
+\layout Standard
+
+Boomerang Practice - Practice about throwing weapons which return to the
+ sender 
+\layout Standard
+
+Bow Practice - Practice about fighting with bows 
+\layout Standard
+
+Climbing - Knowledge and Practice, requires climbing tools 
+\layout Standard
+
+Cooking - Knowledge and Practice, requires cooking tools 
+\layout Standard
+
+Confuse Practice - Practice about tangling enemies 
+\layout Standard
+
+Convert - Knowledge how to make other people believe in your religion 
+\layout Standard
+
+Convincing - Practice in convincing your own opinion 
+\layout Standard
+
+Create Traps - Practice about setting up traps, requires trap tools 
+\layout Standard
+
+Crossbow Practice - Practice about fighting with crossbows 
+\layout Standard
+
+Detection - Practice in searching and finding things 
+\layout Standard
+
+Detect Food - Knowledge and Practice in searching or Hunting for food 
+\layout Standard
+
+Disarm Practice - Practice about removing weapons from foes 
+\layout Standard
+
+Dress Wounds - Knowledge and Practice how to look for wounds 
+\layout Standard
+
+Disguising - Practice in wearing clothes so you are not recognized, requires
+ (special) clothes 
+\layout Standard
+
+Dodge Practice - Practice about dodging attacks and thrown weapons 
+\layout Standard
+
+Explore Items - Knowledge about many (non-magic) items, helps identifying
+ 
+\layout Standard
+
+Farming - Knowledge and Practice how to plant seed ant to look for plants,
+ requires farming tools 
+\layout Standard
+
+Finding Traps - Knowledge about traps for identifying 
+\layout Standard
+
+Floating - Practice in flying above the ground (requires wings or similar)
+ 
+\layout Standard
+
+Gem & Stone Lore - Knowledge about glittering/metallic items (gems, gold,
+ silver etc.) 
+\layout Standard
+
+Haggling - Practice in convincing shopkeepers of low prices (when bying)
+ 
+\layout Standard
+
+Herb Lore - Knowledge about herbs and seeds 
+\layout Standard
+
+Hiding - Practice about hiding in shadows or finding hide-outs 
+\layout Standard
+
+Knive Practice - Practice about fighting with knives and daggers 
+\layout Standard
+
+Immunity against Casting - Practice in resisting against spells 
+\layout Standard
+
+Immunity against Poison - Practice in resisting poison effects 
+\layout Standard
+
+Immunity against Cursing - Practice in resisting cursing 
+\layout Standard
+
+Immunity against Fire - Practice in resisting fire 
+\layout Standard
+
+Immunity against Paralyzing - Practice in resisting paralyzing 
+\layout Standard
+
+Infravision - Practice in seeing in the dark 
+\layout Standard
+
+Justice - Knowledge about good or bad behaviour 
+\layout Standard
+
+Mace Practice - Practice about fighting with maces and flails 
+\layout Standard
+
+Morning Star Practice - Practice about fighting with Morning Stars or similar
+ weapons 
+\layout Standard
+
+Music Lore - Knowledge about sounds and noise.
+ 
+\layout Standard
+
+Nature Lore - Knowledge about nature 
+\layout Standard
+
+Perception - Practice in sensing things 
+\layout Standard
+
+Removing Traps - Practice disarming traps, trap tools are very helpful 
+\layout Standard
+
+Reading & Writing - Knowledge and Practice, might require writing tools
+ 
+\layout Standard
+
+Riding - Practice in climbing on animals and using them to travel 
+\layout Standard
+
+Sailing - Knowledge and practice about moving with a ship in the sea 
+\layout Standard
+
+Scare Practice - Practice about terrifying enemies 
+\layout Standard
+
+Shield Practice - Practice about defending with shields 
+\layout Standard
+
+Sling practice - Practice about fighting with slings 
+\layout Standard
+
+Smithing - Knowledge and Practice about improving weapons and armours (requires
+ smithing tools) 
+\layout Standard
+
+Swimming - Practice about surviving in deep water 
+\layout Standard
+
+Sword Practice - Practice about fighting with swords 
+\layout Standard
+
+Theft - Practice about removing small items from other beings 
+\layout Standard
+
+Thrown Axes Practice - Practice about throwing axes 
+\layout Standard
+
+Thrown Knives Practice - Practice about throwing knives or daggers 
+\layout Standard
+
+Thrown Rocks Practice - Practice about throwing stones or rocks 
+\layout Standard
+
+Thrown Spears Practice - Practice about throwing spears 
+\layout Standard
+
+Two Handed Weapon Practice - Knowledge and Practice about fighting with
+ two weapons at the same time 
+\layout Standard
+
+Unarmed Fighting - Knowledge and Practice about fighting without weapons
+ 
+\layout Standard
+
+Unlock - Knowledge and Practice about removing locks from doors 
+\layout Standard
+
+Walk Silently - Practice about moving without any noisce 
+\layout Standard
+
+Weather Forecast - Knowledge and Practice about the development of the weather
+\layout Section*
+
+
+\family roman 
+8.
+ Magic and Spells
+\layout Standard
+
+This chapter contains a list of spells (or better will contain it).
+ Every spell has severel parameters which describe the effect of a spell:
+ The range of the spell (R), the duration (how long a spell lasts) (D),
+ the effect itself (descriptive) (E), the cost (usually astral power (Ap))
+ (C), deduction (influencing the chance that the spell will succeed) (DD).
+ The spells listed here are subject to change (at least the membership of
+ the casting class).
+\layout Subsubsection*
+
+Arcane Spells:
+\layout Standard
+
+1) Web - R: 5 ps, D: permanent (p), E: web is created for catching certain
+ items (can also have effects like a spider web on a floor), C: 20 Ap/ps
+ size 
+\layout Standard
+
+2) Enchant Item - R: Touch (T), D: p, E: enhances an item magically, C:
+ dependent on item and 
+\begin_inset Quotes pld
+\end_inset 
+
+charge
+\begin_inset Quotes prd
+\end_inset 
+
+ of item, DD: dependent on charge of item
+\layout Standard
+
+3) Deform Item - R: T, D: p, E: similar to smithing (i.e.
+ only one material, material can be added), very powerful!, C: 20 Ap/ounce
+ (changed+added!)
+\layout Standard
+
+4) Reaction - R: 1 ps, D: at once, E: uncertain, C: 132 Ap
+\layout Standard
+
+5) Magical Insight - R: 500 ps, D: p, E: sense all non-living objects (similar
+ to a map), may also appear partially, C: 50 Ap, DD: 5%/difficulty grade
+ of level
+\layout Standard
+
+6) Transform Water - R: T, D: p, E: transforms water into poison or heal
+ potion (or another random potion), C: 15 Ap/difficulty grade of potion
+\layout Standard
+
+7) Transform Food - R: T, D: p, E: transforms food ration into other (f.e.
+ poisoned or especially nourishing), C: 20 Ap/difficulty grade of food
+\layout Standard
+
+8) Teleport Other - R: T, D: at once, E: teleports object up to 1000ps (or
+ into a save place in the guild), C: 25 Ap + 10 Ap/20 ounce
+\layout Standard
+
+9) Animal Polymorph - R: 0, D: 1 sp/level, E: Magician transforms into choosen
+ animal (excluding equipment, can be used if appropriate), C: 10 Ap/animal
+ level 
+\layout Standard
+
+10) Defend Elemental Force - R: 0/T, D: p (A), E: holds back one element
+ from a (N)PC (can be used once per adventure on a character), C: 50 Ap
+\layout Standard
+
+11) Comprehend Languages - R: hearing distance, D: 1 sp/level, E: Magician
+ can understand all languages (except animals and plants), C: 5 Ap
+\layout Standard
+
+12) Break Spell - R: 50 ps, D: p, E: removes magic caused by spells, C:
+ 50 Ap
+\layout Standard
+
+13) Perceive Evil - R: 200 ps, D: 2 bs/level, E: Magician sees all evil
+ beings in range, C: 11 Ap
+\layout Standard
+
+14) Shock Ray - R: 30 ps, D: 5 bs/level, E: invisible rays having an effect
+ like a shock, C: Ap=ep of enemy
+\layout Standard
+
+15) Magic Merge - R: 0, D: 5 bs/level, E: magician merges (physically) with
+ wall or floor and cannot be attacked physically (until magician moves),
+ C: 5 Ap
+\layout Standard
+
+16) Repair Items - R: T, D: p, E: repairs broken item not longer broken
+ than 2 hours, C: 10 Ap
+\layout Standard
+
+17) Teach Telekinesis - R: 0/T, D: p, E: magician 
+\begin_inset Quotes pld
+\end_inset 
+
+teaches
+\begin_inset Quotes prd
+\end_inset 
+
+ (N)PC telekinesis, usage and cost like sorcerer spell!, C: 50 Ap/NPC
+\layout Standard
+
+18) Annul Telekinesis - R: 10 ps, D: p, E: magician annuls teaching of telekines
+is or an telekinesis spell, C: 5 Ap
+\layout Standard
+
+19) NPC Knowledge - R: T, D: p, E: magician learns certain attributes of
+ the touched NPC, C: 40 Ap
+\layout Standard
+
+20) Destroy Trap - R: T, D: 5 ps, E: removes all traps in range, C: 3 Ap/trap
+\layout Subsubsection*
+
+Healing Spells:
+\layout Standard
+
+1) Minor heal force - R: T, D: p, E: heals 1 Lp for 1 Ap, C: see effect
+\layout Standard
+
+2) Major heal force - R: T, D: p, E: heals 1 Lp for 3 Ap including poison
+ and blindness with, always suceeds, C: see effect (minimum 5 Lp) 
+\layout Standard
+
+3) Cure Sickness - R: T, D: p, E: cures one arbitrary (non-magical) illness,
+ C: 9 Ap/Level of illness (healing can be done in several steps ?)
+\layout Standard
+
+4) Unpetrify - R: T, D: p, E: cures victim from petrification, C: 20 Ap
+\layout Standard
+
+5) Cure Poison - R: T, D: p, E: heals from poisoning, C: 1Ap/2 poison levels
+\layout Standard
+
+6) Life Ray - R: 50 ps, D: p, E: all dead beings (including animals/plants)
+ in range become alive, C: 500 Ap
+\layout Standard
+
+7) Remove Paralysis - R: T, D: p, E: removes paralysis/shock effect, C:
+ 4 Ap
+\layout Standard
+
+8) Health Potion - R: T, D: p, E: Fills empty flask with a curing fluid
+ (heal, cure poison/blindness, illness etc), C: 2Ap/Lp or 5Ap or 9 Ap/Level
+ of illness
+\layout Standard
+
+9) Reanimate Dead - R: T, D: p, E: bring back life into a dead body, C:
+ 90Ap, DD: -8% per day since death
+\layout Standard
+
+10) Nourish Charm - R: 0/T, D: p, E: feeds magician/PC, C: 9 Ap
+\layout Standard
+
+11) Reanimate Undead - R: T, D: p, E: destroys undead, reveals information
+ about dead cause of victim, C: 12 Ap + 2 Ap since day of death
+\layout Subsubsection*
+
+Sorcerer Spells:
+\layout Standard
+
+1) Cure Wounds - R: T, D: p, E: heals 1lp/Ap, C: see effect
+\layout Standard
+
+2) Artificial Light - R: like torch, D: 4 sp + 1/level, E: creates light
+ similar to torch, C: 2Ap
+\layout Standard
+
+3) Enchant Lock - R: T, D: p (until broken), E: locks doors or chests magically,
+ C: 10Ap
+\layout Standard
+
+4) Disenchant Lock - R: T, D: p, E: unlocks doors or chests, C: 5Ap/level
+ of lock (upto level of magician)
+\layout Standard
+
+5) Magic Lance - R: 10 ps, D: at once, E: magic energy lance, C: 2Ap/dp
+ (damage points)
+\layout Standard
+
+6) Telepathy - R: 5 ps, D: 5 bs, E: Magician can read/feel mind, C: 15 Ap
+\layout Standard
+
+7) Perceive Telepathy Scan - R: 5ps, D: 5 sp, E: Magician senses/blocks
+ telephatic scans, C: 30 Ap
+\layout Standard
+
+8) Invisibility - R: 0, D: 1Sp/Level, E: Magician and all person near 1
+ ps become invisible, C: 15 Ap
+\layout Standard
+
+9) See Invisible - R: 10 ps, D: 1 sp, E: Magician sees all invisible items/being
+s, C: 12 Ap
+\layout Standard
+
+10) Teleport - R: 0, D: at once, E: Magician teleports up to 1000 ps, C:
+ 5 Ap/ps
+\layout Standard
+
+11) Telekinesis - R: 30 ps, D: 2 sp, E: Magician can move (accelerate) or
+ levitate items with the help of the mind, C: 1Ap/20 Ounces
+\layout Standard
+
+12) Look through Walls - R: 1ps, D: 5 bs, E: Magician can see through walls/door
+s (even chests) up to 1 ps thicknesss, C: 2 Ap
+\layout Standard
+
+13) Form Matter - R: T, D: 1 day, E: Magician can remodel a non-magic item
+ to another 
+\begin_inset Quotes pld
+\end_inset 
+
+lower
+\begin_inset Quotes prd
+\end_inset 
+
+ non-magic item, C: 100 Ap/object 
+\layout Standard
+
+14) Remove Magic - R: 1 ps, D: p, E: Every (!) magic item / spell / being
+ in range (!) looses its magic, C: 60 Ap
+\layout Standard
+
+15) Underwater Breath - R: 0/T, D: 1sp/level, E: Magician or touched person
+ can breathe under water, C: 10 Ap/person
+\layout Standard
+
+16) Recognize Enchantment - R: 30 ps, D: 1 bs/level, E: Magician sees all
+ magic things in a light green frame, C: 5 Ap
+\layout Standard
+
+17) Read Magic Writing - R: 1 ps, D: 1 sp, E: Magician is able to read everythin
+g, C: 5 Ap
+\layout Standard
+
+18) Magic Flight - R: 0, D: 2 sp + 1/level, E: Magician and persons are
+ able to fly, C: 20 Ap + 20/NPC
+\layout Standard
+
+19) Take Over - R: visual contact, D: 2 sp/level, E: Magician takes over
+ victim (and controls it), C: 75 Ap
+\layout Standard
+
+20) Insight in 5th Dimension - R: 100 ps, D: 1 bs/level, E: Magician sees
+ all psi-caused actions (f.e.
+ telepathy, telekinesis, teleportation), C: 20 Ap
+\layout Subsubsection*
+
+Fighting Spells:
+\layout Standard
+
+1) Magic Spear - R: 20 ps, D: at once, E: magic energy spear, C: 3Ap/dp
+\layout Standard
+
+2) Fire Explosion - R: 25 ps/2ps radius, D: at once, E: fire damage d6*level
+ dp, C: 25 Ap, DD: level-30% (upto 0% on level >=30)
+\layout Standard
+
+3) Object to Stone - R: 15 ps, D: p, E: item/being is transformed to stone,
+ C: 30 Ap, DD: -3%/level of item/being
+\layout Standard
+
+4) Create Servant - R: 30 ps, D: 1 year/level, E: Create Servant (a NPC),
+ with somewhat random values, C: 50 Ap/level of NPC
+\layout Standard
+
+5) Cone of Ice - R: 15 ps, D: at once, E: magic cold cone within 1 ps radius,
+ cold damage d4*level dp, C: 20 Ap, DD: like 2)
+\layout Standard
+
+6) Earth Quake - R: 50 ps, D: at once, E: destroys everything in range except
+ in the middle (4 ps), C: 100 Ap
+\layout Standard
+
+7) Sleep NPC - R: 10 ps, D: 1 sp, E: sleeps one or several NPCs in range,
+ C: 7 Ap/victim (wakes up when attacked)
+\layout Standard
+
+8) Paralyze Enemy - R: 5 ps, D: 2 bs/level, E: paralyzes one or several
+ NPCs in range, C: 20 Ap/victim
+\layout Standard
+
+9) Petrify - R: 1 ps, D: p, E: NPC or item is transformed into stone (continues
+ to live 5 days after that), C: 55 Ap
+\layout Standard
+
+10) Create Acid - R: 60 ps, D: p, E: creates acid source or small acid lake
+ with radius of 2 ps which looks like water, C: 50 Ap
+\layout Standard
+
+11) Flash Fire - R: 30 ps, D: p, E: flashes courses through bodies of victims
+ in range, C: 10Ap/dp (all victims get same damage)
+\layout Standard
+
+12) Curse - R: Hearing distance, D: p, E: Covers victim/item with a curse,
+ C: 20 Ap/curse level and grade
+\layout Standard
+
+13) Create Undead - R: T, D: p, E: Creates undead creatures from dead body,
+ C: 10 Ap + 2Ap/Lp
+\layout Standard
+
+14) Sphere of Death - R: 50 ps, D: p, E: all beings (including plants/animals)
+ die, C: 400 Ap, DD: -5%/level of victim (pure black, chaotic magic!)
+\layout Standard
+
+15) Fire Missiles - R: like arrows, D: at once, E: creates fire arrows causing
+ d4*level fire damage, C: 4 Ap/arrow, DD: like arrows
+\layout Subsubsection*
+
+Defence Spells:
+\layout Standard
+
+1) Visibility - R: 5 ps, D: 10 bs/level, E: invisible beings/items become
+ visible (for all persons, not only magician), C: 15 Ap
+\layout Standard
+
+2) Magic Shield - R: 1 ps, D: 1 sp, E: Magician gets a protection shield
+ against normal attacks (not elemental / magical), C: 30 Ap
+\layout Standard
+
+3) Magic Armour - R: 5 ps, D: 1 sp, E: Magician and all things in the area
+ are protected through an magic armour from all sides, C: 50 Ap
+\layout Standard
+
+4) Elemental Shield - R: 1 ps, D: 5bs/level, E: Magician is protected against
+ all elemental attacks (does not include energy or normal attacks!), C:
+ 25 Ap
+\layout Standard
+
+5) Magic Wears Off - R: T, D: 10bs/level, E: all magically caused attacks
+ (includes magically enhanced items) have no effect, C: 35 Ap
+\layout Standard
+
+6) Anti Shock Sphere - R: 10 ps, D: 1 sp, E: Magician and PCs are protected
+ against shock waves within the sphere, C: 20 Ap
+\layout Standard
+
+7) Missile Control - R: 50 ps, D: 2 sp, E: Magician can control missiles
+ through concentration, C: 5Ap/missile (up to 5 missiles/2 levels)
+\layout Standard
+
+8) Teach Teleportation - R: 0/T, D: p, E: Magician 
+\begin_inset Quotes pld
+\end_inset 
+
+teaches
+\begin_inset Quotes prd
+\end_inset 
+
+ teleportation to (N)PC, usage and cost like sorcerer spell!, C: 50 Ap/(N)PC
+\layout Standard
+
+9) Annul Teleportation - R: 15 ps, D: p, E: Annul teaching of teleportation
+ or a teleportation spell, C: 10 Ap
+\layout Standard
+
+10) Floating - R: 0, D: 1sp/level, E: Float in the air, avoiding all traps,
+ C: 12 Ap
+\layout Standard
+
+11) Eagle Eye - R: 40 ps, D: 2sp/level, E: Creates an (moveable) invisible
+ eagle eye (infravision possible) above the magician for observing, C: 17
+ Ap
+\layout Standard
+
+12) Acceleration - R: 0/T, D: 1sp/2level, E: magician or PC gets much more
+ speedy, C: 10 Ap/acceleration point
+\layout Subsubsection*
+
+Nature Spells:
+\layout Standard
+
+1) Nebula - R: 20ps + 1ps/level, D: 2 bs/level, E: Creates 50+1/level cps
+ (cubic passus) of nebula in range, C: 20 Ap
+\layout Standard
+
+2) Absolute Silence - R: 5 ps, D: 1 sp/level, E: creates a cube of silence
+ (20 os) in range (makes casting impossible ?), C: 15 Ap
+\layout Standard
+
+3) Pathfinder - R: 10 kp, D: 2 sp, E: Magician sees all ways in range and
+ all beings walking on them (only works outdoors or in planted dungeons),
+ C: 27 Ap
+\layout Standard
+
+4) Control Weather - R: 0, D: 1 sp/level, E: Creates a certain weather (outdoor)
+, C: 75 Ap
+\layout Standard
+
+5) Natural Flashes - R: 1 ps, D: at once, E: creates flashes on a victim
+ (outdoor spell or dungeon with large water regions), C: 2AF/Sp, DD: Level-20%
+\layout Standard
+
+6) Locate Animals - R: 100 ps, D: 5 bs, E: All animals illuminate in a yellowish
+ color, C: 32 Ap
+\layout Standard
+
+7) Plant Language - R: 5 ps, D: 5 sp, E: Magician understands plants, C:
+ 15 Ap
+\layout Standard
+
+8) Animal Language - R: 5 ps, D: 5 sp, E: Magician understands animals,
+ C: 15 Ap
+\layout Standard
+
+9) Plant/Animal Knowledge - R: 20 ps, D: 1 sp/level, E: Magician recognizes
+ attributes of animals or plants in range, C: 70 Ap
+\layout Standard
+
+10) Wonder Healing - R: T, D: p, E: heals all wounds (including poison and
+ blindness) and illness (last one outdoor only), C: 5Ap/Lp, 10 Ap/illness
+ level
+\layout Standard
+
+11) Drink & Meal - R: 1 ps, D: p, E: creates enough meal for satiating the
+ party, C: 10 Ap/pc
+\layout Standard
+
+12) Water Research - R: 0, D: 10 sp/level, E: Magician can breathe like
+ a fish, C: 5 Ap
+\layout Standard
+
+13) Water Bridge - R: 0, D: 1 sp/level, E: Magician can walk on water, C:
+ 30 Ap
+\layout Standard
+
+14) Desintegrate Undeads - R: 20 ps, D: p, E: destroys undeads, 7Ap/victim
+ and level, DD: -1%/level (every victim is checked)
+\layout Standard
+
+15) Numbing - R: T, D: 5 sp, E: numbs plants or animals (for healing, feeding
+ etc.), C: 5 Ap
+\layout Standard
+
+16) Wall - R: 50 ps, D: 2 bs/level, E: creates Wall from natural material,
+ C: 45 Ap
+\layout Standard
+
+17) Plant Growth - R: 10 ps/level, D: 5 sp, E: lets plants in range grow
+ by a certain amount, C: 15 Ap/growth level
+\layout Standard
+
+18) Nature Attack - R: 20 ps, D: 1 bs/level, E: spores and insect attack
+ all enemies in range causing d6*level damage, confusion and terror, C:
+ 10 Ap/NPC
+\layout Standard
+
+19) Glowing Light - R: like lamp, D: 2 sp/level, E: glowing animals/plants
+ become stimulated to emit light, C: 3 Ap
+\layout Standard
+
+20) Snake Stick - R: T, D: 1 sp/level, E: a stick, sword or similar item
+ is transformed into a (random) snake, C: 1 Ap/lp (dead snake transforms
+ back)
+\layout Subsubsection*
+
+Illusion Spells:
+\layout Standard
+
+1) Double - R: 20 Ps, D: 1 sp/level, E: Magician creates doubles from himself
+ or another person, C: 20 Ap/person and double
+\layout Standard
+
+2) Gas Change - R: 0, D: 5 sp + 1/level (abortable), E: Magician becomes
+ gaseous, C: 35 Ap
+\layout Standard
+
+3) Transform - R: 0/T, D: 5 bs/level, E: NPC transforms into an object,
+ C: 99 Ap
+\layout Standard
+
+4) Create Illusion - R: T, D: 5 bs/level, E: NPC is being confused by an
+ illusion, C: 10 Ap/level of NPC
+\layout Standard
+
+5) Fireworks - R: 500 cps, D: 3 sp, E: magician creates fireworks at the
+ sky, distracting all the (N)PCs in range (outdoor only), C: 20 Ap
+\layout Standard
+
+6) Terrain Transformation - R: 200 cps, D: 5 sp, E: magician changes parts
+ of the terrain, C: 15 Ap/changed part
+\layout Standard
+
+7) Fire Wall - R: 100 ps, D: 1 sp/level, E: creates fire wall which does
+ no damage when stepped through, C: 3 Ap
+\layout Standard
+
+8) Conjure Daemon - R: 20 ps, D: 2 sp/level, E: creates minor daemon which
+ can attack a victim, all lp damages transform to ep 
+\begin_inset Quotes pld
+\end_inset 
+
+damages
+\begin_inset Quotes prd
+\end_inset 
+
+ afterwards, C: 25 Ap
+\layout Standard
+
+9) Mass Illusion - R: 30 ps, D: 10 bs/level, E: All PCs take the form of
+ trees or pillars to deceive enemies, C: 12 Ap/PC
+\layout Standard
+
+10) Frog Trick - R: 10 ps, D: 2 sp, E: All determined victims believe they
+ were transformed to frogs, C: 1Ap/frog
+\layout Subsubsection*
+
+Priest Spells:
+\layout Standard
+
+1) Heal Wounds - R: T, D: p, E: heals 1 Lp for 2 Ap, always suceeds, C:
+ see effect
+\layout Standard
+
+2) Relieve Fear - R: 15 ps, D: p, E: make victim bold, C: 5 Ap
+\layout Standard
+
+3) Remove Darkness - R: T, D: p, E: cures victim from blindness, C: 15 Ap
+\layout Standard
+
+4) Conjure Brightness - R: like a lamp, D: Level*5, E: creates light, C:
+ 2 Ap
+\layout Standard
+
+5) Divine Health - R: T, D: p, E: cures one arbitrary (non-magical) illness,
+ C: 10 Ap/Level of illness (healing can be done in several steps ?)
+\layout Standard
+
+6) Create Water - R: 60 ps, D: p, E: creates source or small lake in range
+ of 2 ps, C: 5 Ap
+\layout Standard
+
+7) Defend Cold - R: 10 ps, D: 10 Sp/Level, E: Defend shield against cold,
+ K: 10 Ap
+\layout Standard
+
+8) Snake Protection - R: 5 ps, D: 6, E: holds back snakes, K: 3Ap/Snake
+\layout Standard
+
+9) Defend Fire - R: 10 ps, D: 5 Sp/Level, E: Defend shield against fire,
+ K: 10 Ap
+\layout Standard
+
+10) Divine Nourishment - R: 1 ps, D: p, E: creates food from solid objects,
+ K: 1Ap/ounce
+\layout Standard
+
+11) Recognise Evil - R: 500 ps, D: 2 bs, E: Magician feels Evil beings,
+ C: 10 Ap
+\layout Standard
+
+12) Holy Movement - R: 5 ps, D: 5 bs, E: Moves items to a destination point
+ at slow speed, C: 5 Ap/ounce
+\layout Standard
+
+13) Mighty Death Message - R: T, D: 5 sp, E: Magician can speak (about death
+ cause) with the soul of the victim who died, C: 5Ap/day since dead
+\layout Standard
+
+14) Remove Curse - R: T, D: p, E: Remove Curse from victim or item, C: 5Ap/Curse
+ Level
+\layout Standard
+
+15) Resurrect - R: T, D: p, E: bring back life into a dead body, C: 100Ap,
+ DD: -10% per day since death
+\layout Standard
+
+16) Location Finder/Resort - R: 0, D: 5 Sp + 1/Level, E: shows location
+ and direction (teleports), C: 40 Ap
+\layout Standard
+
+17) Word of Wrath - R: 15 ps, D: 1 day, E: all evil (good) beings become
+ numbed (until touched), C: 5 Ap/being
+\layout Standard
+
+18) Destroy Undead - R: 15 ps, D: p, E: all undead creatures are destroyed,
+ C: 10Ap/being and level of being, DD: -3%/level (every undead is checked)
+\layout Standard
+
+19) Signs of Expulsion - R: 1 ps, D: 5 sp, E: Enemy flees (check against
+ courage), C: 5Ap/victim and level, DD: -1%/level (every victim is checked)
+\layout Standard
+
+20) Prayer Power - R: T, D: 4 sp + 1/level, E: increases one additional
+ ability by 5%, C: 30 Ap
+\layout Standard
+
+I think after this chapter you might have an idea about the complexity of
+ the game.
+\the_end
