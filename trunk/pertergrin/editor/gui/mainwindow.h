@@ -29,46 +29,57 @@
 #include "worlddialog.h"
 
 // defines
+class PTGMainWindow;
+
+// All menus of the main window
 typedef enum
 {
-  MN_FileNew = 0,
-  MN_FileOpen,
-  MN_FileSave,
-  MN_FileSaveAs,
-  MN_FilePrintWorld,
-  MN_FileQuit,
-  MN_EditCut,
-  MN_EditCopy,
-  MN_EditPaste,
-  MN_EditClear,
-  MN_EditSelectAll,
-  MN_EditMove,
-  MN_EditRefresh,
-  MN_EditUndo,
-  MN_EditRedo,
-  MN_ViewWorldEditor,
-  MN_ViewTownEditor,
-  MN_ViewDungeonEditor,
-  MN_ViewCurrentMapPart,
-  MN_ComponentsLandscapePart,
-  MN_ComponentsTownPart,
-  MN_ComponentsDungeonPart,
-  MN_ComponentsCGroup,
-  MN_ComponentsComponent,
-  MN_ComponentsActionGroup,
-  MN_ComponentsAction,
-  MN_ComponentsAbilityGroup,
-  MN_ComponentsAbility,
-  MN_SettingsPreferences,
-  MN_SettingsGameOptions,
-  MN_SettingsPluginOptions,
-  MN_SettingsSave,
-  MN_SettingsLoad,
-  MN_HelpManual,
-  MN_HelpOnlineHelp,
-  MN_HelpAbout,
-  MN_MenuAnz
-} menu_t;
+  MI_FileNew = 0,
+  MI_FileOpen,
+  MI_FileSave,
+  MI_FileSaveAs,
+  MI_FilePrintWorld,
+  MI_FileQuit,
+  MI_EditCut,
+  MI_EditCopy,
+  MI_EditPaste,
+  MI_EditClear,
+  MI_EditSelectAll,
+  MI_EditMove,
+  MI_EditRefresh,
+  MI_EditUndo,
+  MI_EditRedo,
+  MI_ViewWorldEditor,
+  MI_ViewTownEditor,
+  MI_ViewDungeonEditor,
+  MI_ViewCurrentMapPart,
+  MI_ComponentsLandscapePart,
+  MI_ComponentsTownPart,
+  MI_ComponentsDungeonPart,
+  MI_ComponentsCGroup,
+  MI_ComponentsComponent,
+  MI_ComponentsActionGroup,
+  MI_ComponentsAction,
+  MI_ComponentsAbilityGroup,
+  MI_ComponentsAbility,
+  MI_SettingsPreferences,
+  MI_SettingsGameOptions,
+  MI_SettingsPluginOptions,
+  MI_SettingsSave,
+  MI_SettingsLoad,
+  MI_HelpManual,
+  MI_HelpOnlineHelp,
+  MI_HelpAbout,
+  MI_MenuAnz
+} menuitem_t;
+
+// Menu item struct for defining menus
+typedef struct
+{
+  Glib::ustring oName;
+  Gtk::MenuItem *opGItem;
+  void          (PTGMainWindow::*fpMethod)();
+} ptgmenuitem_t;
 
 // class declaration
 
@@ -76,7 +87,8 @@ class PTGMainWindow : public Gtk::Window
 {
 
 public:
-  PTGMainWindow();
+  PTGMainWindow(BaseObjectType* cobject, 
+                const Glib::RefPtr<Gnome::Glade::Xml>& opRefGlade);
   virtual ~PTGMainWindow();
 
   // Slots for menus
@@ -87,12 +99,11 @@ protected:
   // Signal handlers
   //virtual void on_button_clicked
   
-  Glib::RefPtr<Gnome::Glade::Xml> moRefGlade;
+  Glib::RefPtr<Gnome::Glade::Xml> mopRefGlade;
   Gnome::Glade::VariablesMap* mopVariablesMap;
 
   // Menus
-  Gtk::MenuItem *mopMenuItem[MN_MenuAnz];
-  Glib::ustring moMenuName[MN_MenuAnz];
+  ptgmenuitem_t moMItem[MI_MenuAnz];
 
   // Dialogs
   PTGWorldDialog *mopWorldDialog;

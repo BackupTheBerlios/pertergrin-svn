@@ -23,13 +23,15 @@
 
 // This makes the whole life a lot easier
 #define Menu_Connect( x, y ) \
-        ( x->signal_activate().connect( SigC::slot(*this, &PTGMainWindow::y) ) )
+        ( x->signal_activate().connect( SigC::slot(*this, y) ) )
 
 
 // member methods
 
 // Empty default constructor
-PTGMainWindow::PTGMainWindow()
+PTGMainWindow::PTGMainWindow(BaseObjectType* opObject, 
+                 const Glib::RefPtr<Gnome::Glade::Xml>& opRefGlade)
+  : Gtk::Window(opObject), mopRefGlade( opRefGlade) 
 {
   // Initialisation of member variables
   mopWorldDialog = 0;
@@ -37,71 +39,66 @@ PTGMainWindow::PTGMainWindow()
   // Sets the border width of the window.
   set_border_width(2);
 
-  // Get Glade UI
-  moRefGlade = Gnome::Glade::Xml::create(Glib::ustring(GUI_DIRECTORY) +
-                                         Glib::ustring("/mainwindow.glade"));
-  // Set new parent widget to this window
-  moRefGlade->reparent_widget("mainvbox", *this);
-
-  mopVariablesMap = new Gnome::Glade::VariablesMap(moRefGlade);
+  mopVariablesMap = new Gnome::Glade::VariablesMap(mopRefGlade);
   // Connect values of widgets to members
   //mopVariablesMap->connect_widget("entry", mStrEntry);
   //mopVariablesMap->connect_widget("checkbox", mbCheckBox);
 
-  // Define menu names (is there any way to get them from the glade file ?!?)
-  moMenuName[MN_FileNew] = "new_world";
-  moMenuName[MN_FileOpen] = "open_world";
-  moMenuName[MN_FileSave] = "save_world";
-  moMenuName[MN_FileSaveAs] = "save_world_as";
-  moMenuName[MN_FilePrintWorld] = "print_world";
-  moMenuName[MN_FileQuit] = "quit";
-  moMenuName[MN_EditCut] = "cut";
-  moMenuName[MN_EditCopy] = "copy";
-  moMenuName[MN_EditPaste] = "paste";
-  moMenuName[MN_EditClear] = "clear";
-  moMenuName[MN_EditSelectAll] = "select_all";
-  moMenuName[MN_EditMove] = "move";
-  moMenuName[MN_EditRefresh] = "refresh";
-  moMenuName[MN_EditUndo] = "undo";
-  moMenuName[MN_EditRedo] = "redo";
-  moMenuName[MN_ViewWorldEditor] = "world_editor";
-  moMenuName[MN_ViewTownEditor] = "town_editor";
-  moMenuName[MN_ViewDungeonEditor] = "dungeon_editor";
-  moMenuName[MN_ViewCurrentMapPart] = "current_map_part";
-  moMenuName[MN_ComponentsLandscapePart] = "landscape_part";
-  moMenuName[MN_ComponentsTownPart] = "town_part";
-  moMenuName[MN_ComponentsDungeonPart] = "dungeon_part";
-  moMenuName[MN_ComponentsCGroup] = "component_group";
-  moMenuName[MN_ComponentsComponent] = "component";
-  moMenuName[MN_ComponentsActionGroup] = "action_group";
-  moMenuName[MN_ComponentsAction] = "action";
-  moMenuName[MN_ComponentsAbilityGroup] = "abilit_group";
-  moMenuName[MN_ComponentsAbility] = "ability";
-  moMenuName[MN_SettingsPreferences] = "preferences";
-  moMenuName[MN_SettingsGameOptions] = "game_options";
-  moMenuName[MN_SettingsPluginOptions] = "plugin_options";
-  moMenuName[MN_SettingsSave] = "settings_save";
-  moMenuName[MN_SettingsLoad] = "settings_load";
-  moMenuName[MN_HelpManual] = "manual";
-  moMenuName[MN_HelpOnlineHelp] = "online_help";
-  moMenuName[MN_HelpAbout] = "about";
+  // Defining the menu (items, names, methods) to be done in an init method 
 
+  // Define menu names (is there any way to get them from the glade file ?!?)
+  moMItem[MI_FileNew].oName = "new_world";
+  moMItem[MI_FileOpen].oName = "open_world";
+  moMItem[MI_FileSave].oName = "save_world";
+  moMItem[MI_FileSaveAs].oName = "save_world_as";
+  moMItem[MI_FilePrintWorld].oName = "print_world";
+  moMItem[MI_FileQuit].oName = "quit";
+  moMItem[MI_EditCut].oName = "cut";
+  moMItem[MI_EditCopy].oName = "copy";
+  moMItem[MI_EditPaste].oName = "paste";
+  moMItem[MI_EditClear].oName = "clear";
+  moMItem[MI_EditSelectAll].oName = "select_all";
+  moMItem[MI_EditMove].oName = "move";
+  moMItem[MI_EditRefresh].oName = "refresh";
+  moMItem[MI_EditUndo].oName = "undo";
+  moMItem[MI_EditRedo].oName = "redo";
+  moMItem[MI_ViewWorldEditor].oName = "world_editor";
+  moMItem[MI_ViewTownEditor].oName = "town_editor";
+  moMItem[MI_ViewDungeonEditor].oName = "dungeon_editor";
+  moMItem[MI_ViewCurrentMapPart].oName = "current_map_part";
+  moMItem[MI_ComponentsLandscapePart].oName = "landscape_part";
+  moMItem[MI_ComponentsTownPart].oName = "town_part";
+  moMItem[MI_ComponentsDungeonPart].oName = "dungeon_part";
+  moMItem[MI_ComponentsCGroup].oName = "component_group";
+  moMItem[MI_ComponentsComponent].oName = "component";
+  moMItem[MI_ComponentsActionGroup].oName = "action_group";
+  moMItem[MI_ComponentsAction].oName = "action";
+  moMItem[MI_ComponentsAbilityGroup].oName = "abilit_group";
+  moMItem[MI_ComponentsAbility].oName = "ability";
+  moMItem[MI_SettingsPreferences].oName = "preferences";
+  moMItem[MI_SettingsGameOptions].oName = "game_options";
+  moMItem[MI_SettingsPluginOptions].oName = "plugin_options";
+  moMItem[MI_SettingsSave].oName = "settings_save";
+  moMItem[MI_SettingsLoad].oName = "settings_load";
+  moMItem[MI_HelpManual].oName = "manual";
+  moMItem[MI_HelpOnlineHelp].oName = "online_help";
+  moMItem[MI_HelpAbout].oName = "about";
+
+  // Define menu methods (read the handlers from the glade file ?)
+  moMItem[MI_FileNew].fpMethod = &PTGMainWindow::on_file_new;
+  moMItem[MI_FileQuit].fpMethod = &PTGMainWindow::on_quit;
+
+  // If all menu items can be accessed the next two blocks are in a foor loop
   // Get menu items from glade file
-  moRefGlade->get_widget(moMenuName[MN_FileNew],mopMenuItem[MN_FileNew]);
-  moRefGlade->get_widget(moMenuName[MN_FileQuit],mopMenuItem[MN_FileQuit]);
+  mopRefGlade->get_widget(moMItem[MI_FileNew].oName,moMItem[MI_FileNew].opGItem);
+  mopRefGlade->get_widget(moMItem[MI_FileQuit].oName,moMItem[MI_FileQuit].opGItem);
 
   // Connect all menu items to slots (see macro above)
-  if ( mopMenuItem[MN_FileQuit] )
-    Menu_Connect( mopMenuItem[MN_FileQuit], on_quit );
+  if ( moMItem[MI_FileQuit].opGItem )
+    Menu_Connect( moMItem[MI_FileQuit].opGItem, moMItem[MI_FileQuit].fpMethod );
 
-  if ( mopMenuItem[MN_FileNew] )
-    Menu_Connect( mopMenuItem[MN_FileNew], on_file_new);
-
-  //Connect signal handler
-  //Gtk::Button* pButton = 0;
-  //moRefGlade->get_widget("button", pButton);
-  //if(pButton)
-  //  pButton->signal_clicked().connect( SigC::slot(*this, &ExampleWindow::on_button_clicked) );
+  if ( moMItem[MI_FileNew].opGItem )
+    Menu_Connect( moMItem[MI_FileNew].opGItem, moMItem[MI_FileNew].fpMethod );
 
   // Finally show our window
   show_all_children();
@@ -129,15 +126,13 @@ void PTGMainWindow::on_quit()
 void PTGMainWindow::on_file_new()
 {
   int iRes = 0;
-  Glib::RefPtr<Gnome::Glade::Xml> oRefGlade;
-  oRefGlade = Gnome::Glade::Xml::create(Glib::ustring(GUI_DIRECTORY) +
-                                        Glib::ustring("/worlddialog.glade"));
+  Glib::RefPtr<Gnome::Glade::Xml> opRefGlade;
+  opRefGlade = Gnome::Glade::Xml::create(Glib::ustring(GUI_DIRECTORY) +
+                                         Glib::ustring("/worlddialog.glade"));
   // Open world dialog
   if( !mopWorldDialog )
-  {
-    oRefGlade->get_widget_derived("WorldDialog", mopWorldDialog);
-    //mopWorldDialog = new PTGWorldDialog();
-  }
+    opRefGlade->get_widget_derived("WorldDialog", mopWorldDialog);
+
   if( mopWorldDialog )
   {
     iRes = mopWorldDialog->run();
@@ -148,12 +143,3 @@ void PTGMainWindow::on_file_new()
       mopWorldDialog->getOptions();
   }
 }
-
-/*
-void PTGMainWindow::on_button_clicked()
-{
-  if(mopVariablesMap)
-    mopVariablesMap->transfer_widgets_to_variables();
-
-}
-*/
