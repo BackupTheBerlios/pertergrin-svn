@@ -12,6 +12,11 @@
   <property name="modal">False</property>
   <property name="resizable">True</property>
   <property name="destroy_with_parent">False</property>
+  <property name="decorated">True</property>
+  <property name="skip_taskbar_hint">False</property>
+  <property name="skip_pager_hint">False</property>
+  <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
+  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
 
   <child>
     <widget class="GtkVBox" id="mainvbox">
@@ -46,9 +51,29 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image956">
+			    <widget class="GtkImage" id="image1045">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-new</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="change_world">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Change World</property>
+			  <property name="use_underline">True</property>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image1046">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-refresh</property>
 			      <property name="icon_size">1</property>
 			      <property name="xalign">0.5</property>
 			      <property name="yalign">0.5</property>
@@ -67,7 +92,7 @@
 			  <accelerator key="O" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image957">
+			    <widget class="GtkImage" id="image1047">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
@@ -88,7 +113,7 @@
 			  <accelerator key="S" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image958">
+			    <widget class="GtkImage" id="image1048">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save</property>
 			      <property name="icon_size">1</property>
@@ -109,7 +134,7 @@
 			  <accelerator key="W" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image959">
+			    <widget class="GtkImage" id="image1049">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save-as</property>
 			      <property name="icon_size">1</property>
@@ -123,7 +148,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="trennlinie1">
+			<widget class="GtkSeparatorMenuItem" id="trennlinie1">
 			  <property name="visible">True</property>
 			</widget>
 		      </child>
@@ -136,7 +161,7 @@
 			  <accelerator key="P" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image960">
+			    <widget class="GtkImage" id="image1050">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-print</property>
 			      <property name="icon_size">1</property>
@@ -150,7 +175,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="trennlinie2">
+			<widget class="GtkSeparatorMenuItem" id="trennlinie2">
 			  <property name="visible">True</property>
 			</widget>
 		      </child>
@@ -163,7 +188,7 @@
 			  <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image961">
+			    <widget class="GtkImage" id="image1051">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-quit</property>
 			      <property name="icon_size">1</property>
@@ -197,7 +222,7 @@
 			  <accelerator key="X" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image962">
+			    <widget class="GtkImage" id="image1052">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-cut</property>
 			      <property name="icon_size">1</property>
@@ -218,7 +243,7 @@
 			  <accelerator key="C" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image963">
+			    <widget class="GtkImage" id="image1053">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-copy</property>
 			      <property name="icon_size">1</property>
@@ -239,7 +264,7 @@
 			  <accelerator key="V" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image964">
+			    <widget class="GtkImage" id="image1054">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-paste</property>
 			      <property name="icon_size">1</property>
@@ -259,7 +284,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image965">
+			    <widget class="GtkImage" id="image1055">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-delete</property>
 			      <property name="icon_size">1</property>
@@ -288,7 +313,7 @@
 			  <accelerator key="M" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image966">
+			    <widget class="GtkImage" id="image1056">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-go-forward</property>
 			      <property name="icon_size">1</property>
@@ -302,7 +327,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="trennlinie4">
+			<widget class="GtkSeparatorMenuItem" id="trennlinie4">
 			  <property name="visible">True</property>
 			</widget>
 		      </child>
@@ -314,7 +339,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image967">
+			    <widget class="GtkImage" id="image1057">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-refresh</property>
 			      <property name="icon_size">1</property>
@@ -335,7 +360,7 @@
 			  <accelerator key="Z" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image968">
+			    <widget class="GtkImage" id="image1058">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-undo</property>
 			      <property name="icon_size">1</property>
@@ -356,7 +381,7 @@
 			  <accelerator key="R" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image969">
+			    <widget class="GtkImage" id="image1059">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-redo</property>
 			      <property name="icon_size">1</property>
@@ -397,7 +422,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image970">
+			    <widget class="GtkImage" id="image1060">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-home</property>
 			      <property name="icon_size">1</property>
@@ -428,7 +453,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="trennlinie5">
+			<widget class="GtkSeparatorMenuItem" id="trennlinie5">
 			  <property name="visible">True</property>
 			</widget>
 		      </child>
@@ -481,7 +506,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image971">
+			    <widget class="GtkImage" id="image1061">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-home</property>
 			      <property name="icon_size">1</property>
@@ -503,7 +528,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="trennlinie6">
+			<widget class="GtkSeparatorMenuItem" id="trennlinie6">
 			  <property name="visible">True</property>
 			</widget>
 		      </child>
@@ -515,7 +540,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image972">
+			    <widget class="GtkImage" id="image1062">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-convert</property>
 			      <property name="icon_size">1</property>
@@ -535,7 +560,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image973">
+			    <widget class="GtkImage" id="image1063">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-no</property>
 			      <property name="icon_size">1</property>
@@ -549,7 +574,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="trennlinie7">
+			<widget class="GtkSeparatorMenuItem" id="trennlinie7">
 			  <property name="visible">True</property>
 			</widget>
 		      </child>
@@ -561,7 +586,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image974">
+			    <widget class="GtkImage" id="image1064">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-index</property>
 			      <property name="icon_size">1</property>
@@ -581,7 +606,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image975">
+			    <widget class="GtkImage" id="image1065">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-refresh</property>
 			      <property name="icon_size">1</property>
@@ -595,7 +620,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="trennlinie10">
+			<widget class="GtkSeparatorMenuItem" id="trennlinie10">
 			  <property name="visible">True</property>
 			</widget>
 		      </child>
@@ -607,7 +632,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image976">
+			    <widget class="GtkImage" id="image1066">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-index</property>
 			      <property name="icon_size">1</property>
@@ -627,7 +652,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image977">
+			    <widget class="GtkImage" id="image1067">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-preferences</property>
 			      <property name="icon_size">1</property>
@@ -660,7 +685,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image978">
+			    <widget class="GtkImage" id="image1068">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-properties</property>
 			      <property name="icon_size">1</property>
@@ -680,7 +705,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image979">
+			    <widget class="GtkImage" id="image1069">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-preferences</property>
 			      <property name="icon_size">1</property>
@@ -700,7 +725,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image980">
+			    <widget class="GtkImage" id="image1070">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-properties</property>
 			      <property name="icon_size">1</property>
@@ -714,7 +739,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="trennlinie8">
+			<widget class="GtkSeparatorMenuItem" id="trennlinie8">
 			  <property name="visible">True</property>
 			</widget>
 		      </child>
@@ -726,7 +751,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image981">
+			    <widget class="GtkImage" id="image1071">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-save</property>
 			      <property name="icon_size">1</property>
@@ -746,7 +771,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image982">
+			    <widget class="GtkImage" id="image1072">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-open</property>
 			      <property name="icon_size">1</property>
@@ -780,7 +805,7 @@
 			  <accelerator key="F1" modifiers="0" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image983">
+			    <widget class="GtkImage" id="image1073">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-help</property>
 			      <property name="icon_size">1</property>
@@ -801,7 +826,7 @@
 			  <accelerator key="F1" modifiers="GDK_SHIFT_MASK" signal="activate"/>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image984">
+			    <widget class="GtkImage" id="image1074">
 			      <property name="visible">True</property>
 			      <property name="stock">gtk-dialog-question</property>
 			      <property name="icon_size">1</property>
@@ -815,7 +840,7 @@
 		      </child>
 
 		      <child>
-			<widget class="GtkMenuItem" id="trennlinie9">
+			<widget class="GtkSeparatorMenuItem" id="trennlinie9">
 			  <property name="visible">True</property>
 			</widget>
 		      </child>
@@ -827,7 +852,7 @@
 			  <property name="use_underline">True</property>
 
 			  <child internal-child="image">
-			    <widget class="GtkImage" id="image985">
+			    <widget class="GtkImage" id="image1075">
 			      <property name="visible">True</property>
 			      <property name="stock">gnome-stock-about</property>
 			      <property name="icon_size">1</property>
@@ -866,117 +891,205 @@
 	      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
 	      <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
 	      <property name="tooltips">True</property>
+	      <property name="show_arrow">True</property>
 
 	      <child>
-		<widget class="button" id="save_button">
+		<widget class="GtkToolButton" id="save_button">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Save</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-save</property>
+		  <property name="stock_id">gtk-save</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="cut_button">
+		<widget class="GtkSeparatorToolItem" id="separatortoolitem1">
+		  <property name="visible">True</property>
+		  <property name="draw">True</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkToolButton" id="cut_button">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Cut</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-cut</property>
-		  <property name="new_group">True</property>
+		  <property name="stock_id">gtk-cut</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		</widget>
 		<packing>
-		  <property name="new_group">True</property>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
 		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="copy_button">
+		<widget class="GtkToolButton" id="copy_button">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">Copy</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-copy</property>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="button" id="paste_button">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Paste</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-paste</property>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="button" id="clear_button">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Clear</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-delete</property>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="button" id="refresh_button">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Refresh</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-refresh</property>
-		</widget>
-	      </child>
-
-	      <child>
-		<widget class="button" id="settings_button">
-		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Settings</property>
-		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-properties</property>
-		  <property name="new_group">True</property>
+		  <property name="stock_id">gtk-copy</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		</widget>
 		<packing>
-		  <property name="new_group">True</property>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
 		</packing>
 	      </child>
 
 	      <child>
-		<widget class="button" id="actions_button">
+		<widget class="GtkToolButton" id="paste_button">
 		  <property name="visible">True</property>
-		  <property name="label" translatable="yes">Actions</property>
+		  <property name="label" translatable="yes">Paste</property>
 		  <property name="use_underline">True</property>
-		  <property name="stock_pixmap">gtk-index</property>
+		  <property name="stock_id">gtk-paste</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
 		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
 	      </child>
 
 	      <child>
-		<widget class="GtkCombo" id="SelectCombo">
+		<widget class="GtkToolButton" id="clear_button">
 		  <property name="visible">True</property>
-		  <property name="value_in_list">False</property>
-		  <property name="allow_empty">True</property>
-		  <property name="case_sensitive">False</property>
-		  <property name="enable_arrow_keys">True</property>
-		  <property name="enable_arrows_always">False</property>
+		  <property name="label" translatable="yes">Clear</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_id">gtk-delete</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
+		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
+	      </child>
 
-		  <child internal-child="entry">
-		    <widget class="GtkEntry" id="SelectComboEntry">
-		      <property name="visible">True</property>
-		      <property name="can_focus">True</property>
-		      <property name="editable">False</property>
-		      <property name="visibility">True</property>
-		      <property name="max_length">0</property>
-		      <property name="text" translatable="yes"></property>
-		      <property name="has_frame">True</property>
-		      <property name="invisible_char" translatable="yes">*</property>
-		      <property name="activates_default">False</property>
-		    </widget>
-		  </child>
+	      <child>
+		<widget class="GtkToolButton" id="refresh_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Refresh</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_id">gtk-refresh</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
+		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
+	      </child>
 
-		  <child internal-child="list">
-		    <widget class="GtkList" id="SelectComboList">
+	      <child>
+		<widget class="GtkSeparatorToolItem" id="separatortoolitem2">
+		  <property name="visible">True</property>
+		  <property name="draw">True</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">False</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkToolButton" id="settings_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Settings</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_id">gtk-properties</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
+		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkToolButton" id="actions_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Actions</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_id">gtk-index</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
+		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">True</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="GtkToolItem" id="toolitem1">
+		  <property name="visible">True</property>
+		  <property name="visible_horizontal">True</property>
+		  <property name="visible_vertical">True</property>
+		  <property name="is_important">False</property>
+
+		  <child>
+		    <widget class="GtkCombo" id="SelectCombo">
 		      <property name="visible">True</property>
-		      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+		      <property name="value_in_list">False</property>
+		      <property name="allow_empty">True</property>
+		      <property name="case_sensitive">False</property>
+		      <property name="enable_arrow_keys">True</property>
+		      <property name="enable_arrows_always">False</property>
+
+		      <child internal-child="entry">
+			<widget class="GtkEntry" id="SelectComboEntry">
+			  <property name="visible">True</property>
+			  <property name="can_focus">True</property>
+			  <property name="editable">False</property>
+			  <property name="visibility">True</property>
+			  <property name="max_length">0</property>
+			  <property name="text" translatable="yes"></property>
+			  <property name="has_frame">True</property>
+			  <property name="invisible_char" translatable="yes">*</property>
+			  <property name="activates_default">False</property>
+			</widget>
+		      </child>
+
+		      <child internal-child="list">
+			<widget class="GtkList" id="SelectComboList">
+			  <property name="visible">True</property>
+			  <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+			</widget>
+		      </child>
 		    </widget>
 		  </child>
 		</widget>
+		<packing>
+		  <property name="expand">False</property>
+		  <property name="homogeneous">False</property>
+		</packing>
 	      </child>
 	    </widget>
 	  </child>
