@@ -44,8 +44,8 @@ static void MapEditClassRealize (GtkWidget *widget);
 static gint MapEditClassRender( GtkWidget *widget, GdkEventExpose *event );
 static void MapEditClassSizeReq (GtkWidget *widget,
 				 GtkRequisition *requisition);
-//static void MapEditClassNotifyDimensions( GtkWidget *widget, 
-//				    GtkAllocation *allocation );
+static void MapEditClassNotifyDimensions( GtkWidget *widget, 
+				    GtkAllocation *allocation );
 static void InitMapEditClass( GtkMapEditClass *class );
 static void MapEditInit( MD *md );
 
@@ -103,7 +103,7 @@ void errormsg(short type, char *errmsg, ...)
 {
 
 #ifdef DEBUG // Empty function if debugging disabled (bad idea ;-)
-  char prmsg[1024]="",head[12];
+  char prmsg[1024]="",head[12]="";
   FILE *fh;
 
   if (!errmsg) return;
@@ -189,7 +189,7 @@ void errormsg(short type, char *errmsg, ...)
 static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md, 
 		    struct MCMap *smap)
 {
-    guchar lnum = 0;
+    guchar lnum = 1; // 1 Layer
     gulong i,j;
     errormsg(MAPDEBUG1,"MakeMap start");
 
@@ -237,9 +237,7 @@ static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md,
                         dmap->mm_Rows[j].mp_Coordinates.x = j * md->md_PWidth;
                         dmap->mm_Rows[j].mp_Coordinates.y = i * md->md_PLength;
                         dmap->mm_Rows[j].mp_Coordinates.l = lnum;
-#if DEBUGLEV > 4
-			errormsg(MAPDEBUG5,"MakeMap: smap=%x", smap);
-#endif
+
                         if (!smap) // Create our own map
                         {
                             dmap->mm_Rows[j].mp_Number = md->md_Default->mp_Number;
@@ -277,8 +275,8 @@ static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md,
         if ( (mkcopy & COPYLAYER) && lnum < md->md_Map->mm_MapSize.l )
         {
 #if DEBUGLEV > 4
-	    errormsg(MAPDEBUG5,"MakeMap: mkcopy=%u, COPYMAP=%u", mkcopy, 
-		     COPYMAP);
+	    errormsg(MAPDEBUG5,"MakeMap: mkcopy=%u, COPYMAP=%u, lnum=%u", 
+		     mkcopy, COPYMAP, lnum);
 #endif
             if ( (mkcopy & COPYMAP))
             /* Allocate own layer */
@@ -315,7 +313,7 @@ static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md,
             {
 #if DEBUGLEV > 4
 	        errormsg(MAPDEBUG5,"MakeMap: smap=%x, smap->NextLayer=%x",
-			 smap,smap->mm_NextLayer);
+			 smap,(smap ? smap->mm_NextLayer : 0));
 #endif
                 if (!smap || !smap->mm_NextLayer)
                 {
@@ -330,9 +328,6 @@ static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md,
                         return FALSE; // Not enough memory
                     }
                 }
-#if DEBUGLEV > 4
-		errormsg(MAPDEBUG5,"MakeMap: smap=%x",smap);
-#endif
                 if (smap) smap = smap->mm_NextLayer;
 #if DEBUGLEV > 2
                 errormsg(MAPDEBUG3,"MakeMap start: dmap=%x, md=%x, smap=%x",
@@ -356,7 +351,8 @@ static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md,
     errormsg(MAPDEBUG2,"lnum=%u, md->md_Map->mm_MapSize.l=%u", lnum, 
 	     md->md_Map->mm_MapSize.l);
 #endif
-    if (lnum > md->md_Map->mm_MapSize.l) // This should not happen
+    if (md->md_Map->mm_MapSize.l && (lnum > md->md_Map->mm_MapSize.l)) 
+    // This should not happen
     {
         errormsg(MAPERROR,"Fatal Error: Layer Size exceeded!");
         return FALSE; // Layer size exceeded, but why ??
@@ -418,7 +414,7 @@ static BOOL RemoveMap( struct MCMap *amap, MD *md)
         amap=tmap;            // Set new current layer
         lnum++;
     } while (amap);
-    md->md_Map=NULL;
+    amap=NULL;
     errormsg(MAPDEBUG1,"RemoveMap succesfully finished");
     return TRUE;
 }
@@ -461,7 +457,7 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args)
     MD              *md =  gtk_type_new GTK_TYPE_MAPEDIT;
     GdkPixbuf       *bm=NULL;
     struct MCMap    *amap=NULL;
-    gulong          arg, i, mapx=0, mapy=0, mapl = 0;
+    gulong          arg, i, mapx=0, mapy=0, mapl = 1;
     BOOL            mkcopy = FALSE;
 
     errormsg(MAPDEBUG1,"MapEditClassNew: Creating New Widget");
@@ -685,7 +681,7 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args)
 	        md->md_Map = amap;
 	    }
 #if DEBUGLEV > 2
-		    errormsg(MAPDEBUG3,"md->md_Map=%x",md->md_Map);
+	    errormsg(MAPDEBUG3,"md->md_Map=%x",md->md_Map);
 #endif
 	    if (md->md_Map)
 	    {
@@ -760,6 +756,12 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args)
 				{
 				    amap->mm_Rows[j].mp_PBCoord.x = md->md_AllPieces[amap->mm_Rows[j].mp_PixbufNumber].mp_PBCoord.x;
 				    amap->mm_Rows[j].mp_PBCoord.y = md->md_AllPieces[amap->mm_Rows[j].mp_PixbufNumber].mp_PBCoord.y;
+#if DEBUGLEV > 3
+				    errormsg(MAPDEBUG4,"[%u].mp_PBCoord.x=%u, "
+					     "[%u].mp_PBCoord.y=%u,",
+					     j,amap->mm_Rows[j].mp_PBCoord.x,
+					     j,amap->mm_Rows[j].mp_PBCoord.y);
+#endif
 				}
 			    }
 			    amap = amap->mm_NextLayer;
@@ -1030,7 +1032,7 @@ static void MapEditClassSizeReq (GtkWidget *widget,
 **/
 static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
 {
-    guint       colsize, rowsize;
+    guint       colsize = 0, rowsize = 0;
     guint       left, top, xpos, ypos, selx, sely; //, color=0;
     gulong       cx, cy, i, j, fw = 0, fh = 0, ysize;
     GdkPixbuf *tmppb; /* temporary Pixbuf for scaling */
@@ -1041,6 +1043,12 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
 
 #if DEBUGLEV > 2
     errormsg(MAPDEBUG3,"RenderPixbuf: md=%x, area=%x",md,area);
+#endif
+
+#if DEBUGLEV > 3
+    errormsg(MAPDEBUG4,"RenderPixbuf: area->x=%u, area->y=%u, area->width=%u, "
+	     "area->height=%u, name=%s", area->x, area->y, area->width, 
+	     area->height, md->child.name);
 #endif
     /*
     **  Get initial left and top offset.
@@ -1158,12 +1166,12 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     **  including relative selected map position
     */
     rowsize = cx/md->md_PWidth + md->md_Select.x;
-    if (rowsize > amap->mm_MapSize.y) rowsize = amap->mm_MapSize.y;
+    if (rowsize > amap->mm_MapSize.x) rowsize = amap->mm_MapSize.x;
     colsize = cy/md->md_PLength + md->md_Select.y;
-    if (colsize > amap->mm_MapSize.x) colsize = amap->mm_MapSize.x;
+    if (colsize > amap->mm_MapSize.y) colsize = amap->mm_MapSize.y;
 #if DEBUGLEV > 3
-    errormsg(MAPDEBUG4,"Renderpixbuf: rowsize=%u, colsize=%u", rowsize, 
-	     colsize);
+    errormsg(MAPDEBUG4,"Renderpixbuf: rowsize=%u, colsize=%u, mapx=%u, mapy=%u"
+	     , rowsize, colsize, md->md_Map->mm_MapSize.x, amap->mm_MapSize.y);
 #endif
 
     /*
@@ -1286,6 +1294,8 @@ static gint MapEditClassRender( GtkWidget *widget, GdkEventExpose *event )
     MD              *md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
     //gulong           fw = 0, fh = 0;
 
+    errormsg(MAPDEBUG1,"Expose: Entered");
+
     g_return_val_if_fail (widget != NULL, FALSE);
     g_return_val_if_fail (GTK_IS_MAPEDIT (widget), FALSE);
     g_return_val_if_fail (event != NULL, FALSE);
@@ -1308,7 +1318,8 @@ static gint MapEditClassRender( GtkWidget *widget, GdkEventExpose *event )
     if (!RenderPixbuf( md, &widget->allocation ))
         return FALSE; // Don't know what to return in case this fails
 
-        return FALSE;
+    errormsg(MAPDEBUG1,"Expose: Finished succesfully");
+    return FALSE;
 }
 
 /*
@@ -1868,14 +1879,22 @@ static gint MapEditClassGoInactive( GtkWidget *widget, GdkEventButton *event)
 /*
 **  Notification about size changes
 **/
-/* static void MapEditClassNotifyDimensions( GtkWidget *widget, 
+static void MapEditClassNotifyDimensions( GtkWidget *widget, 
 				    GtkAllocation *allocation )
 {
     MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
 
+    errormsg(MAPDEBUG1,"MapEditNotifyDimensions: Entered");
+
     g_return_if_fail (widget != NULL);
     g_return_if_fail (GTK_IS_MAPEDIT (widget));
     g_return_if_fail (allocation != NULL);
+
+#if DEBUGLEV > 2
+    errormsg(MAPDEBUG3,"MapEditClassNotifyDimensions: allocation->x=%u, "
+	     "allocation->y=%u, allocation->width=%u, allocation->height=%u",
+	     allocation->x,allocation->y,allocation->width,allocation->height);
+#endif
 
     widget->allocation = *allocation;
 
@@ -1885,8 +1904,13 @@ static gint MapEditClassGoInactive( GtkWidget *widget, GdkEventButton *event)
 				allocation->x, allocation->y,
 				allocation->width, 
 				allocation->height);
+
+	// Render with new size
+	RenderPixbuf(md, allocation);
     }
-} */
+
+    errormsg(MAPDEBUG1,"MapEditNotifyDimensions: Finished");
+}
 
 /*
 ** Get map piece number from Map position
@@ -2161,7 +2185,7 @@ static void InitMapEditClass( GtkMapEditClass *class )
     wcl->realize = MapEditClassRealize;
     wcl->expose_event = MapEditClassRender;
     wcl->size_request = MapEditClassSizeReq; // Replaces MAPEDIT_BoxWidth ?
-    //wcl->size_allocate = MapEditClassDimensions;
+    wcl->size_allocate = MapEditClassNotifyDimensions;
     wcl->button_press_event = MapEditClassGoActive;
     wcl->button_release_event = MapEditClassGoInactive;
     //wcl->motion_notify_event = MapEditClassNotifyMove;
@@ -2182,7 +2206,7 @@ guint  MapEditClassGetType(void)
 {
     static guint me_type = 0;
 
-    errormsg(MAPDEBUG1,"MapEditClassGetType: Entered");
+    //errormsg(MAPDEBUG1,"MapEditClassGetType: Entered");
 
     if (!me_type)
     {
@@ -2198,6 +2222,6 @@ guint  MapEditClassGetType(void)
 	me_type = gtk_type_unique (gtk_widget_get_type(), &me_info);
     }
 
-    errormsg(MAPDEBUG1,"MapEditClassGetType: Finished");
+    //errormsg(MAPDEBUG1,"MapEditClassGetType: Finished");
     return me_type;
 }
