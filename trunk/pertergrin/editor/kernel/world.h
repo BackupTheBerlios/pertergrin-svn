@@ -24,7 +24,8 @@
 class PtgWorld
 {
 public:
-  PtgWorld(int iXSize, int iYSize, Glib::ustring oName, int iTileWidth, int iTileHeight);
+  PtgWorld(int iXSize, int iYSize, Glib::ustring oName, Glib::ustring oWorldType,
+           int iTileWidth, int iTileHeight, int iRegionXSize, int iRegionYSize);
 
   // Methods changing the map directly
   void mapClear(int iXPos, int iYPos, int iWidth, int iHeight);
@@ -46,6 +47,8 @@ public:
   // Methods changing the world
   void setSize(int iXSize, int iYSize);
   void getSize(int &iXSize, int &iYSize);
+  void setRegionSize(int iRegionXSize, int iRegionYSize);
+  void getRegionSize(int &iRegionXSize, int &iRegionYSize);
   void setName(Glib::ustring oName);
   Glib::ustring &getName();
   void setDescription(Glib::ustring oDescription);
