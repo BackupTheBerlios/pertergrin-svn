@@ -2,17 +2,17 @@
 <GTK-Interface>
 
 <project>
-  <name>Mapeditor</name>
-  <program_name>mapeditor</program_name>
-  <directory></directory>
-  <source_directory>src</source_directory>
-  <pixmaps_directory>pixmaps</pixmaps_directory>
+  <name>Pertergrin</name>
+  <program_name>pertergrin</program_name>
+  <directory>../</directory>
+  <source_directory></source_directory>
+  <pixmaps_directory>../pixmaps</pixmaps_directory>
   <language>C</language>
   <gnome_support>False</gnome_support>
   <gettext_support>True</gettext_support>
   <use_widget_names>True</use_widget_names>
   <output_translatable_strings>True</output_translatable_strings>
-  <translatable_strings_file>maplang.c</translatable_strings_file>
+  <translatable_strings_file>../maplang.c</translatable_strings_file>
 </project>
 
 <widget>
@@ -20,6 +20,11 @@
   <name>mainwindow</name>
   <width>400</width>
   <height>400</height>
+  <signal>
+    <name>destroy</name>
+    <handler>gtk_main_quit</handler>
+    <last_modification_time>Wed, 02 May 2001 10:55:37 GMT</last_modification_time>
+  </signal>
   <title>window1</title>
   <type>GTK_WINDOW_TOPLEVEL</type>
   <position>GTK_WIN_POS_NONE</position>
@@ -62,20 +67,22 @@
 	    <name>file1_menu</name>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>new_world1</name>
+	      <class>GtkMenuItem</class>
+	      <name>new_world</name>
+	      <tooltip>Create a new world</tooltip>
 	      <signal>
 		<name>activate</name>
-		<handler>on_new_world1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:20:38 GMT</last_modification_time>
+		<handler>on_new_world_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:48:20 GMT</last_modification_time>
 	      </signal>
-	      <stock_item>GNOMEUIINFO_MENU_NEW_ITEM</stock_item>
 	      <label>_New World</label>
+	      <right_justify>False</right_justify>
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>open_world1</name>
+	      <class>GtkMenuItem</class>
+	      <name>open_world</name>
+	      <tooltip>Open an existing world</tooltip>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_O</key>
@@ -83,17 +90,16 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_open_world1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:21:02 GMT</last_modification_time>
+		<handler>on_open_world_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:36:09 GMT</last_modification_time>
 	      </signal>
 	      <label>_Open World</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_OPEN</stock_icon>
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>save_world1</name>
+	      <class>GtkMenuItem</class>
+	      <name>save_world</name>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_S</key>
@@ -101,17 +107,16 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_save_world1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:21:06 GMT</last_modification_time>
+		<handler>on_save_world_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:36:09 GMT</last_modification_time>
 	      </signal>
 	      <label>_Save World</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_SAVE</stock_icon>
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>save_world_as1</name>
+	      <class>GtkMenuItem</class>
+	      <name>save_world_as</name>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_W</key>
@@ -119,12 +124,11 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_save_world_as1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:21:10 GMT</last_modification_time>
+		<handler>on_save_world_as_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:38:45 GMT</last_modification_time>
 	      </signal>
 	      <label>Save World _As</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_SAVE_AS</stock_icon>
 	    </widget>
 
 	    <widget>
@@ -134,8 +138,9 @@
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>print_world1</name>
+	      <class>GtkMenuItem</class>
+	      <name>print_world</name>
+	      <tooltip>Print the world as graphic</tooltip>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_P</key>
@@ -143,12 +148,11 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_print_world1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:21:16 GMT</last_modification_time>
+		<handler>on_print_world_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:38:45 GMT</last_modification_time>
 	      </signal>
 	      <label>_Print World</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_PRINT</stock_icon>
 	    </widget>
 
 	    <widget>
@@ -158,8 +162,8 @@
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>quit1</name>
+	      <class>GtkMenuItem</class>
+	      <name>quit</name>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_Q</key>
@@ -172,24 +176,23 @@
 	      </signal>
 	      <label>_Quit</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_EXIT</stock_icon>
 	    </widget>
 	  </widget>
 	</widget>
 
 	<widget>
 	  <class>GtkMenuItem</class>
-	  <name>edit1</name>
+	  <name>edit</name>
 	  <label>_Edit</label>
 	  <right_justify>False</right_justify>
 
 	  <widget>
 	    <class>GtkMenu</class>
-	    <name>edit1_menu</name>
+	    <name>edit_menu</name>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>cut1</name>
+	      <class>GtkMenuItem</class>
+	      <name>cut</name>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_X</key>
@@ -197,17 +200,16 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_cut1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:21:33 GMT</last_modification_time>
+		<handler>on_cut_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:38:45 GMT</last_modification_time>
 	      </signal>
 	      <label>C_ut</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_CUT</stock_icon>
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>copy1</name>
+	      <class>GtkMenuItem</class>
+	      <name>copy</name>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_C</key>
@@ -215,17 +217,16 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_copy1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:21:38 GMT</last_modification_time>
+		<handler>on_copy_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:38:45 GMT</last_modification_time>
 	      </signal>
 	      <label>_Copy</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_COPY</stock_icon>
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>paste1</name>
+	      <class>GtkMenuItem</class>
+	      <name>paste</name>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_V</key>
@@ -233,21 +234,21 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_paste1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:21:41 GMT</last_modification_time>
+		<handler>on_paste_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:40:36 GMT</last_modification_time>
 	      </signal>
 	      <label>_Paste</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_PASTE</stock_icon>
 	    </widget>
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>clear1</name>
+	      <name>clear</name>
+	      <tooltip>Clear map with default map piece</tooltip>
 	      <signal>
 		<name>activate</name>
-		<handler>on_clear1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:21:45 GMT</last_modification_time>
+		<handler>on_clear_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:40:36 GMT</last_modification_time>
 	      </signal>
 	      <label>_Clear</label>
 	      <right_justify>False</right_justify>
@@ -261,19 +262,21 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>select_all1</name>
+	      <name>select_all</name>
+	      <tooltip>Mark whole map as selected</tooltip>
 	      <signal>
 		<name>activate</name>
-		<handler>on_select_all1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:13:34 GMT</last_modification_time>
+		<handler>on_select_all_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:40:36 GMT</last_modification_time>
 	      </signal>
 	      <label>_Select All</label>
 	      <right_justify>False</right_justify>
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>move1</name>
+	      <class>GtkMenuItem</class>
+	      <name>move</name>
+	      <tooltip>Move the marked map part</tooltip>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_M</key>
@@ -281,12 +284,11 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_move1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:17:54 GMT</last_modification_time>
+		<handler>on_move_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:40:36 GMT</last_modification_time>
 	      </signal>
 	      <label>_Move</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_PREF</stock_icon>
 	    </widget>
 
 	    <widget>
@@ -296,8 +298,8 @@
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>undo1</name>
+	      <class>GtkMenuItem</class>
+	      <name>undo</name>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_Z</key>
@@ -305,17 +307,16 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_undo1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:03:43 GMT</last_modification_time>
+		<handler>on_undo_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:40:36 GMT</last_modification_time>
 	      </signal>
 	      <label>_Undo</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_UNDO</stock_icon>
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>redo1</name>
+	      <class>GtkMenuItem</class>
+	      <name>redo</name>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_R</key>
@@ -323,33 +324,32 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_redo1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:03:54 GMT</last_modification_time>
+		<handler>on_redo_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:40:46 GMT</last_modification_time>
 	      </signal>
 	      <label>_Redo</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_REDO</stock_icon>
 	    </widget>
 	  </widget>
 	</widget>
 
 	<widget>
 	  <class>GtkMenuItem</class>
-	  <name>view1</name>
+	  <name>view</name>
 	  <label>_View</label>
 	  <right_justify>False</right_justify>
 
 	  <widget>
 	    <class>GtkMenu</class>
-	    <name>view1_menu</name>
+	    <name>view_menu</name>
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>worldeditor1</name>
+	      <name>worldeditor</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_worldeditor1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:19:30 GMT</last_modification_time>
+		<handler>on_worldeditor_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:41:24 GMT</last_modification_time>
 	      </signal>
 	      <label>_World Editor</label>
 	      <right_justify>False</right_justify>
@@ -357,11 +357,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>towneditor1</name>
+	      <name>towneditor</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_towneditor1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:22:29 GMT</last_modification_time>
+		<handler>on_towneditor_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:41:24 GMT</last_modification_time>
 	      </signal>
 	      <label>_Town Editor</label>
 	      <right_justify>False</right_justify>
@@ -369,11 +369,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>dungeoneditor1</name>
+	      <name>dungeoneditor</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_dungeoneditor1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:21:54 GMT</last_modification_time>
+		<handler>on_dungeoneditor_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:41:24 GMT</last_modification_time>
 	      </signal>
 	      <label>_Dungeon Editor</label>
 	      <right_justify>False</right_justify>
@@ -387,7 +387,7 @@
 
 	    <widget>
 	      <class>GtkCheckMenuItem</class>
-	      <name>map_pieces1</name>
+	      <name>map_pieces</name>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_D</key>
@@ -395,8 +395,8 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_map_pieces1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:23:31 GMT</last_modification_time>
+		<handler>on_map_pieces_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:41:24 GMT</last_modification_time>
 	      </signal>
 	      <label>_Map Pieces</label>
 	      <active>True</active>
@@ -405,7 +405,7 @@
 
 	    <widget>
 	      <class>GtkCheckMenuItem</class>
-	      <name>map_pieces_label1</name>
+	      <name>map_pieces_label</name>
 	      <accelerator>
 		<modifiers>GDK_CONTROL_MASK</modifiers>
 		<key>GDK_E</key>
@@ -413,8 +413,8 @@
 	      </accelerator>
 	      <signal>
 		<name>activate</name>
-		<handler>on_map_pieces_label1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:31:10 GMT</last_modification_time>
+		<handler>on_map_pieces_label_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:41:24 GMT</last_modification_time>
 	      </signal>
 	      <label>Map Pieces _Label</label>
 	      <active>False</active>
@@ -425,21 +425,21 @@
 
 	<widget>
 	  <class>GtkMenuItem</class>
-	  <name>create1</name>
+	  <name>create</name>
 	  <label>_Create</label>
 	  <right_justify>False</right_justify>
 
 	  <widget>
 	    <class>GtkMenu</class>
-	    <name>create1_menu</name>
+	    <name>create_menu</name>
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>world_part1</name>
+	      <name>world_part</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_world_part1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:33:30 GMT</last_modification_time>
+		<handler>on_world_part_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_World Part...</label>
 	      <right_justify>False</right_justify>
@@ -447,11 +447,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>town_part1</name>
+	      <name>town_part</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_town_part1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:34:00 GMT</last_modification_time>
+		<handler>on_town_part_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_Town Part...</label>
 	      <right_justify>False</right_justify>
@@ -459,11 +459,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>dungeon_part1</name>
+	      <name>dungeon_part</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_dungeon_part1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:34:10 GMT</last_modification_time>
+		<handler>on_dungeon_part_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_Dungeon Part...</label>
 	      <right_justify>False</right_justify>
@@ -477,11 +477,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>equipment_item1</name>
+	      <name>equipment_item</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_equipment_item1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:34:26 GMT</last_modification_time>
+		<handler>on_equipment_item_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_Equipment Item...</label>
 	      <right_justify>False</right_justify>
@@ -489,11 +489,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>npc1</name>
+	      <name>npc</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_npc1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:34:55 GMT</last_modification_time>
+		<handler>on_npc_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_NPC...</label>
 	      <right_justify>False</right_justify>
@@ -501,11 +501,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>race1</name>
+	      <name>race</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_race1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:35:21 GMT</last_modification_time>
+		<handler>on_race_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_Race...</label>
 	      <right_justify>False</right_justify>
@@ -513,11 +513,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>hero_type1</name>
+	      <name>hero_type</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_hero_type1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:35:43 GMT</last_modification_time>
+		<handler>on_hero_type_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_Hero Type...</label>
 	      <right_justify>False</right_justify>
@@ -525,11 +525,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>spell1</name>
+	      <name>spell</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_spell1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:35:55 GMT</last_modification_time>
+		<handler>on_spell_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_Spell...</label>
 	      <right_justify>False</right_justify>
@@ -543,11 +543,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>magic_action1</name>
+	      <name>magic_action</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_magic_action1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:36:13 GMT</last_modification_time>
+		<handler>on_magic_action_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_Magic Action...</label>
 	      <right_justify>False</right_justify>
@@ -555,11 +555,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>action1</name>
+	      <name>action</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_action1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:36:42 GMT</last_modification_time>
+		<handler>on_action_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>A_ction...</label>
 	      <right_justify>False</right_justify>
@@ -567,11 +567,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>ability1</name>
+	      <name>ability</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_ability1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:37:01 GMT</last_modification_time>
+		<handler>on_ability_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_Ability...</label>
 	      <right_justify>False</right_justify>
@@ -579,11 +579,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>state1</name>
+	      <name>state</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_state1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:37:08 GMT</last_modification_time>
+		<handler>on_state_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>_State...</label>
 	      <right_justify>False</right_justify>
@@ -591,11 +591,11 @@
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>attribute1</name>
+	      <name>attribute</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_attribute1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:37:30 GMT</last_modification_time>
+		<handler>on_attribute_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
 	      </signal>
 	      <label>Attr_ibute...</label>
 	      <right_justify>False</right_justify>
@@ -605,44 +605,45 @@
 
 	<widget>
 	  <class>GtkMenuItem</class>
-	  <name>einstellungen1</name>
-	  <stock_item>GNOMEUIINFO_MENU_SETTINGS_TREE</stock_item>
+	  <name>settings</name>
+	  <label>_Settings</label>
+	  <right_justify>False</right_justify>
 
 	  <widget>
 	    <class>GtkMenu</class>
-	    <name>einstellungen1_menu</name>
+	    <name>settings_menu</name>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>einstellungen2</name>
+	      <class>GtkMenuItem</class>
+	      <name>preferences</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_einstellungen2_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:23:01 GMT</last_modification_time>
+		<handler>on_preferences_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:48:51 GMT</last_modification_time>
 	      </signal>
-	      <stock_item>GNOMEUIINFO_MENU_PREFERENCES_ITEM</stock_item>
-	    </widget>
-
-	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>game_options1</name>
-	      <signal>
-		<name>activate</name>
-		<handler>on_game_options1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:39:24 GMT</last_modification_time>
-	      </signal>
-	      <label>_Game Options...</label>
+	      <label>_Preferences</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_PROP</stock_icon>
 	    </widget>
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>module_settings1</name>
+	      <name>game_options</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_module_settings1_activate</handler>
-		<last_modification_time>Tue, 03 Apr 2001 08:41:09 GMT</last_modification_time>
+		<handler>on_game_option_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:44:47 GMT</last_modification_time>
+	      </signal>
+	      <label>_Game Options...</label>
+	      <right_justify>False</right_justify>
+	    </widget>
+
+	    <widget>
+	      <class>GtkMenuItem</class>
+	      <name>module_settings</name>
+	      <signal>
+		<name>activate</name>
+		<handler>on_module_settings_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:45:23 GMT</last_modification_time>
 	      </signal>
 	      <label>Plugin _Settings...</label>
 	      <right_justify>False</right_justify>
@@ -655,62 +656,70 @@
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>speichern2</name>
+	      <class>GtkMenuItem</class>
+	      <name>settings_save</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_speichern2_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:23:46 GMT</last_modification_time>
+		<handler>on_settings_save_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:45:23 GMT</last_modification_time>
 	      </signal>
-	      <label>Sp_eichern</label>
+	      <label>S_ave</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_SAVE</stock_icon>
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>laden1</name>
+	      <class>GtkMenuItem</class>
+	      <name>settings_load</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_laden1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:24:52 GMT</last_modification_time>
+		<handler>on_settings_load_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:46:21 GMT</last_modification_time>
 	      </signal>
-	      <label>_Laden</label>
+	      <label>_Load</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_OPEN</stock_icon>
 	    </widget>
 	  </widget>
 	</widget>
 
 	<widget>
 	  <class>GtkMenuItem</class>
-	  <name>hilfe1</name>
+	  <name>help</name>
 	  <stock_item>GNOMEUIINFO_MENU_HELP_TREE</stock_item>
 
 	  <widget>
 	    <class>GtkMenu</class>
-	    <name>hilfe1_menu</name>
+	    <name>help_menu</name>
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>manual1</name>
+	      <name>manual</name>
 	      <accelerator>
 		<modifiers>0</modifiers>
 		<key>GDK_F1</key>
 		<signal>activate</signal>
 	      </accelerator>
+	      <signal>
+		<name>activate</name>
+		<handler>on_manual_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:47:21 GMT</last_modification_time>
+	      </signal>
 	      <label>_Manual...</label>
 	      <right_justify>False</right_justify>
 	    </widget>
 
 	    <widget>
 	      <class>GtkMenuItem</class>
-	      <name>online_help1</name>
+	      <name>online_help</name>
 	      <accelerator>
 		<modifiers>GDK_SHIFT_MASK</modifiers>
 		<key>GDK_F1</key>
 		<signal>activate</signal>
 	      </accelerator>
+	      <signal>
+		<name>activate</name>
+		<handler>on_online_help_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:47:21 GMT</last_modification_time>
+	      </signal>
 	      <label>_Online Help</label>
 	      <right_justify>False</right_justify>
 	    </widget>
@@ -722,16 +731,15 @@
 	    </widget>
 
 	    <widget>
-	      <class>GtkPixmapMenuItem</class>
-	      <name>about1</name>
+	      <class>GtkMenuItem</class>
+	      <name>about</name>
 	      <signal>
 		<name>activate</name>
-		<handler>on_about1_activate</handler>
-		<last_modification_time>Wed, 24 May 2000 15:34:38 GMT</last_modification_time>
+		<handler>on_about_activate</handler>
+		<last_modification_time>Sat, 28 Apr 2001 09:47:21 GMT</last_modification_time>
 	      </signal>
 	      <label>_About...</label>
 	      <right_justify>False</right_justify>
-	      <stock_icon>GNOME_STOCK_MENU_ABOUT</stock_icon>
 	    </widget>
 	  </widget>
 	</widget>
@@ -765,7 +773,6 @@
 	  <child_name>Toolbar:button</child_name>
 	  <name>save_button</name>
 	  <label>Save</label>
-	  <stock_pixmap>GNOME_STOCK_PIXMAP_SAVE</stock_pixmap>
 	</widget>
 
 	<widget>
@@ -773,7 +780,6 @@
 	  <child_name>Toolbar:button</child_name>
 	  <name>cut_button</name>
 	  <label>Cut</label>
-	  <stock_pixmap>GNOME_STOCK_PIXMAP_CUT</stock_pixmap>
 	  <child>
 	    <new_group>True</new_group>
 	  </child>
@@ -784,7 +790,6 @@
 	  <child_name>Toolbar:button</child_name>
 	  <name>copy_button</name>
 	  <label>Copy</label>
-	  <stock_pixmap>GNOME_STOCK_PIXMAP_COPY</stock_pixmap>
 	</widget>
 
 	<widget>
@@ -792,7 +797,6 @@
 	  <child_name>Toolbar:button</child_name>
 	  <name>paste_button</name>
 	  <label>Paste</label>
-	  <stock_pixmap>GNOME_STOCK_PIXMAP_PASTE</stock_pixmap>
 	</widget>
 
 	<widget>
@@ -800,7 +804,6 @@
 	  <child_name>Toolbar:button</child_name>
 	  <name>clear_button</name>
 	  <label>Clear</label>
-	  <stock_pixmap>GNOME_STOCK_PIXMAP_CLEAR</stock_pixmap>
 	</widget>
 
 	<widget>
@@ -808,7 +811,6 @@
 	  <child_name>Toolbar:button</child_name>
 	  <name>refresh_button</name>
 	  <label>Refresh</label>
-	  <stock_pixmap>GNOME_STOCK_PIXMAP_REFRESH</stock_pixmap>
 	</widget>
 
 	<widget>
@@ -816,7 +818,6 @@
 	  <child_name>Toolbar:button</child_name>
 	  <name>settings_button</name>
 	  <label>Settings</label>
-	  <stock_pixmap>GNOME_STOCK_PIXMAP_PROPERTIES</stock_pixmap>
 	  <child>
 	    <new_group>True</new_group>
 	  </child>
@@ -827,7 +828,6 @@
 	  <child_name>Toolbar:button</child_name>
 	  <name>actions_button</name>
 	  <label>Actions</label>
-	  <stock_pixmap>GNOME_STOCK_PIXMAP_EXEC</stock_pixmap>
 	</widget>
       </widget>
     </widget>
@@ -854,9 +854,10 @@
 	<widget>
 	  <class>Custom</class>
 	  <name>custom1</name>
+	  <creation_function>mapedit_create_new</creation_function>
 	  <int1>0</int1>
 	  <int2>0</int2>
-	  <last_modification_time>Wed, 04 Apr 2001 16:25:43 GMT</last_modification_time>
+	  <last_modification_time>Wed, 02 May 2001 10:03:25 GMT</last_modification_time>
 	</widget>
       </widget>
     </widget>
