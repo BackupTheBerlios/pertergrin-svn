@@ -32,7 +32,7 @@ public:
   void createWorld(pworld_t sWorldData);
   void setWorldData(pworld_t sWorldData);
   // Read only
-  auto_ptr<PtgWorld> &getWorld();
+  const auto_ptr<PtgWorld> &getWorld();
 
 private:
   auto_ptr<PtgWorld> mpoWorld;
