@@ -1,0 +1,69 @@
+                   Module Integration
+                   ==================
+
+General
+-------
+This documents describes how the modules (internal one as well
+as additional external) are integrated into the Pertegrin.
+Typical modules are town, dungeon, equipment, npc editor.
+
+Main Window
+-----------
+The main window is the interface to the UI parts of the
+modules. All the dialogs or forms accessible by the menu 
+are created and shown using the main window. Forms are 
+usually dockable and do not need to be handled by the user
+at once. 
+
+Every UI-module has to provide certain informations 
+(configuration): 
+Name
+Description
+UI-Type (like dialog, form)
+Name of Glade file
+PTG-Type (f.e. TOWN_BASE, TOWN_EXTENSION) 
+State availability (bool)
+Provided methods
+
+Extension modules can be defined by the user (ptgeditor 
+configuration). As extension modules are optional the
+ptgeditor checks the availability of a extension module.
+
+If the modules has state availability the state can
+be shown somewhere in the ptgeditor (to be defined closer)
+
+Modules can use other modules as well but have to look
+for themselves if the needed module is available.
+
+App Core
+--------
+The world type defines features a certain role playing game
+has. This feature list has influence on the Pertergrin user
+interface. After the world is created all features not 
+supported are greyed out or removed at the user interface.
+
+To offer this flexibility the types are not defined in code
+but by files being found in the modules directory. The
+modules hierarchy looks like this:
+- world: Modules for different world types
+- map: Modules for creating maps (like dungeons, towns)
+- equipment: editors for equipment
+- npc: editors for NPCs
+- ...
+
+The world modules basically define which editing abilities
+are available for the world. Such a module needs to provide
+the following information (configuration):
+Name (shown in the "New World" dialog)
+Description
+
+
+Example
+-------
+Name: Town_Base
+Description: Base dialog for Town options
+UI-Type: Dialog
+Name of glade file: Town_Base.glade
+PTG_Type: TOWN_BASE
+State availability: No
+Provided Methods: getOptions, setOptions
