@@ -1,0 +1,49 @@
+                   Pertergrin - A RPG system
+                   =========================
+
+Pertergrin a fantasy role playing game. As such it has certain known 
+features of this type of games. It has a freely invented historic 
+background. The player (i.e. YOU) plays the role of a hero.
+The computer plays the role of the master which controls the game.
+
+Pertergrin is also a fantasy role playing game system. As such you do 
+not only play one game (or sequels) but you can create your
+own games inside Pertergrin. It has the potential to break the historic
+restriction (so you could theoretically invent a science fiction role
+playing game) but this is outside the direct focus of the authors.
+
+Pertergrin features an Editor where you can change the Pertergrin World.
+You can create the world, buildings, towns, NPCs, and other objects.
+
+Pertergrin is an acronym for Per Terram Grinare.
+Pertergrin is a game developed for Amiga (NG) and Linux.
+
+To install this game you need to have gtk 1.2 or higher installed
+for the editor as well as SDL for the game client. Most data is saved
+in a database. Pertergrin uses PostgreSQL 7.1 or higher which need to
+be installed as well. An install script is available which creates
+the database for you and you can optionally insert the "demo" game
+Pertergrin (recommanded).
+
+To play the game you first need to load the world (if you do not want
+to play the default Pertergrin world), then load or create your
+character(s). You have even more loading options but these can be
+read in the Pertergrin manual in the doc directory.
+
+The editor should be quite straight forward to use. If you start it
+it first looks in the database for a game and loads it if it is
+available. It creates a new game if none if available. You have the
+option to export the whole game (which is recommanded for backups).
+You should know that you can protect certain areas of the game and
+this feature is also used by the Pertergrin world so that there is
+a common standard for certain towns and areas. When you study the
+manual you will certainly find out how to access these areas as well.
+
+The current stable or development version of the game can be found on
+http://pertergrin.berlios.de. If you prefer to live on the bleeding
+edge you can access the latest code from CVS. If you want to actively
+participate on the development just ask one of the developer or on
+the Pertergrin development mailing list.
+
+Reinhard Katzmann <reinhard@suamor.de>
+April 2001
