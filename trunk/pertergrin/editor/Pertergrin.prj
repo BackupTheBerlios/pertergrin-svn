@@ -52,9 +52,9 @@ project.programming.language=C_C++
 project.excluded.modules=intl
 
 project.config.extra.modules.before=
-project.config.extra.modules.after=gui modules
+project.config.extra.modules.after=
 project.config.blocked=0
-project.config.disable.overwriting=0 1 1 1 1 1 1 1 1 
+project.config.disable.overwriting=1 1 1 0 1 0 0 0 0 
 
 project.menu.entry=Pertergrin Version 0.1
 project.menu.group=Applications
@@ -81,18 +81,21 @@ preferences.indent.size=4
 preferences.tabsize=4
 preferences.indent.closing=0
 
-module.include.name=include
+module.include.name=./
 module.include.type=
 module.include.files=
 
-module.source.name=kernel
+module.source.name=./
 module.source.type=
 module.source.files=\
-	main.cc
+	kernel/main.cc\
+	gui/mainwindow.cc\
+	gui/mainwindow.h
 
 module.pixmap.name=pixmaps
 module.pixmap.type=
-module.pixmap.files=
+module.pixmap.files=\
+	ptg_landscape.png
 
 module.data.name=data
 module.data.type=
@@ -122,4 +125,4 @@ compiler.options.other.c.flags=
 compiler.options.other.l.flags=
 compiler.options.other.l.libs=
 
-project.src.paths=gui
+project.src.paths=
