@@ -1,0 +1,68 @@
+               Dynamic GUI
+               ===========
+
+This text files describes the problem of the dynamic Pertergrin Editor
+GUI and tries to find solutions.
+
+1) World, Town Dungeon
+
+Concerning the world as a whole: no dynamic needed
+Concerning a town as a whole: probably no dynamic needed
+Concerning a dungeon as a whole: probably no dynamic needed
+
+towns and dungeons are both (external) base modules contrary
+to the world being part of the pertergrin kernel.
+
+2) Landscape Parts
+
+Many Abilities can be static. Some custom properties
+could be useful. Current Idea: Extra glade file for custom properties
+
+3) Town Parts
+
+Many Abilities can be static. Some custom properties are useful.
+Current Idea: Extra glade file for custom properties
+
+4) Dungeon Parts
+
+Many Abilities can be static. Some custom properties are useful.
+Current Idea: Extra glade file for custom properties
+
+5) PCs and NPCs
+
+Dynamic abilities are required except some very few static abilities.
+Grouping NPCs according to their race could be useful.
+
+6) Equipment Items
+
+Dynamic abilities are required except some very few static abilities.
+As there are so many items possible grouping is necessary.
+
+7) Races
+
+Dynamic abilities are required except some very few static abilities.
+
+
+It is clearly visible that the deeper the details need to be defined
+the more dynamic abilities are required.
+
+Solution
+--------
+
+In glade you have to use either static widgets (Combobox, Entry,
+Spinbox) or lists (actually a treeview or listview). Glade does
+not save every window or dialog as a new file but saves them all
+in one file. By using several glade files for dialogs or for
+forms and one mainwindow it can be extended using modules. 
+
+libglade2mm documentation is part of the gtkmm documentation
+including examples. Some extra information can be found by
+styding the header files. The library offers to get widgets
+and derived widgets (i.e. custom widgets) from a glade file.
+A dialog like one of the above is a custom widget i.e. it
+is part of module: glade file(s), class file(s) and header(s).
+
+So it is possible to get easily access to the widgets and
+lists or treeviews can be filled with the data provided
+by the modules. More information can be found in the modules
+concept (see module-integration.txt).
