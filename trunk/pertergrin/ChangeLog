@@ -1,0 +1,12 @@
+21 Aug 2003 - Reinhard Katzmann <reinhard@suamor.de>
+	- Start port to GTK2
+	- Checked in the current SQL database from October 2002 (sorry)
+	- Started switch to CPP / gtkmm / libglademm based PTG Editor
+13 May 2001 - Reinhard Katzmann <reinhard@suamor.de>
+	- Fixed a lot of bugs in editor/mapeditwiget/mapeditclass.c
+	- Added configure scripts, docs and Makefile(s) for the editor
+	  and the mapeditclass (including the testmapedit demo).
+	- Added a prototype for the editor. Some things are todo until
+	  it can be used as to draw some maps: editor/ptgeditor
+	- Added my graphics (ptg_landscape.png) which can be used for 
+	  drawing.
