@@ -101,6 +101,8 @@ PTGMainWindow::PTGMainWindow(BaseObjectType* opObject,
   if ( moMItem[MI_FileNew].opGItem )
     Menu_Connect( moMItem[MI_FileNew].opGItem, moMItem[MI_FileNew].vpMethod );
 
+  // Create application kernel
+  
   // Finally show our window
   show_all_children();
   // Maximize window

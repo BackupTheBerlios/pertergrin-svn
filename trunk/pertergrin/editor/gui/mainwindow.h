@@ -27,6 +27,7 @@
 #include <gtkmm.h>
 
 #include "worlddialog.h"
+#include "kernel/app.h"
 
 // defines
 class PTGMainWindow;
@@ -78,7 +79,7 @@ typedef struct
 {
   Glib::ustring oName;
   Gtk::MenuItem *opGItem;
-  void          (PTGMainWindow::*fpMethod)();
+  void          (PTGMainWindow::*vpMethod)();
 } ptgmenuitem_t;
 
 // class declaration
@@ -111,6 +112,9 @@ protected:
   // Variables
   //Glib::ustring moStrEntry;
   //bool mbCheckBox;
+private:
+  PtgApp moApp;
+
 };
 
 #endif // PGTMAINWINDOW_H
