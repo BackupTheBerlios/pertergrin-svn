@@ -18,6 +18,7 @@
 
 // includes
 #include "mainwindow.h"
+#include "kernel/ptgtypes.h"
 
 // defines
 
@@ -85,8 +86,8 @@ PTGMainWindow::PTGMainWindow(BaseObjectType* opObject,
   moMItem[MI_HelpAbout].oName = "about";
 
   // Define menu methods (read the handlers from the glade file ?)
-  moMItem[MI_FileNew].fpMethod = &PTGMainWindow::on_file_new;
-  moMItem[MI_FileQuit].fpMethod = &PTGMainWindow::on_quit;
+  moMItem[MI_FileNew].vpMethod = &PTGMainWindow::on_file_new;
+  moMItem[MI_FileQuit].vpMethod = &PTGMainWindow::on_quit;
 
   // If all menu items can be accessed the next two blocks are in a foor loop
   // Get menu items from glade file
@@ -95,10 +96,10 @@ PTGMainWindow::PTGMainWindow(BaseObjectType* opObject,
 
   // Connect all menu items to slots (see macro above)
   if ( moMItem[MI_FileQuit].opGItem )
-    Menu_Connect( moMItem[MI_FileQuit].opGItem, moMItem[MI_FileQuit].fpMethod );
+    Menu_Connect( moMItem[MI_FileQuit].opGItem, moMItem[MI_FileQuit].vpMethod );
 
   if ( moMItem[MI_FileNew].opGItem )
-    Menu_Connect( moMItem[MI_FileNew].opGItem, moMItem[MI_FileNew].fpMethod );
+    Menu_Connect( moMItem[MI_FileNew].opGItem, moMItem[MI_FileNew].vpMethod );
 
   // Finally show our window
   show_all_children();
@@ -109,11 +110,6 @@ PTGMainWindow::PTGMainWindow(BaseObjectType* opObject,
 // Destructor
 PTGMainWindow::~PTGMainWindow()
 {
-  if( mopWorldDialog )
-  {
-    delete mopWorldDialog;
-    mopWorldDialog = 0;
-  }
 }
 
 // Call this slot to quit the program
