@@ -18,7 +18,7 @@ AC_SUBST(GTKMM_LIBS)
 AC_SUBST(GTKMM_CFLAGS)
 dnl Checks for programs.
 dnl Checks for libraries.
-PKG_CHECK_MODULES(LIBGLADEMM2, libglademm-2.0,, exit)
+PKG_CHECK_MODULES(LIBGLADEMM2, libglademm-2.0 >= 2.1.0,, exit)
 AC_SUBST(LIBGLADEMM2_LIBS)
 AC_SUBST(LIBGLADEMM2_CFLAGS)
 
