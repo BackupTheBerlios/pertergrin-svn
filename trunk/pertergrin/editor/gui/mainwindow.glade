@@ -1,0 +1,1132 @@
+<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
+<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
+
+<glade-interface>
+<requires lib="gnome"/>
+
+<widget class="GtkWindow" id="PtgMainWindow">
+  <property name="border_width">2</property>
+  <property name="visible">True</property>
+  <property name="title" translatable="yes">Pertergrin Editor</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+  <signal name="destroy" handler="gtk_main_quit"/>
+
+  <child>
+    <widget class="GtkVBox" id="mainvbox">
+      <property name="visible">True</property>
+      <property name="homogeneous">False</property>
+      <property name="spacing">0</property>
+
+      <child>
+	<widget class="GtkHandleBox" id="menuhandlebox">
+	  <property name="visible">True</property>
+	  <property name="shadow_type">GTK_SHADOW_OUT</property>
+	  <property name="handle_position">GTK_POS_LEFT</property>
+	  <property name="snap_edge">GTK_POS_TOP</property>
+
+	  <child>
+	    <widget class="GtkMenuBar" id="menubar">
+	      <property name="visible">True</property>
+
+	      <child>
+		<widget class="GtkMenuItem" id="file1">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_File</property>
+		  <property name="use_underline">True</property>
+
+		  <child>
+		    <widget class="GtkMenu" id="file1_menu">
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="new_world">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_New World</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_new_world_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image507">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-new</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="open_world">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Open World</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_open_world_activate"/>
+			  <accelerator key="O" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image508">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-open</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="save_world">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Save World</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_save_world_activate"/>
+			  <accelerator key="S" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image509">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-save</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="save_world_as">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Save World _As</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_save_world_as_activate"/>
+			  <accelerator key="W" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image510">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-save-as</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="trennlinie1">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="print_world">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Print World</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_print_world_activate"/>
+			  <accelerator key="P" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image511">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-print</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="trennlinie2">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="quit">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Quit</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="gtk_main_quit"/>
+			  <accelerator key="Q" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image512">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-quit</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="edit">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_Edit</property>
+		  <property name="use_underline">True</property>
+
+		  <child>
+		    <widget class="GtkMenu" id="edit_menu">
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="cut">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">C_ut</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_cut_activate"/>
+			  <accelerator key="X" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image513">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-cut</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="copy">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Copy</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_copy_activate"/>
+			  <accelerator key="C" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image514">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-copy</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="paste">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Paste</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_paste_activate"/>
+			  <accelerator key="V" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image515">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-paste</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="clear">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Clear</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_clear_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image516">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-delete</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="select_all">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Select All</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_select_all_activate"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="move">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Move</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_move_activate"/>
+			  <accelerator key="M" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image517">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-go-forward</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="trennlinie4">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="refresh">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Re_fresh</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_refresh_activate" last_modification_time="Thu, 18 Jul 2002 17:07:14 GMT"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image518">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-refresh</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="undo">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Undo</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_undo_activate"/>
+			  <accelerator key="Z" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image519">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-undo</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="redo">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Redo</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_redo_activate"/>
+			  <accelerator key="R" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image520">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-redo</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="view">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_View</property>
+		  <property name="use_underline">True</property>
+
+		  <child>
+		    <widget class="GtkMenu" id="view_menu">
+
+		      <child>
+			<widget class="GtkMenuItem" id="worldeditor">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_World Editor</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_worldeditor_activate"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="towneditor">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Town Editor</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_towneditor_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image521">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-home</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="dungeoneditor">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Dungeon Editor</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_dungeoneditor_activate"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="current_map_part">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Current Map Part</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_current_map_part_activate" last_modification_time="Wed, 13 Aug 2003 12:40:13 GMT"/>
+			  <accelerator key="I" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="trennlinie5">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkCheckMenuItem" id="map_pieces">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Map Pieces</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">True</property>
+			  <signal name="activate" handler="on_map_pieces_activate"/>
+			  <accelerator key="D" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkCheckMenuItem" id="map_pieces_label">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Map Pieces _Label</property>
+			  <property name="use_underline">True</property>
+			  <property name="active">False</property>
+			  <signal name="activate" handler="on_map_pieces_label_activate"/>
+			  <accelerator key="E" modifiers="GDK_CONTROL_MASK" signal="activate"/>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="create">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_Create</property>
+		  <property name="use_underline">True</property>
+
+		  <child>
+		    <widget class="GtkMenu" id="create_menu">
+
+		      <child>
+			<widget class="GtkMenuItem" id="landscape_part">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Landscape Part...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_landscape_part_activate" last_modification_time="Wed, 13 Aug 2003 09:53:28 GMT"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="town_part">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Town Part...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_town_part_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image522">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-home</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="dungeon_part">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Dungeon Part...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_dungeon_part_activate"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="trennlinie6">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="equipment_item">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Equipment Item...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_equipment_item_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image523">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-find-and-replace</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="npc">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_NPC...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_npc_activate"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="race">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Race...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_race_activate"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="hero_type">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Hero Type...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_hero_type_activate"/>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="spell">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Spell...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_spell_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image524">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-select-color</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="trennlinie7">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="magic_action">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Magic Action...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_magic_action_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image525">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-convert</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="action">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">A_ction...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_action_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image526">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-index</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="ability">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Ability...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_ability_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image527">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-preferences</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="state">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_State...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_state_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image528">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-justify-left</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="attribute">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Attr_ibute...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_attribute_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image529">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-properties</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="settings">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_Settings</property>
+		  <property name="use_underline">True</property>
+
+		  <child>
+		    <widget class="GtkMenu" id="settings_menu">
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="preferences">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Preferences</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_preferences_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image530">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-properties</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="game_options">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Game Options...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_game_option_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image531">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-preferences</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="module_settings">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">Plugin _Settings...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_module_settings_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image532">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-properties</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="trennlinie8">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="settings_save">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">S_ave</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_settings_save_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image533">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-save</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="settings_load">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Load</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_settings_load_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image534">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-open</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkMenuItem" id="help">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">_Help</property>
+		  <property name="use_underline">True</property>
+
+		  <child>
+		    <widget class="GtkMenu" id="help_menu">
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="manual">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Manual...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_manual_activate"/>
+			  <accelerator key="F1" modifiers="0" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image535">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-help</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="online_help">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_Online Help</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_online_help_activate"/>
+			  <accelerator key="F1" modifiers="GDK_SHIFT_MASK" signal="activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image536">
+			      <property name="visible">True</property>
+			      <property name="stock">gtk-dialog-question</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkMenuItem" id="trennlinie9">
+			  <property name="visible">True</property>
+			</widget>
+		      </child>
+
+		      <child>
+			<widget class="GtkImageMenuItem" id="about">
+			  <property name="visible">True</property>
+			  <property name="label" translatable="yes">_About...</property>
+			  <property name="use_underline">True</property>
+			  <signal name="activate" handler="on_about_activate"/>
+
+			  <child internal-child="image">
+			    <widget class="GtkImage" id="image537">
+			      <property name="visible">True</property>
+			      <property name="stock">gnome-stock-about</property>
+			      <property name="icon_size">1</property>
+			      <property name="xalign">0.5</property>
+			      <property name="yalign">0.5</property>
+			      <property name="xpad">0</property>
+			      <property name="ypad">0</property>
+			    </widget>
+			  </child>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkHandleBox" id="toolbarhandlebox">
+	  <property name="visible">True</property>
+	  <property name="shadow_type">GTK_SHADOW_OUT</property>
+	  <property name="handle_position">GTK_POS_LEFT</property>
+	  <property name="snap_edge">GTK_POS_TOP</property>
+
+	  <child>
+	    <widget class="GtkToolbar" id="toolbar">
+	      <property name="visible">True</property>
+	      <property name="orientation">GTK_ORIENTATION_HORIZONTAL</property>
+	      <property name="toolbar_style">GTK_TOOLBAR_BOTH</property>
+	      <property name="tooltips">True</property>
+
+	      <child>
+		<widget class="button" id="save_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Save</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_pixmap">gtk-save</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="button" id="cut_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Cut</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_pixmap">gtk-cut</property>
+		  <property name="new_group">True</property>
+		</widget>
+		<packing>
+		  <property name="new_group">True</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="button" id="copy_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Copy</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_pixmap">gtk-copy</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="button" id="paste_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Paste</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_pixmap">gtk-paste</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="button" id="clear_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Clear</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_pixmap">gtk-delete</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="button" id="refresh_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Refresh</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_pixmap">gtk-refresh</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="button" id="settings_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Settings</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_pixmap">gtk-properties</property>
+		  <property name="new_group">True</property>
+		</widget>
+		<packing>
+		  <property name="new_group">True</property>
+		</packing>
+	      </child>
+
+	      <child>
+		<widget class="button" id="actions_button">
+		  <property name="visible">True</property>
+		  <property name="label" translatable="yes">Actions</property>
+		  <property name="use_underline">True</property>
+		  <property name="stock_pixmap">gtk-index</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkCombo" id="SelectCombo">
+		  <property name="visible">True</property>
+		  <property name="value_in_list">False</property>
+		  <property name="allow_empty">True</property>
+		  <property name="case_sensitive">False</property>
+		  <property name="enable_arrow_keys">True</property>
+		  <property name="enable_arrows_always">False</property>
+
+		  <child internal-child="entry">
+		    <widget class="GtkEntry" id="SelectComboEntry">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="editable">False</property>
+		      <property name="visibility">True</property>
+		      <property name="max_length">0</property>
+		      <property name="text" translatable="yes"></property>
+		      <property name="has_frame">True</property>
+		      <property name="invisible_char" translatable="yes">*</property>
+		      <property name="activates_default">False</property>
+		    </widget>
+		  </child>
+
+		  <child internal-child="list">
+		    <widget class="GtkList" id="SelectComboList">
+		      <property name="visible">True</property>
+		      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkScrolledWindow" id="mapeditwindow">
+	  <property name="border_width">1</property>
+	  <property name="visible">True</property>
+	  <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
+	  <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+	  <property name="shadow_type">GTK_SHADOW_NONE</property>
+	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+	  <child>
+	    <widget class="GtkViewport" id="mapeditviewport">
+	      <property name="visible">True</property>
+	      <property name="shadow_type">GTK_SHADOW_IN</property>
+
+	      <child>
+		<widget class="Custom" id="ptgmapedit">
+		  <property name="visible">True</property>
+		  <property name="creation_function">mapedit_create_new</property>
+		  <property name="int1">0</property>
+		  <property name="int2">0</property>
+		  <property name="last_modification_time">Wed, 02 May 2001 10:03:25 GMT</property>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="padding">1</property>
+	  <property name="expand">True</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkHSeparator" id="mapstatushseparator">
+	  <property name="visible">True</property>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">True</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkStatusbar" id="statusbar">
+	  <property name="visible">True</property>
+	  <property name="has_resize_grip">True</property>
+	</widget>
+	<packing>
+	  <property name="padding">0</property>
+	  <property name="expand">False</property>
+	  <property name="fill">False</property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+</glade-interface>
