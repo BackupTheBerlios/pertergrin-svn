@@ -40,6 +40,7 @@ class PTGMainWindow;
 typedef enum
 {
   MI_FileNew = 0,
+  MI_FileChange,
   MI_FileOpen,
   MI_FileSave,
   MI_FileSaveAs,
@@ -98,6 +99,7 @@ public:
 
   // Slots for menus
   void on_file_new();
+  void on_file_change();
   void on_quit();
 
 protected:
@@ -126,7 +128,7 @@ protected:
 
 private:
   PtgApp moApp;
-
+  cwtmap_t moMap;
 };
 
 #endif // PGTMAINWINDOW_H
