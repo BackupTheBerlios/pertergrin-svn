@@ -38,6 +38,11 @@ CWMapDrawArea::CWMapDrawArea(Glib::RefPtr<Gdk::Pixbuf> &opTileset,
   // Connect to expose event
   signal_expose_event().connect( slot(*this, 
                                  &CWMapDrawArea::on_map_area_expose) );
+  // Fetch parent viewport
+  mopParent = (Gtk::Viewport *) get_parent();
+  g_assert( mopParent != 0 );
+  mopParent->signal_set_scroll_adjustments().connect( slot(*this, 
+			   &CWMapDrawArea::on_set_scroll_adjustments) );
   adjust_scrollbars();
 }
 
@@ -158,19 +163,71 @@ bool CWMapDrawArea::on_map_area_value_changed()
   return false;
 }
 
-bool CWMapDrawArea::on_set_scroll_adjustments()
+void CWMapDrawArea::on_set_scroll_adjustments(Gtk::Adjustment *opHadjustment,
+                                              Gtk::Adjustment *opVadjustment)
 {
-  int iXMoved = 0, iYMoved = 0, iWidth = 1, iHeight = 1;
-  int iDirection = 0; // 0: No move, unchanged!
+  int iX1 = 0, iY1 = 0, iX2 = 0, iY2 = 0, iWidth, iHeight, iX=0, iY=0;
+
+  // Size of drawarea
+  iWidth = get_width();
+  iHeight = get_height();
+
+  // Get Position of adjustments
+  if( opHadjustment->get_lower() != ( opHadjustment->get_upper() - 
+                                      opHadjustment->get_page_size() ) )
+  {
+    iX = opHadjustment->get_value() - opHadjustment->get_lower();
+  }
+  if( opVadjustment->get_lower() != ( opVadjustment->get_upper() - 
+                                      opVadjustment->get_page_size() ) )
+  {
+    iY = opVadjustment->get_value() - opVadjustment->get_lower();
+  }
+
+  // Check the X direction being moved
+  if ( miDrawAreaX - iX > iWidth )
+    iX2 = miDrawAreaX - iX; // positive move
+  else if( iX - miDrawAreaX > iWidth )
+    iX1 = iX - miDrawAreaX; // negative move
+  
+  // Check the Y direction being moved
+  if ( miDrawAreaY - iY > iHeight )
+    iY2 = miDrawAreaY - iY; // positive move
+  else if( iY - miDrawAreaY > iHeight )
+    iY1 = iY - miDrawAreaY; // negative move
 
   // Move part of the map being visible
   const Glib::RefPtr<Gdk::GC> oGC = get_style()->get_fg_gc(Gtk::STATE_NORMAL);
   const Glib::RefPtr<Gdk::Drawable> oWindow = get_window();
-  if( iDirection >= 0 )
-    oWindow->draw_drawable(oGC, oWindow, 0, 0, iXMoved, iYMoved, iWidth, iHeight );
-  else
-    oWindow->draw_drawable(oGC, oWindow, iXMoved, iYMoved, 0, 0, iWidth, iHeight );
-  return true;
+    oWindow->draw_drawable(oGC, oWindow, iX1, iY1, iX2, iY2, iWidth, iHeight );
+
+  // Calculate position inside map using size of tiles
+  iX = iX / moTilesMap.iXTileSize;
+  iY = iY / moTilesMap.iYTileSize;
+
+  iWidth = iWidth / moTilesMap.iXTileSize + 1;
+  iHeight = iHeight / moTilesMap.iYTileSize + 1;
+  // Draw the rest of the map
+  for( iX1 = iX; iX < iHeight; iX1++ )
+  {
+    vector<cwtpos_t> &vecoRow = moTilesMap.vecoMap[iX1];
+    for( iY1 = iY; iY < iHeight; iY1++ )
+    {
+      // Copy map tile to draw buffer (double buffering)
+      mopTilesets[vecoRow[iY1].iTileset]->copy_area(vecoRow[iY1].iXPos,
+                                                    vecoRow[iY1].iYPos, 
+                                                    moTilesMap.iXTileSize,
+                                                    moTilesMap.iYTileSize,
+                                                    moDrawPB,
+                                                    iX1*moTilesMap.iXTileSize,
+                                                    iY1*moTilesMap.iYTileSize);
+    }
+  }
+  moDrawPB->render_to_drawable( oWindow, oGC, 0, 0, 0, 0, iWidth, iHeight, 
+                                Gdk::RGB_DITHER_NORMAL, iWidth, iHeight);
+
+  miDrawAreaX = iX;
+  miDrawAreaY = iY;
 }
 
 void CWMapDrawArea::adjust_scrollbars(void)
