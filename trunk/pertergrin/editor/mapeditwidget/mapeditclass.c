@@ -10,31 +10,32 @@
  * along with this program. If not contact one the AUTHORS.
  */
 
-/*
-#define USE_DMALLOC 1
+//#define USE_DMALLOC 1
 
-#define MALLOC(size){ (malloc(size)) }
-#define ALLOC(type,size) (malloc(sizeof(type)*size))
-#define REALLOC(mem,type,size) (realloc(mem, sizeof(type)*size))
-#define CALLOC(type,size) (calloc(sizeof(type), size))
-#define FREE(mem) (free(mem))
-*/
+//#define MALLOC(size){ (malloc(size)) }
+//#define ALLOC(type,size) (malloc(sizeof(type)*size))
+//#define REALLOC(mem,type,size) (realloc(mem, sizeof(type)*size))
 
 #include <sys/types.h>
 // #include <sys/commsize.h>
 #include <memory.h>
+#include <stdlib.h>
+//#include <dmalloc.h>
 #include <math.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #include <glib.h>
 #include <gtk/gtkmain.h>
+#include <gtk/gtkviewport.h>
 #include <gtk/gtksignal.h>
 #include <gdk/gdktypes.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-#include <widgets/mapeditclass.h> // Attention: Version numbering is here!
+#include "mapeditclass.h" // Attention: Version numbering is here!
+
+//#define CALLOC(type,size) (calloc(sizeof(type), size))
+//#define FREE(mem) (free(mem))
 
 extern char *getLogfile();
 guint  MapEditClassGetType(void);
@@ -42,10 +43,16 @@ static void MapEditClassSet( GtkObject *obj, GtkArg *arg, guint arg_id );
 static void MapEditClassGet( GtkObject *obj, GtkArg *arg, guint arg_id );
 static void MapEditClassRealize (GtkWidget *widget);
 static gint MapEditClassRender( GtkWidget *widget, GdkEventExpose *event );
+static void MapEditClassDraw (GtkWidget *widget, GdkRectangle *area);
 static void MapEditClassSizeReq (GtkWidget *widget,
 				 GtkRequisition *requisition);
 static void MapEditClassNotifyDimensions( GtkWidget *widget, 
 				    GtkAllocation *allocation );
+static gint MapEditClassNotifyMove(GtkWidget *widget, GdkEventMotion *event);
+static void MapEditAdjustmentChanged( GtkAdjustment *adjustment, 
+				      gpointer data);
+static void MapEditAdjustmentValueChanged( GtkAdjustment *adjustment, 
+					   gpointer data);
 static void InitMapEditClass( GtkMapEditClass *class );
 static void MapEditInit( MD *md );
 
@@ -227,12 +234,13 @@ static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md,
 #endif
                 dmap->mm_Rows = g_malloc0(md->md_Default->mp_Size * 
 					  md->md_Map->mm_MapSize.x );
-#if DEBUGLEV > 2
-		errormsg(MAPDEBUG3,"MakeMap: dmap=%x, md=%x, smap=%x", dmap,
+#if DEBUGLEV > 5
+		errormsg(MAPDEBUG6,"MakeMap: dmap=%x, md=%x, smap=%x", dmap,
 			 md, smap);
 #endif
 #if DEBUGLEV > 1
-		errormsg(MAPDEBUG2,"MakeMap: dmap->mm_Rows=%x",dmap->mm_Rows);
+		errormsg(MAPDEBUG2,"MakeMap: i=%u, dmap->mm_Rows=%x",i,
+			 dmap->mm_Rows);
 #endif
                 if (dmap->mm_Rows)
                 {
@@ -454,6 +462,7 @@ static void MapEditInit(MD *md)
   md->md_ScaleWidth = md->md_ScaleHeight = 100; // 100% scaled
   md->md_UndoBuffer                 = NULL;
   md->md_InitialBuffer              = NULL;
+
   errormsg(MAPDEBUG1,"MapEditInit: Finished setting up md structure");
 }
 
@@ -666,7 +675,7 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args)
     */
 #if DEBUGLEV > 2
     errormsg(MAPDEBUG3,"MapPieces=%x,md->md_PWidth=%u, md->md_PLength=%u,"
-	     "md->md_Default=%u",md->md_MapPieces,md->md_PWidth,
+	     "md->md_Default=%x",md->md_MapPieces,md->md_PWidth,
 	     md->md_PLength, md->md_Default);
 #endif
     if (md->md_MapPieces && md->md_PWidth && md->md_PLength && md->md_Default)
@@ -953,9 +962,6 @@ static void MapEditClassGet( GtkObject *obj, GtkArg *arg, guint arg_id )
 static void MapEditClassRealize (GtkWidget *widget)
 {
     MD *md;
-    GdkWindowAttr attributes;
-    gint attributes_mask;
-
     errormsg(MAPDEBUG1,"MapEditClassRealize entered");
 
 #if DEBUGLEV > 2
@@ -969,25 +975,69 @@ static void MapEditClassRealize (GtkWidget *widget)
 #if DEBUGLEV > 2
     errormsg(MAPDEBUG3,"md=%x",md);
 #endif
-    attributes.x = widget->allocation.x;
-    attributes.y = widget->allocation.y;
-    attributes.width = widget->allocation.width;
-    attributes.height = widget->allocation.height;
-    attributes.wclass = GDK_INPUT_OUTPUT;
-    attributes.window_type = GDK_WINDOW_CHILD;
-    // Add events which interests us
-    attributes.event_mask = gtk_widget_get_events (widget) | 
-      GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK | 
-      GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK;
-    attributes.visual = gtk_widget_get_visual (widget);
-    attributes.colormap = gtk_widget_get_colormap (widget);
+    if (widget->parent)
+    {
+        GdkEventMask emask;
+	GtkViewport *vp;
+        errormsg(MAPDEBUG1,"MapEditClassRealize parent");
 
-    attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-    widget->window = gdk_window_new (widget->parent->window, &attributes, 
-				     attributes_mask);
-    widget->style = gtk_style_attach (widget->style, widget->window);
+	// We require a viewport for proper operation
+	g_return_if_fail ( GTK_IS_VIEWPORT ( widget->parent ));
+
+        widget->window = gtk_widget_get_parent_window (widget);
+	emask = gdk_window_get_events( widget->window );
+	gdk_window_set_events( widget->window, emask | GDK_BUTTON_PRESS_MASK | 
+	  GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | GDK_EXPOSURE_MASK 
+	  | GDK_LEAVE_NOTIFY_MASK | GDK_PROPERTY_CHANGE_MASK );
+        gdk_window_ref (widget->window);
+
+	vp = GTK_VIEWPORT ( widget->parent );
+	md->hadjustment = vp->hadjustment;
+	md->vadjustment = vp->vadjustment;
+
+	gtk_signal_connect (GTK_OBJECT (md->hadjustment), "changed",
+			    (GtkSignalFunc) MapEditAdjustmentChanged,
+			    (gpointer) md);
+	gtk_signal_connect (GTK_OBJECT (md->hadjustment), "value_changed",
+			    (GtkSignalFunc) MapEditAdjustmentValueChanged,
+			    (gpointer) md);
+
+	gtk_signal_connect (GTK_OBJECT (md->vadjustment), "changed",
+			    (GtkSignalFunc) MapEditAdjustmentChanged,
+			    (gpointer) md);
+	gtk_signal_connect (GTK_OBJECT (md->vadjustment), "value_changed",
+			    (GtkSignalFunc) MapEditAdjustmentValueChanged,
+			    (gpointer) md);
+    }
+    else // Create own window (problem: whole map always visible)
+    {
+        GdkWindowAttr attributes;
+	gint attributes_mask;
+
+        errormsg(MAPDEBUG1,"MapEditClassRealize new");
+
+	attributes.x = widget->allocation.x;
+	attributes.y = widget->allocation.y;
+	attributes.width = widget->allocation.width;
+	attributes.height = widget->allocation.height;
+	attributes.wclass = GDK_INPUT_OUTPUT;
+	attributes.window_type = GDK_WINDOW_CHILD;
+	// Add events which interests us
+	attributes.event_mask = gtk_widget_get_events (widget) | 
+	  GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK | 
+	  GDK_BUTTON_RELEASE_MASK | GDK_ENTER_NOTIFY_MASK | 
+	  GDK_LEAVE_NOTIFY_MASK | GDK_PROPERTY_CHANGE_MASK;
+	attributes.visual = gtk_widget_get_visual (widget);
+	attributes.colormap = gtk_widget_get_colormap (widget);
+
+	attributes_mask = GDK_WA_X | GDK_WA_Y| GDK_WA_VISUAL | GDK_WA_COLORMAP;
+	widget->window = gdk_window_new (widget->parent->window, &attributes, 
+					 attributes_mask);
+    }
     gdk_window_set_user_data (widget->window, widget);
-    gtk_style_set_background (widget->style, widget->window, GTK_STATE_ACTIVE);
+    widget->style = gtk_style_attach (widget->style, widget->window);
+    gtk_style_set_background (widget->style, widget->window, 
+			      GTK_STATE_NORMAL);
 
     errormsg(MAPDEBUG1,"MapEditClassRealize finished");
 }
@@ -1043,9 +1093,7 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     guint       colsize = 0, rowsize = 0;
     guint       left, top, xpos, ypos, selx, sely; //, color=0;
     gulong       cx, cy, i, j, fw = 0, fh = 0, ysize;
-    GdkPixbuf *tmppb; /* temporary Pixbuf for scaling */
     /* static */ struct MCMap *amap = NULL; // Hmm, why did I want it static ??
-
 
     errormsg(MAPDEBUG1,"RenderPixbuf: Entered");
 
@@ -1055,9 +1103,11 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
 
 #if DEBUGLEV > 3
     errormsg(MAPDEBUG4,"RenderPixbuf: area->x=%u, area->y=%u, area->width=%u, "
-	     "area->height=%u, name=%s", area->x, area->y, area->width, 
-	     area->height, md->child.name);
+	     "area->height=%u, name=%s, parent name=%s",
+	     area->x, area->y, area->width, area->height, 
+	     md->child.name, md->child.parent->name);
 #endif
+
     /*
     **  Get initial left and top offset.
     **/
@@ -1122,16 +1172,6 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     }
 
     /*
-    **  Allocate temporary Pixbuf which will be blitted
-    */
-    tmppb=gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, cx, cy);
-
-    if (!tmppb) return (FALSE);
-#if DEBUGLEV > 3
-    errormsg(MAPDEBUG4,"Renderpixbuf: tmppb=%x", tmppb);
-#endif
-
-    /*
     ** Select the correct Map layer
     */
     if ( md->md_Map->mm_MapSize.l &&
@@ -1164,7 +1204,7 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     */
     selx = md->md_Select.x * md->md_PLength;
     sely = md->md_Select.y * md->md_PWidth;
-    ysize = md->md_Default->mp_Size * md->md_Select.y;
+    ysize = 0; //md->md_Default->mp_Size * md->md_Select.y;
 #if DEBUGLEV > 3
     errormsg(MAPDEBUG4,"Renderpixbuf: selx=%u, sely=%u, ysize=%u", selx, sely,
 	     ysize);
@@ -1189,29 +1229,74 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     */
     for (i=md->md_Select.y;i<colsize;i++)
     {
+        guint mi = i-md->md_Select.y;
         amap->mm_Rows = (void *) (amap->mm_Columns[i] + ysize);
+	errormsg(MAPINFO,"coord[0].x=%u, coord[0].y=%u, Row=%x", 
+		 amap->mm_Rows[0].mp_Coordinates.x,
+		 amap->mm_Rows[0].mp_Coordinates.y, amap->mm_Rows-ysize);
         for(j=md->md_Select.x;j<rowsize;j++)
         {
-            xpos = amap->mm_Rows[j].mp_Coordinates.x - selx + j*2*fw;
-            ypos = amap->mm_Rows[j].mp_Coordinates.y - sely + i*2*fh;
+	    guint mj = j-md->md_Select.x;
 
-#if DEBUGLEV > 5
+	    // Scale Map Piece before drawing
+	    // Thinkable alternative:
+	    // Scale md->md_MapPieces completely when Scale is changed
+	    // Disadvantage: Might cost much memory.
+	    if (md->md_ScaleWidth !=100 || md->md_ScaleHeight != 100)
+	    {
+	        guint scx = md->md_PWidth * md->md_ScaleWidth/100,
+		       scy = md->md_PLength * md->md_ScaleHeight/100;
+		GdkPixbuf *tmppb = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE,
+						  8, md->md_PWidth, 
+						  md->md_PLength );
+		GdkPixbuf *tpb = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE,
+						8, scx, scy );
+
+		xpos = amap->mm_Rows[j].mp_Coordinates.x * 
+		  md->md_ScaleWidth/100 - selx + mj*2*fw;
+		ypos = amap->mm_Rows[j].mp_Coordinates.y * 
+		  md->md_ScaleHeight/100 -sely + mi*2*fh;
+
+		// Copy map piece to be scaled
+		gdk_pixbuf_copy_area(md->md_MapPieces,
+				     amap->mm_Rows[j].mp_PBCoord.x,
+				     amap->mm_Rows[j].mp_PBCoord.y, 
+				     md->md_PWidth, md->md_PLength, tmppb,
+				     0, 0);
+
+		// Scale it to the other temporary buffer
+		gdk_pixbuf_scale(tmppb, tpb, 0, 0, scx, scy,
+				 0, 0, md->md_ScaleWidth/100, 
+				 md->md_ScaleHeight/100, GDK_INTERP_BILINEAR);
+
+		// Render it on window
+		gdk_pixbuf_render_to_drawable(tpb, md->child.window,
+                                  md->child.style->fg_gc[GTK_STATE_NORMAL],
+				  0, 0, xpos, ypos, scx, scy,
+                                  GDK_RGB_DITHER_NORMAL, xpos, ypos);
+
+		// Free the pixbufs
+		gdk_pixbuf_unref(tpb);
+		gdk_pixbuf_unref(tmppb);
+	    }
+	    else // No scaling
+	    {
+	      xpos = amap->mm_Rows[j].mp_Coordinates.x - selx + mj*2*fw;
+	      ypos = amap->mm_Rows[j].mp_Coordinates.y - sely + mi*2*fh;
+
+	      gdk_pixbuf_render_to_drawable(md->md_MapPieces, md->child.window,
+                                  md->child.style->fg_gc[GTK_STATE_NORMAL],
+                                  amap->mm_Rows[j].mp_PBCoord.x,
+                                  amap->mm_Rows[j].mp_PBCoord.y, xpos, ypos,
+                                  md->md_PWidth, md->md_PLength, 
+                                  GDK_RGB_DITHER_NORMAL, xpos, ypos);
+	    }
+
+#if DEBUGLEV > 3
 	    errormsg(MAPDEBUG4,"Renderpixbuf: i=%u, j=%u, xc=%u, yc=%u, xp=%u,"
 		     "yp=%u", i, j, md->md_Map->mm_Rows[j].mp_PBCoord.x, 
 		     amap->mm_Rows[j].mp_PBCoord.y, xpos, ypos);
 #endif
-	    /*gdk_pixbuf_copy_area(md->md_MapPieces,
-				 md->md_Map->mm_Rows[j].mp_PBCoord.x,
-				 amap->mm_Rows[j].mp_PBCoord.y, md->md_PWidth,
-				 md->md_PLength, tmppb, xpos, ypos);*/
-
-	    gdk_pixbuf_render_to_drawable(md->md_MapPieces, md->child.window,
-                                  md->child.style->fg_gc[GTK_STATE_NORMAL],
-                                  md->md_Map->mm_Rows[j].mp_PBCoord.x,
-                                  amap->mm_Rows[j].mp_PBCoord.y, xpos, ypos,
-                                  md->md_PWidth, md->md_PLength, 
-                                  GDK_RGB_DITHER_NORMAL, xpos, ypos);
-
             if (md->md_GetPieces)
             {
                 if (md->md_Frame)
@@ -1250,11 +1335,6 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
             }
         }
     }
-    /* gdk_pixbuf_render_to_drawable(tmppb, md->child.window,
-				  md->child.style->fg_gc[GTK_STATE_NORMAL],
-				  0, 0, left, top, cx, cy, 
-				  GDK_RGB_DITHER_NORMAL,
-				  left, top); */
 
     // Draw the toggle gadget
     if ( md->md_Frame && md->md_FrameToggle.l == md->md_Select.l &&
@@ -1264,21 +1344,19 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
         /*
         **  Render the "frame" so it looks like a toggled widget.
         **/
+        guint ftx = md->md_FrameToggle.x * md->md_ScaleWidth/100 - selx,
+	  fty = md->md_FrameToggle.y * md->md_ScaleHeight/100 - sely;
+
         gdk_draw_rectangle(md->child.window, md->child.style->black_gc,
-			   FALSE, md->md_FrameToggle.x-selx, 
-			   md->md_FrameToggle.y-sely,
-			   md->md_PWidth, md->md_PLength);
+			   FALSE, ftx, fty, md->md_PWidth, md->md_PLength);
 
 	gtk_paint_shadow (md->child.style, md->child.window,
-			  GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL, &md->child,
-			  "text", md->md_FrameToggle.x-selx,
-			  md->md_FrameToggle.y-sely,
-			  md->md_PWidth, md->md_PLength);
+			  GTK_STATE_NORMAL, GTK_SHADOW_IN, NULL, &md->child,
+			  "text", ftx, fty, md->md_PWidth, md->md_PLength);
     }
     /*
     **  Free temporary Pixbuf
     */
-    gdk_pixbuf_unref(tmppb);
     errormsg(MAPDEBUG1,"RenderPixbuf: Finished succesfully");
     return TRUE;
 }
@@ -1298,7 +1376,7 @@ static void NotifyAttrChange( GtkObject *obj, char *value )
 static gint MapEditClassRender( GtkWidget *widget, GdkEventExpose *event )
 {
     MD              *md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
-    //gulong           fw = 0, fh = 0;
+    GtkAllocation   myalloc;
 
     errormsg(MAPDEBUG1,"Expose: Entered");
 
@@ -1306,26 +1384,62 @@ static gint MapEditClassRender( GtkWidget *widget, GdkEventExpose *event )
     g_return_val_if_fail (GTK_IS_MAPEDIT (widget), FALSE);
     g_return_val_if_fail (event != NULL, FALSE);
 
-    if ( &md->child != widget)
-    {
-        errormsg(MAPINFO,"Expose: widget=%x, md->child=%x",widget,md->child);
-        errormsg(MAPINFO,"Expose: widget name=%s, md->child name=%s",
-		 widget->name,md->child.name);
-	// What should we do now ?? Is a mapedit widget but not ours
-        //md->child=widget;
-    }
+#if DEBUGLEV > 3
+    errormsg(MAPDEBUG4,"Expose: event->area.x=%u, .y=%u, width=%u, height=%u,"
+	     "widget.x=%u, .y=%u, width=%u, height=%u", event->area.x, 
+	     event->area.y, event->area.width, event->area.height, 
+	     md->child.allocation.x, md->child.allocation.y, 
+	     md->child.allocation.width, md->child.allocation.height);
+#endif
     // Do not render more than once (but pretend you just had)
     if (event->count > 0)
         return FALSE;
 
     /*
     **  Render the pixel rectangles.
+    **  Actually only render the visible part, else everything gets to slow
     **/
-    if (!RenderPixbuf( md, &widget->allocation ))
-        return FALSE; // Don't know what to return in case this fails
+    myalloc.x = event->area.x;
+    myalloc.y = event->area.y;
+    if (widget->parent)
+    {
+	myalloc.width = md->md_PWidth + widget->parent->allocation.width;
+	myalloc.height = md->md_PLength + widget->parent->allocation.height;
+    }
+    else
+    {
+	myalloc.width = md->md_PWidth + widget->allocation.width;
+	myalloc.height = md->md_PLength + widget->allocation.height;
+    }
+    if (!RenderPixbuf( md, &myalloc ))
+      return FALSE; /* Don't know what to return in case this fails */
 
     errormsg(MAPDEBUG1,"Expose: Finished succesfully");
     return FALSE;
+}
+
+/*
+ * Draw the mapedit widget (simple function)
+ * Not really necessary, expose should be enough
+ */
+static void MapEditClassDraw (GtkWidget *widget, GdkRectangle *area)
+{
+    MD              *md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
+    GtkAllocation   myalloc;
+
+    errormsg(MAPDEBUG1,"Draw: Entered");
+#if DEBUGLEV > 3
+    errormsg(MAPDEBUG4,"Draw: area->x=%u, area->y=%u, area->width=%u, "
+	     "area->height=%u, name=%s, parent name=%s",
+	     area->x, area->y, area->width, area->height, 
+	     md->child.name, md->child.parent->name);
+#endif
+    myalloc.x = area->x;
+    myalloc.y = area->y;
+    myalloc.width = md->md_PWidth + area->width;
+    myalloc.height = md->md_PLength + area->height;
+    RenderPixbuf( md, &myalloc );
+    errormsg(MAPDEBUG1,"Draw: Finished succesfully");
 }
 
 /*
@@ -1335,6 +1449,8 @@ static gulong DrawPiece( MD *md, GtkAllocation *area, COORD newpiece)
 {
     COORD ppos, len;
     struct MCMap *amap = md->md_Map;
+
+    errormsg(MAPDEBUG1,"DrawPiece: Entered");
 
     len.x = md->md_PWidth + md->md_Grid ? 1 : 0;
     len.y = md->md_PLength + md->md_Grid ? 1 : 0;
@@ -1380,11 +1496,13 @@ static gulong DrawPiece( MD *md, GtkAllocation *area, COORD newpiece)
     md->md_CurrPiece.mp_Coordinates.l = md->md_Select.l;
     md->md_CurrPiece.mp_Coordinates.x = amap->mm_Rows[md->md_Select.x].mp_Coordinates.x;
     md->md_CurrPiece.mp_Coordinates.y = amap->mm_Rows[md->md_Select.x].mp_Coordinates.y;
+
+    errormsg(MAPDEBUG1,"DrawPiece: Finished");
     return MAPERR_Ok;
 }
 
 /*
-**  Draw a piece with the currently selected map piece.
+**  Draw the frame around the selected map piece.
 **/
 static gulong DrawTFrame( MD *md, COORD newpiece, BOOL state)
 {
@@ -1392,25 +1510,27 @@ static gulong DrawTFrame( MD *md, COORD newpiece, BOOL state)
     static COORD opos;
     gulong fw, fh;
 
+    errormsg(MAPDEBUG1,"DrawTFrame: Entered: nx=%u, ny=%u", newpiece.x, 
+	     newpiece.y);
+
     if (!md->md_Frame)
         return(MAPERR_NoFrame);
-    //DoMethod( md->md_Frame, OM_GET, FRM_FrameWidth,  &fw );
-    //DoMethod( md->md_Frame, OM_GET, FRM_FrameHeight, &fh );
-    fw = md->child.style->klass->xthickness;
-    fh = md->child.style->klass->ythickness;
+
+    fw = md->child.style->klass->xthickness + 1 + md->md_FrameSpace;
+    fh = md->child.style->klass->ythickness + 1 + md->md_FrameSpace;
 #if DEBUGLEV > 2
-    errormsg(MAPDEBUG3,"DrawTFrame: fw=%u, fh=%u",fw,fh);
+    errormsg(MAPDEBUG3,"DrawTFrame: fw=%u, fh=%u", fw, fh);
 #endif
-    fw+=1+md->md_FrameSpace;
-    fh+=1+md->md_FrameSpace;
-    len.x = md->md_PWidth + fw;
-    len.y = md->md_PLength + fh;
+    len.x = md->md_PWidth + 2*fw;
+    len.y = md->md_PLength + 2*fh;
 #if DEBUGLEV > 3
-    errormsg(MAPDEBUG4,"DrawTFrame: Now fw=%u, fh=%u, len.x=%u, len.y=%u",
-	     fw, fh, len.x, len.y);
+    errormsg(MAPDEBUG4,"DrawTFrame: len.x=%u, len.y=%u", len.x, len.y);
 #endif
     ppos.x = (newpiece.x/len.x) * len.x;
     ppos.y = (newpiece.y/len.y) * len.y;
+#if DEBUGLEV > 3
+    errormsg(MAPDEBUG3,"DrawTFrame: ppos.x=%u, ppos.y=%u", ppos.x, ppos.y);
+#endif
     if ( md->md_FrameToggle.l == newpiece.l &&
          md->md_FrameToggle.x == ppos.x &&
          md->md_FrameToggle.y == ppos.y )
@@ -1443,10 +1563,11 @@ static gulong DrawTFrame( MD *md, COORD newpiece, BOOL state)
 		       md->md_PWidth, md->md_PLength);
 
     gtk_paint_shadow (md->child.style, md->child.window,
-		      GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL, &md->child,
+		      GTK_STATE_NORMAL, GTK_SHADOW_IN, NULL, &md->child,
 		      "text", ppos.x, ppos.y,
 		      md->md_PWidth, md->md_PLength);
 
+    errormsg(MAPDEBUG1,"DrawTFrame: Finished");
     return MAPERR_Ok;
 }
 
@@ -1639,7 +1760,7 @@ static gint MapEditClassGoActive( GtkWidget *widget, GdkEventButton *event )
 {
     MD          *md;
     gint         l, t;
-    guint        w, h;
+    guint        w, h, fw, fh;
     COORD        newpiece;
     static BOOL oldtoggle = FALSE;
 
@@ -1663,7 +1784,7 @@ static gint MapEditClassGoActive( GtkWidget *widget, GdkEventButton *event )
     w = widget->allocation.width;
     h = widget->allocation.height;
 
-    // Left mouse button pressed ? (we don't count the number pressed)
+    /* Left mouse button pressed ? (we don't count the number pressed) */
     if (event->button == 1)
     {
         // All further mouse events are handled now by this class
@@ -1679,12 +1800,15 @@ static gint MapEditClassGoActive( GtkWidget *widget, GdkEventButton *event )
 		 w,h);
 #endif
 
+	fw = 2 * (md->child.style->klass->xthickness + 1 + md->md_FrameSpace);
+	fh = 2* (md->child.style->klass->ythickness + 1 + md->md_FrameSpace);
+
 	/*
 	**  Are we really hit?
 	**/
 	if ( l >= 0 && t >= 0 && l < w && t < h )
-	    if ( l <= (md->md_Map->mm_MapSize.x*md->md_PWidth) && 
-		      (md->md_Map->mm_MapSize.y*md->md_PLength) )
+	    if ( l <= (md->md_Map->mm_MapSize.x*(md->md_PWidth+fw)) && 
+		      (md->md_Map->mm_MapSize.y*(md->md_PLength+fh)) )
 	    {
 		newpiece.x=l;
 		newpiece.y=t;
@@ -1739,7 +1863,7 @@ static gint MapEditClassGoActive( GtkWidget *widget, GdkEventButton *event )
     // Check for right button (abort)
     else if (event->button == 2) 
     {
-        // Left mouse button wasn't pressed before
+        /* Left mouse button wasn't pressed before */
         if(!gtk_grab_get_current)
 	    return FALSE;
 	
@@ -1798,6 +1922,9 @@ static gint MapEditClassGoActive( GtkWidget *widget, GdkEventButton *event )
 	}
 
     }
+
+    errormsg(MAPDEBUG1,"MapEditClassGoActive: Finished");
+
     return FALSE;
 }
 
@@ -1807,6 +1934,8 @@ static gint MapEditClassGoActive( GtkWidget *widget, GdkEventButton *event )
 static gint MapEditClassGoInactive( GtkWidget *widget, GdkEventButton *event)
 {
     MD          *md;
+
+    errormsg(MAPDEBUG1,"MapEditClassGoInActive: Entered");
 
     /*
     **  Reset initial map?
@@ -1847,23 +1976,23 @@ static gint MapEditClassGoInactive( GtkWidget *widget, GdkEventButton *event)
     }
     NotifyAttrChange( GTK_OBJECT(widget), "mapedit_map" );
 
+    errormsg(MAPDEBUG1,"MapEditClassGoActive: Finished");
+
     return FALSE;
 }
 
 // Move around in the widget
-/* static gint MapEditClassNotifyMove(GtkWidget *widget, GdkEventMotion *event)
+static gint MapEditClassNotifyMove(GtkWidget *widget, GdkEventMotion *event)
 {
     MD          *md;
     gint         x,y,mask;
     GdkModifierType mods;
 
+    errormsg(MAPDEBUG1,"MapEditClassNotifyMove: Entered");
+
     g_return_val_if_fail (widget != NULL, FALSE);
     g_return_val_if_fail (GTK_IS_MAPEDIT (widget), FALSE);
     g_return_val_if_fail (event != NULL, FALSE);
-
-    // Only continue when mouse events are grabbed
-    if(!gtk_grab_get_current)
-        return FALSE;
 
     md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
 
@@ -1879,8 +2008,10 @@ static gint MapEditClassGoInactive( GtkWidget *widget, GdkEventButton *event)
     }
     // ToDo: Scroll the map mapedit widget when right or bottom is reached
 
+    errormsg(MAPDEBUG1,"MapEditClassNotifyMove: Finished");
+
     return FALSE;
-} */
+}
 
 /*
 **  Notification about size changes
@@ -1917,6 +2048,81 @@ static void MapEditClassNotifyDimensions( GtkWidget *widget,
 
     errormsg(MAPDEBUG1,"MapEditNotifyDimensions: Finished");
 }
+
+static void MapEditAdjustmentChanged( GtkAdjustment *adjustment, 
+				      gpointer data)
+{
+    MD *md;
+    errormsg(MAPDEBUG1,"MapEditAdjustmentChanged: Entered");
+
+    g_return_if_fail (adjustment != NULL);
+    g_return_if_fail (data != NULL);
+    g_return_if_fail (GTK_IS_MAPEDIT (data));
+    
+    md = GTK_MAPEDIT_SELECT (data);
+    // Anything todo here ?
+
+    errormsg(MAPDEBUG1,"MapEditAdjustmentChanged: Finished");
+}
+
+/*
+ * Display another part of the map
+ */
+static void MapEditAdjustmentValueChanged( GtkAdjustment *adjustment, 
+					   gpointer data)
+{
+    MD *md;
+
+    errormsg(MAPDEBUG1,"MapEditAdjustmentValueChanged: Entered");
+
+    g_return_if_fail (adjustment != NULL);
+    g_return_if_fail (data != NULL);
+    g_return_if_fail (GTK_IS_MAPEDIT (data));
+    
+    md = GTK_MAPEDIT_SELECT (data);
+
+    if (GTK_WIDGET_VISIBLE (&md->child))
+    {
+        GtkAllocation myalloc;
+	guint fw, fh;
+
+	myalloc.x = 0;
+	myalloc.y = 0;
+
+	if (md->hadjustment->lower != (md->hadjustment->upper -
+				       md->hadjustment->page_size))
+	    myalloc.x = md->hadjustment->lower - md->hadjustment->value;
+
+	if (md->vadjustment->lower != (md->vadjustment->upper -
+				       md->vadjustment->page_size))
+	    myalloc.y = md->vadjustment->lower - md->vadjustment->value;
+
+	fw = md->child.style->klass->xthickness + 1 + md->md_FrameSpace;
+	fh = md->child.style->klass->ythickness + 1 + md->md_FrameSpace;
+	md->md_Select.x = (-1 * myalloc.x) / (md->md_PWidth + (md->md_Frame?2*fw:0));
+	md->md_Select.y = (-1 * myalloc.y) / (md->md_PLength + (md->md_Frame?2*fh:0));
+
+	if (GTK_WIDGET_REALIZED (md))
+	{
+#if DEBUGLEV > 4
+	    errormsg(MAPDEBUG5,"myalloc.x=%u, myalloc.y=%u, sel.x=%u, sel.y=%u"
+		     ", pw=%u, ph=%u",(-1 * myalloc.x),(-1 * myalloc.y), 
+		     md->md_Select.x, md->md_Select.y, 
+		     (md->md_PWidth + (md->md_Frame?2*fw:0)),
+		     (md->md_PLength + (md->md_Frame?2*fh:0)));
+#endif
+	    gdk_window_move (md->child.window,
+			     myalloc.x,
+			     myalloc.y);
+	}
+    }
+
+    errormsg(MAPDEBUG1,"MapEditAdjustmentValueChanged: Finished");
+}
+
+
+// Methods defined by MapEditClass (use ExecMethod())
+
 
 /*
 ** Get map piece number from Map position
@@ -2085,7 +2291,7 @@ static gulong FillMap( GtkWidget *widget, struct mapSection * mst )
 ** Attention: Next redraw will fail, if you do not set up a new map
 ** Why waste memory ;-)
 */
-static void DeleteMap( GtkObject *obj, WidgetMsg gmsg )
+static void DeleteMap( GtkObject *obj )
 {
     MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( obj );
 
@@ -2112,7 +2318,7 @@ static void GetPixbufCoord( GtkObject *obj, struct PBCoord *bc )
 ** Copy UndoBuffer to Map Object Area
 ** Map Object Area -> UndoBuffer currently not implemented.
 */
-static void RestoreOldPicture( GtkObject *obj, WidgetMsg msg )
+static void RestoreOldPicture( GtkObject *obj )
 {
     MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( obj );
     if (!md->md_Map) return;
@@ -2126,6 +2332,43 @@ static void RestoreOldPicture( GtkObject *obj, WidgetMsg msg )
     // Copy the Undobuffer to the MapEdit Map -> contains to many layers
     // Go to the last layer (md->md_Map->mm_MapSize.l) and set next layer to 0
     // At the same time go to the last UndoBuffer layer and set next layer to Undobuffer
+}
+
+gulong ExecMethod(guint method, GtkObject *obj, GtkArg *arg, guint arg_id)
+{
+    switch(method)
+    {
+        case MAP_GetXYPiece:
+	    return GetXYPiece( obj, 
+			       (struct mapSelect *) GTK_VALUE_POINTER(*arg));
+	    break;
+        case MAP_Clear:
+	    ClearMap( obj );
+	    return MAPERR_Ok;
+	    break;
+        case MAP_Set:
+	    return SetMapPiece( obj,
+				(struct mapSelect *) GTK_VALUE_POINTER(*arg));
+	    break;
+        case MAP_Fill:
+	    return FillMap ( GTK_WIDGET(obj),
+			     (struct mapSection *) GTK_VALUE_POINTER(*arg));
+	    break;
+        case MAP_Undo:
+	    RestoreOldPicture( obj );
+	    return MAPERR_Ok;
+	    break;
+        case MAP_BitmapCoord:
+	    GetPixbufCoord( obj,(struct PBCoord *) GTK_VALUE_POINTER(*arg));
+	    return MAPERR_Ok;	    
+	    break;
+        case MAP_Delete:
+	    DeleteMap ( obj );
+	    return MAPERR_Ok;	    
+	    break;
+        default:
+	    return MAPERR_Unknown;
+    }
 }
 
 /*
@@ -2190,13 +2433,19 @@ static void InitMapEditClass( GtkMapEditClass *class )
     // Events which have to be known by our class
     wcl->realize = MapEditClassRealize;
     wcl->expose_event = MapEditClassRender;
+    wcl->draw = MapEditClassDraw;
     wcl->size_request = MapEditClassSizeReq; // Replaces MAPEDIT_BoxWidth ?
     wcl->size_allocate = MapEditClassNotifyDimensions;
     wcl->button_press_event = MapEditClassGoActive;
     wcl->button_release_event = MapEditClassGoInactive;
-    //wcl->motion_notify_event = MapEditClassNotifyMove;
+    wcl->motion_notify_event = MapEditClassNotifyMove;
     //wcl->enter_notify_event = MapEditClassEntered;
     //wcl->leave_notify_event = MapEditClassLeft;
+    /*wcl->set_scroll_adjustments_signal = 
+      gtk_signal_new("set_scroll_adjustment", GTK_RUN_LAST, ocl->type,
+		     GTK_SIGNAL_OFFSET(GtkMapEditClass, setscrolladjustments),
+		     gtk_marshal_NONE__POINTER_POINTER, GTK_TYPE_NONE, 2,
+		     GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT); */
     /*
     **  Setup dispatcher.
     **/
@@ -2216,7 +2465,7 @@ guint  MapEditClassGetType(void)
 
     if (!me_type)
     {
-        GtkTypeInfo me_info =
+        static const GtkTypeInfo me_info =
 	{
 	    "MapEditClass",
 	    sizeof (MD),
