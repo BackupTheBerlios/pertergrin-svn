@@ -50,8 +50,9 @@ public:
   CWMapDrawArea(Glib::RefPtr<Gdk::Pixbuf> &opTileset, 
               int &iXTileSize, int &iYTileSize);
   void setMap(cwtmap_t &oTilesMap, int iXSize=0, int iYSize=0);
-  void changeMap(int iWidth, int iHeight, int iXPos=0, int iYPos=0, 
-                 cwtpos_t &oTile=moTempTile);
+  void changeMap(int iWidth, int iHeight, int iXPos=0, int iYPos=0);
+  void changeMap(int iWidth, int iHeight, int iXPos, int iYPos, 
+                 cwtpos_t &oTile);
   void setDefaultTile(cwtpos_t &oTile);
   void setTilesetsSize(int iNum);
   void addTileset(Glib::RefPtr<Gdk::Pixbuf> &opTileset, int iPos);
@@ -75,7 +76,6 @@ private:
   int miXTileSize;
   int miYTileSize;
   cwtpos_t moDefaultTile;
-  static cwtpos_t &moTempTile;
 };
 
 #endif // MAPDRAWAREA_H
