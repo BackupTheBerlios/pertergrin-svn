@@ -1,41 +1,54 @@
 ## Process this file with automake to produce Makefile.in
+## Created by Anjuta - will be overwritten
+## If you don't want it to overwrite it,
+## 	Please disable it in the Anjuta project configuration
 
-SUBDIRS = mapeditwidget
+SUBDIRS = intl po pixmaps
 
-INCLUDES = \
-	-I$(top_srcdir)/intl \
-	@GTK_CFLAGS@ @GDK_PIXBUF_CFLAGS@ @LIBGLADE_CFLAGS@
+INCLUDES = -Igui -Imodules \
+	$(LIBGLADEMM2_CFLAGS)
+
+ptgeditor_CFLAGS =\
+	 -Wall -Wimplicit -Wreturn-type -Wunused -Wswitch -Wcomment -Wuninitialized -Wparentheses -Wtraditional -Wpointer-arith -Wmissing-prototypes -Woverloaded-virtual\
+	 -O1\
+	 -g
+
+ptgeditor_CXXFLAGS =\
+	 -Wall -Wimplicit -Wreturn-type -Wunused -Wswitch -Wcomment -Wuninitialized -Wparentheses -Wtraditional -Wpointer-arith -Wmissing-prototypes -Woverloaded-virtual\
+	 -O1\
+	 -g
 
 bin_PROGRAMS = ptgeditor
 
 ptgeditor_SOURCES = \
-	editor.c \
-	support.c support.h \
-	files.c files.h \
-	gui.c gui.h \
-	callbacks.c callbacks.h
+	kernel/main.cc \
+	gui/mainwindow.cc gui/mainwindow.h
 
-ptgeditor_LDADD = @GTK_LIBS@ @GDK_PIXBUF_LIBS@ @LIBGLADE_LIBS@ $(INTLLIBS) \
-	 mapeditwidget/mapeditclass.o
+ptgeditor_LDFLAGS =
 
-install-data-local:
-	@$(NORMAL_INSTALL)
-	if test -d $(srcdir)/pixmaps; then \
-	  $(mkinstalldirs) $(DESTDIR)$(pkgdatadir)/pixmaps; \
-	  for pixmap in $(srcdir)/pixmaps/*; do \
-	    if test -f $$pixmap; then \
-	      $(INSTALL_DATA) $$pixmap $(DESTDIR)$(pkgdatadir)/pixmaps; \
-	    fi \
-	  done \
-	fi
+ptgeditor_LDADD = \
+	$(LIBGLADEMM2_LIBS)
 
+ptgeditor_includedir = $(pkgincludedir)
+
+EXTRA_DIST = $(ptgeditordoc_DATA)
+
+ptgeditordocdir = ${prefix}/doc/Pertergrin
+ptgeditordoc_DATA = \
+	README\
+	COPYING\
+	AUTHORS\
+	ChangeLog\
+	INSTALL\
+	NEWS\
+	TODO\
+	ABOUT-NLS
+
+# Copy all the spec files. Of cource, only one is actually used.
 dist-hook:
-	if test -d pixmaps; then \
-	  mkdir $(distdir)/pixmaps; \
-	  for pixmap in pixmaps/*; do \
-	    if test -f $$pixmap; then \
-	      cp -p $$pixmap $(distdir)/pixmaps; \
-	    fi \
-	  done \
-	fi
+	for specfile in *.spec; do \
+		if test -f $$specfile; then \
+			cp -p $$specfile $(distdir); \
+		fi \
+	done
 
