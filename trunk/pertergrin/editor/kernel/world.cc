@@ -199,8 +199,8 @@ void PtgWorld::setSize(int iXSize, int iYSize)
   if( iYSize < 10 )
     iYSize = 10;
 
-  iXSize = msWorldData.iXSize;
-  iYSize = msWorldData.iYSize;
+  msWorldData.iXSize = iXSize;
+  msWorldData.iYSize = iYSize;
   // Reserve size so vectors do not reallocate all the time
   // Attention: for real size maps > 1000 you may not use the complete
   // size but only the size which fits in memory!
