@@ -59,8 +59,6 @@ public:
   void getTileSize(int &iWidth, int &iHeight);
 
 private:
-  // Prevent creation with empty constructor
-  PtgWorld() {};
   pworld_t msWorldData;
   plpart_t msClearDefaultPart;
 };
