@@ -22,8 +22,11 @@ bin_PROGRAMS = ptgeditor
 
 ptgeditor_SOURCES = \
 	kernel/main.cc \
+	kernel/app.cc \
+	kernel/world.cc \
 	gui/mainwindow.cc gui/mainwindow.h \
-	gui/worlddialog.cc gui/worlddialog.h
+	gui/worlddialog.cc gui/worlddialog.h \
+	gui/mapdrawarea.cc gui/mapdrawarea.h
 
 ptgeditor_LDFLAGS =
 
