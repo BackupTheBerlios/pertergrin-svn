@@ -19,7 +19,7 @@
 #include <gtkmm/main.h>
 #include "mainwindow.h"
 
-int main()
+int main(int argc, char*argv[])
 
 {
   Gtk::Main kit(argc,argv);
