@@ -19,12 +19,12 @@
 #include "world.h"
 
 // Empty default constructor
-PtgWorld::PtgWorld(int iXSize, int iYSize, Glib::ustring oName, 
-                   int iTileWidth, int iTileHeight)
+PtgWorld::PtgWorld(int iXSize, int iYSize, Glib::ustring oName, Glib::ustring oWorldType,
+                   int iTileWidth, int iTileHeight, int iRegionXSize, int iRegionYSize)
 {
   msWorldData.oName = "";
   msWorldData.oDescription = "";
-  msWorldData.oWorldType = "";
+  msWorldData.oWorldType = oWorldType;
   msWorldData.iXSize = 0;
   msWorldData.iYSize = 0;
   msWorldData.oStartDate = "";
@@ -34,7 +34,12 @@ PtgWorld::PtgWorld(int iXSize, int iYSize, Glib::ustring oName,
   msWorldData.iRegionYSize = 0;	
   msWorldData.iTileWidth = 0;
   msWorldData.iTileHeight = 0;
+  
+  // Default selected region (nothing selected)
+  mapClearRegion();
+  
   setSize(iXSize, iYSize);
+  setRegionSize(iRegionXSize, iRegionYSize);
   setName(oName);
 
   // Prevent too small graphic tiles
@@ -46,8 +51,6 @@ PtgWorld::PtgWorld(int iXSize, int iYSize, Glib::ustring oName,
   msWorldData.iTileWidth = iTileWidth;
   msWorldData.iTileHeight = iTileHeight;
 
-  // Default selected region (nothing selected)
-  mapClearRegion();
 }
 
 // Clears the map
@@ -226,6 +229,38 @@ void PtgWorld::getSize(int &iXSize, int &iYSize)
 {
   iXSize = msWorldData.iXSize;
   iYSize = msWorldData.iYSize;
+}
+
+// Set the region size of the world
+// Input parameters:
+// iRegionXSize  -  Region X-Size of the world
+// iRegionYSize  -  Region Y-Size of the world
+void PtgWorld::setRegionSize(int iRegionXSize, int iRegionYSize)
+{
+  // Max. region size is size of map
+  if( iRegionXSize > msWorldData.iXSize )
+    iRegionXSize = msWorldData.iXSize;
+  if( iRegionYSize > msWorldData.iYSize )
+    iRegionYSize = msWorldData.iYSize;
+
+  // Prevent a too small world map
+  if( iRegionXSize < 10 )
+    iRegionXSize = 10;
+  if( iRegionYSize < 10 )
+    iRegionYSize = 10;
+  
+  msWorldData.iRegionXSize = iRegionXSize;
+  msWorldData.iRegionYSize = iRegionYSize;
+}
+
+// Get the region size of the world  
+// Output parameters:
+// iRegionXSize  -  Region X-Size of the world
+// iRegionYSize  -  Region Y-Size of the world
+void PtgWorld::getRegionSize(int &iRegionXSize, int &iRegionYSize)
+{
+  iRegionXSize = msWorldData.iRegionXSize;
+  iRegionYSize = msWorldData.iRegionYSize;
 }
 
 // Set the name of the world
