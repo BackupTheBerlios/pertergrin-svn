@@ -27,10 +27,14 @@
 #include <gtkmm.h>
 
 #include "worlddialog.h"
+#include "mapdrawarea.h"
 #include "kernel/app.h"
 
 // defines
 class PTGMainWindow;
+
+// Should be part of the configuration class
+#define PTGTileMapFile "pixmaps/ptg_landscape.png"
 
 // All menus of the main window
 typedef enum
@@ -109,9 +113,17 @@ protected:
   // Dialogs
   PTGWorldDialog *mopWorldDialog;
 
+  // Pixmap
+  Glib::RefPtr<Gdk::Pixbuf> mopTilesMap;
+  Gtk::Viewport *mopMap;
+
   // Variables
   //Glib::ustring moStrEntry;
   //bool mbCheckBox;
+
+  // Methods
+  bool LoadTilesMap();
+
 private:
   PtgApp moApp;
 

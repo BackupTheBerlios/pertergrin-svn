@@ -1003,7 +1003,9 @@
 	      <property name="shadow_type">GTK_SHADOW_IN</property>
 
 	      <child>
-		<placeholder/>
+		<widget class="GtkDrawingArea" id="drawingarea1">
+		  <property name="visible">True</property>
+		</widget>
 	      </child>
 	    </widget>
 	  </child>
