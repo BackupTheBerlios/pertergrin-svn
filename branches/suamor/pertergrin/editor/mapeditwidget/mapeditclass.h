@@ -62,8 +62,10 @@ typedef struct MCMap
 /*
 **  MapEditClass object instance data.
 **/
-typedef struct _GtkMapData {
+typedef struct _GtkMapEditData {
     GtkWidget         child;           /* object data */
+    GtkAdjustment    *hadjustment;     /* horizontal adjustment of parent    */
+    GtkAdjustment    *vadjustment;     /* vertical adjustment of parent      */
     struct MCMap     *md_Map;          /* map data (2D, BMap-like w. layers) */
     GdkPixbuf        *md_MapPieces;    /* PixBuf containing all map pieces   */
     guint             md_PWidth;       /* Width of one map piece             */
@@ -79,8 +81,6 @@ typedef struct _GtkMapData {
     BOOL              md_Grid;         /* If TRUE Grid around map pieces     */
     guchar            md_GridPen;      /* Selected GridPen.                  */
     COORD             md_Select;       /* Selected map position              */
-//  guint             md_BoxWidth;     /* current width of the object        */
-//  guint             md_BoxHeight;    /* current height of the object       */
     guchar            md_ScaleWidth;   /* show width percentage of the map   */
     guchar            md_ScaleHeight;  /* show height percentage of the map  */
     struct MCMap     *md_UndoBuffer;   /* UndoBuffer, for application        */
@@ -101,6 +101,7 @@ typedef struct _GtkMapEditClass
   void (* selectx)    (MD *md);
   void (* selecty)    (MD *md);
   void (* selectl)    (MD *md);
+
 } GtkMapEditClass;
 
 /* GtkArg Arguments The commentary show when the args can be used */
@@ -138,12 +139,17 @@ enum {
 enum mapmsg_types { MAPINFO, MAPERROR, MAPWARNING, MAPDEBUG1, MAPDEBUG2,
 		    MAPDEBUG3, MAPDEBUG4, MAPDEBUG5, MAPMSG, MAPDEBUG6, 
 		    MAPPARANOIA };
+typedef struct _GtkMapEditData GtkMapEdit;
 
 void errormsg(short type, char *errmsg, ...);
 GtkWidget *MapEditClassNew(GtkArg *args, guint num_args);
 
 /* Methods */
 
+enum mapmethods { MAP_GetXYPiece, MAP_Clear, MAP_Set, MAP_Fill, MAP_Undo,
+		  MAP_BitmapCoord, MAP_Delete };
+
+/*
 #define MAP_GetXYPiece    "mapgetxypiece"
 #define MAP_Clear         "mapclear"
 #define MAP_Set           "mapset"
@@ -151,6 +157,7 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args);
 #define MAP_Undo          "mapundo"
 #define MAP_BitmapCoord   "mapbitmapcoord"
 #define MAP_Delete        "mapdelete"
+*/
 
 struct mapSelect {
     gulong   MethodID;   /* MAGM_GetXYPiece, MAP_Set */
@@ -182,6 +189,7 @@ typedef struct WidgetMsg *WidgetMsg;
 /* OM_SET & MapEdit methods may return these: */
 
 #define MAPERR_Ok            (0)    /* No problems */
+#define MAPERR_Unknown       (1 << 8)  /* Unknown method */
 #define MAPERR_NoChange      (1 << 9)  /* No Undo has been done */
 #define MAPERR_NoAttr        (1 << 10) /* You did not specify a necessary attribute */
 #define MAPERR_AllocFail     (1 << 11) /* AllocVec() failure */
