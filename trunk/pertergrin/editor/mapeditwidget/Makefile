@@ -1,8 +1,10 @@
-mapeditclass.o: mapeditclass.c
-	gcc -Wall -O2 -g -c `gtk-config --cflags` mapeditclass.c
+all: testmapedit
 
-testmapedit.o: testmapedit.c
-	gcc -Wall -O2 -g -c `gtk-config --cflags` testmapedit.c
+mapeditclass.o: mapeditclass.c mapeditclass.h
+	gcc -Wall -O2 -g -c `gtk-config --cflags` -o $@ $<
 
-testmapedit: testmapedit.o
-	gcc -Wall -O2 -g `gtk-config --libs` testmapedit.o mapeditclass.o
+testmapedit.o: testmapedit.c mapeditclass.h
+	gcc -Wall -O2 -g -c `gtk-config --cflags` -o $@ $<
+
+testmapedit: testmapedit.o mapeditclass.o
+	gcc -Wall -O2 -g `gdk-pixbuf-config --libs` -lglade testmapedit.o mapeditclass.o -o $@
