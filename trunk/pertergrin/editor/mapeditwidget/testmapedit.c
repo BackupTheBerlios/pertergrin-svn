@@ -159,6 +159,7 @@ BOOL MapPicLoad(void)
 {
     errormsg(MAPDEBUG1,"MapPicLoad: Entered");
 
+    gdk_rgb_init (); // Required for rendering! Really put here ?
     mMapPieces = gdk_pixbuf_new_from_file ("breakout.png");
     g_assert (mMapPieces != NULL);
 
@@ -371,7 +372,6 @@ GtkWidget *InitTestMEdWindow( void )
 
 int main( int argc, char **argv )
 {
-    printf("Hi\n");
 #ifdef DELLOG
     {
         FILE *fh;
@@ -381,10 +381,9 @@ int main( int argc, char **argv )
     }
 #endif
     gtk_init(&argc, &argv);
-    printf("Hi again!\n");
 
 #if DEBUGLEV > 4
-    errormsg(MAPMSG,"main: Trying to load MapPieces Pixbuf...");
+    errormsg(MAPMSG,"\nmain: Trying to load MapPieces Pixbuf...");
 #endif
     if (!MapPicLoad())
     {
