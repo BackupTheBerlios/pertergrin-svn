@@ -1033,7 +1033,6 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     guint       colsize, rowsize;
     guint       left, top, xpos, ypos, selx, sely; //, color=0;
     gulong       cx, cy, i, j, fw = 0, fh = 0, ysize;
-    /* char zeile[256]; */
     GdkPixbuf *tmppb; /* temporary Pixbuf for scaling */
     static struct MCMap *amap = NULL;
 
@@ -1201,9 +1200,6 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
             }
             else
             {
-                xpos += (md->md_Grid ? 1 : 0); /* Destination position x */
-                ypos += (md->md_Grid ? 1 : 0); /* Destination position y */
-
                 /* Draw Grid if wished */
                 if (md->md_Grid)
                 {
@@ -1219,6 +1215,9 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
 					   TRUE, xpos, top,
 					   xpos, top+area->height-1);
 
+		    xpos ++; /* Destination position x */
+		    ypos ++; /* Destination position y */
+
 #if DEBUGLEV > 3
 		    errormsg(MAPDEBUG4,"Renderpixbuf: Grid at %u,%u-%u,%u and"
 			     " %u,%u-%u,%u", left, ypos, left+area->width-1, 
@@ -1226,6 +1225,11 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
 #endif
                 }
             }
+#if DEBUGLEV > 3
+	    errormsg(MAPDEBUG4,"Renderpixbuf: xc=%u, yc=%u, xp=%u, yp=%u", 
+		     md->md_Map->mm_Rows[j].mp_PBCoord.x, 
+		     amap->mm_Rows[j].mp_PBCoord.y, xpos+fw, ypos+fh);
+#endif
 	    gdk_pixbuf_copy_area(md->md_MapPieces,
 				 md->md_Map->mm_Rows[j].mp_PBCoord.x,
 				 amap->mm_Rows[j].mp_PBCoord.y, md->md_PWidth,
