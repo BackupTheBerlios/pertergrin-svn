@@ -57,39 +57,12 @@
 --- SQL Database definition
 --- ------------------------------------------------------------------
 
----- Object type pc (personal character) - Last Update 18.04.2001
-
-DROP TABLE pc;
-DROP SEQUENCE pc_pcid_seq;
-CREATE TABLE pc (
-	pcid		serial PRIMARY KEY,
-	name		TEXT NOT NULL,
-	description	TEXT NOT NULL,
-	complexattr	INT2[] NOT NULL,
-	attributes	INT2[] NOT NULL,
-	handler		INT2,
-	FOREIGN KEY (attributes) REFERENCES attributes(attributesid)
-	FOREIGN KEY (complexattr) REFERENCES complexattr(complexattrid)
-);
-
-
----- Object type npc (non-personal character) - Last Update 18.04.2001
-
-DROP TABLE npc;
-DROP SEQUENCE npc_npcid_seq;
-CREATE TABLE npc (
-	npcid		serial PRIMARY KEY,
-	name		TEXT NOT NULL,
-	description	TEXT NOT NULL,
-	complexattr	INT2[] NOT NULL,
-	attributes	INT2[] NOT NULL,
-	handler		INT2,
-	FOREIGN KEY (attributes) REFERENCES attributes(attributesid)
-	FOREIGN KEY (complexattr) REFERENCES complexattr(complexattrid)
-);
-
-
----- Object type attributes - Last Update 18.04.2001
+---- Object type attributes - Last Update 16.05.2001
+--
+-- types: 0 = boolean
+--        1 = integer
+--        2 = double
+--        3 = text
 
 DROP TABLE attributes;
 DROP SEQUENCE attributes_attributesid_seq;
@@ -97,9 +70,8 @@ CREATE TABLE attributes (
 	attributesid	serial PRIMARY KEY,
 	name		TEXT NOT NULL,
 	description	TEXT NOT NULL,
-	valueint	INT4 NOT NULL,
-	valuechar	TEXT NOT NULL,
-	valuefloat	FLOAT4 NOT NULL,
+	type		INT2 NOT NULL,
+	value		TEXT NOT NULL,
 	format		TEXT NOT NULL
 ):
 
@@ -112,9 +84,178 @@ CREATE TABLE complexattr (
 	complexattrid	serial PRIMARY KEY,
 	name		TEXT NOT NULL,
 	description	TEXT NOT NULL,
-	attributes	INT2[] NOT NULL,
+	base		BOOLEAN NOT NULL,
+	attributes	INT4[] NOT NULL,
 	handler		INT2,
 	FOREIGN KEY (attributes) REFERENCES attributes(attributesid)
+);
+
+---- Object type race - Last Update 16.05.2001
+
+DROP TABLE race;
+DROP SEQUENCE race_raceid_seq;
+CREATE TABLE race (
+	raceid		serial PRIMARY KEY,
+	name		TEXT NOT NULL,
+	description	TEXT NOT NULL,
+	attributes	INT4[] NOT NULL,
+	complexattr	INT4[],
+	FOREIGN KEY (attributes) REFERENCES attributes(attributesid),
+	FOREIGN KEY (complexattr) REFERENCES complexattr(complexattrid)
+);
+
+---- Object type herotype - Last Update 16.05.2001
+
+DROP TABLE herotype;
+DROP SEQUENCE herotype_herotypeid_seq;
+CREATE TABLE herotype (
+	herotypeid	serial PRIMARY KEY,
+	name		TEXT NOT NULL,
+	description	TEXT NOT NULL,
+	attributes	INT4[] NOT NULL,
+	complexattr	INT4[],
+);
+	
+---- Object type pc (personal character, hero) - Last Update 16.05.2001
+
+DROP TABLE pc;
+DROP SEQUENCE pc_pcid_seq;
+CREATE TABLE pc (
+	pcid		serial PRIMARY KEY,
+	name		TEXT NOT NULL,
+	description	TEXT NOT NULL,
+	complexattr	INT4[],
+	attributes	INT4[] NOT NULL,
+	race            INT2 NOT NULL,
+	herotype        INT2 NOT NULL,
+	handler		INT2,
+	FOREIGN KEY (attributes) REFERENCES attributes(attributesid),
+	FOREIGN KEY (complexattr) REFERENCES complexattr(complexattrid),
+	FOREIGN KEY (race) REFERENCES race(raceid)
+	FOREIGN KEY (herotype) REFERENCES herotype(herotypeid)
+);
+
+---- Object type npc (non-personal character) - Last Update 18.04.2001
+
+DROP TABLE npc;
+DROP SEQUENCE npc_npcid_seq;
+CREATE TABLE npc (
+	npcid		serial PRIMARY KEY,
+	name		TEXT NOT NULL,
+	description	TEXT NOT NULL,
+	base		BOOLEAN NOT NULL,
+	complexattr	INT4[],
+	attributes	INT4[] NOT NULL,
+	handler		INT2,
+	FOREIGN KEY (attributes) REFERENCES attributes(attributesid),
+	FOREIGN KEY (complexattr) REFERENCES complexattr(complexattrid)
+);
+
+---- Object type simpleobject - Last Update 16.05.2001
+
+DROP TABLE simpleobject;
+DROP SEQUENCE simpleobject_simpleobjectid_seq;
+CREATE TABLE simpleobject (
+	simpleobjectid	serial PRIMARY KEY,
+	name		TEXT NOT NULL,
+	description	TEXT NOT NULL,
+	attributes	INT4[] NOT NULL,
+	FOREIGN KEY (attributes) REFERENCES attributes(attributesid),
+);
+
+---- Object type item - Last Update 04.10.2002
+
+DROP TABLE item;
+DROP SEQUENCE item_itemid_seq;
+CREATE TABLE item (
+	itemid		serial PRIMARY KEY,
+	name		TEXT NOT NULL,
+	description	TEXT NOT NULL,
+	type		INT2 NOT NULL,
+	attributes	INT4[] NOT NULL,
+	complexattr	INT4[],
+	item		INT4[],
+	FOREIGN KEY (item) REFERENCES item(itemid),
+	FOREIGN KEY (attributes) REFERENCES attributes(attributesid),
+	FOREIGN KEY (complexattr) REFERENCES complexattr(complexattrid)
+);
+
+---- Object type town - Last Update 04.10.2002
+
+DROP TABLE town;
+DROP SEQUENCE town_townid_seq;
+CREATE TABLE town (
+	townid		serial PRIMARY KEY,
+	name		TEXT NOT NULL,
+	description	TEXT NOT NULL,
+	attributes	INT4[] NOT NULL,
+	complexattr	INT4[],
+	dungeon		INT4[],
+	npc		INT4[],
+	item		INT4[],
+	simpleobject	INT4[],
+	FOREIGN KEY (dungeon) REFERENCES dungeon(dungeonid),
+	FOREIGN KEY (simpleobject) REFERENCES simpleobject(simpleobjectid),
+	FOREIGN KEY (npc) REFERENCES npc(npcid),
+	FOREIGN KEY (attributes) REFERENCES attributes(attributesid),
+	FOREIGN KEY (complexattr) REFERENCES complexattr(complexattrid)
+);
+
+---- Object type dungeon - Last Update 04.10.2002
+
+DROP TABLE dungeon;
+DROP SEQUENCE dungeon_dungeonid_seq;
+CREATE TABLE dungeon (
+	dungeonid	serial PRIMARY KEY,
+	name		TEXT NOT NULL,
+	description	TEXT NOT NULL,
+	attributes	INT4[] NOT NULL,
+	complexattr	INT4[],
+	town		INT4[],
+	npc		INT4[],
+	simpleobject	INT4[],
+	item		INT4[],
+	FOREIGN KEY (town) REFERENCES town(townid),
+	FOREIGN KEY (simpleobject) REFERENCES simpleobject(simpleobjectid),
+	FOREIGN KEY (npc) REFERENCES npc(npcid),
+	FOREIGN KEY (attributes) REFERENCES attributes(attributesid),
+	FOREIGN KEY (complexattr) REFERENCES complexattr(complexattrid)
+);
+
+---- Object type world - Last Update 04.10.2002
+
+DROP TABLE world;
+DROP SEQUENCE world_worldid_seq;
+CREATE TABLE world (
+	worldid		serial PRIMARY KEY,
+	name		TEXT NOT NULL,
+	description	TEXT NOT NULL,
+	attributes	INT4[] NOT NULL,
+	complexattr	INT4[],
+	dungeon		INT4[],
+	town		INT4[],
+	npc		INT4[],
+	pc		INT4 NOT NULL,
+	FOREIGN KEY (dungeon) REFERENCES dungeon(dungeonid),
+	FOREIGN KEY (town) REFERENCES town(townid),
+	FOREIGN KEY (pc) REFERENCES pc(pcid),
+	FOREIGN KEY (npc) REFERENCES npc(npcid),
+	FOREIGN KEY (attributes) REFERENCES attributes(attributesid),
+	FOREIGN KEY (complexattr) REFERENCES complexattr(complexattrid)
+);
+
+---- Object type universe - Last Update 04.10.2002
+
+DROP TABLE universe;
+DROP SEQUENCE universe_universeid_seq;
+CREATE TABLE universe (
+	universeid	serial PRIMARY KEY,
+	name		TEXT NOT NULL,
+	description	TEXT NOT NULL,
+	attributes	INT4[],
+	world		INT4[] NOT NULL,
+	FOREIGN KEY (world) REFERENCES attributes(worldid),
+	FOREIGN KEY (attributes) REFERENCES attributes(attributesid),
 );
 
 --- Foreign Keys which cannot be inserted (drop table will remove
