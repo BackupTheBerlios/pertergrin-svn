@@ -18,6 +18,7 @@
 
 // includes
 #include "mainwindow.h"
+#include "glibmm/ustring.h"
 
 // defines
 
@@ -30,11 +31,12 @@ PTGMainWindow::PTGMainWindow()
   set_border_width(10);
 
   // Get Glade UI
-  moRefGlade = Gnome::Glade::Xml::create("example.glade");
+  moRefGlade = Gnome::Glade::Xml::create(Glib::ustring(GUI_DIRECTORY) +
+                                         Glib::ustring("/mainwindow.glade"));
   // Set new parent widget to this window
   moRefGlade->reparent_widget("vbox", *this);
 
-  mopVariablesMap = new Gnome::Glade::VariablesMap(m_refGlade);
+  mopVariablesMap = new Gnome::Glade::VariablesMap(moRefGlade);
   // Connect values of widgets to members
   //mopVariablesMap->connect_widget("entry", mStrEntry);
   //mopVariablesMap->connect_widget("checkbox", mbCheckBox);
@@ -50,7 +52,7 @@ PTGMainWindow::PTGMainWindow()
 }
 
 // Destructor
-PTGMainWindow::PTGMainWindow()
+PTGMainWindow::~PTGMainWindow()
 {
 }
 
