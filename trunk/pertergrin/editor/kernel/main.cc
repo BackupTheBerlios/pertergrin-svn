@@ -23,8 +23,21 @@ int main(int argc, char*argv[])
 
 {
   Gtk::Main kit(argc,argv);
-  PTGMainWindow oMainWin;
+  PTGMainWindow *opMainWin;
+  Glib::RefPtr<Gnome::Glade::Xml> opRefXml;
 
-  kit.run(oMainWin);
+  // Create main window
+  opRefXml = Gnome::Glade::Xml::create(Glib::ustring(GUI_DIRECTORY) +
+                                       Glib::ustring("/mainwindow.glade"));
+  
+  if( opRefXml )
+  {
+    // Get referenze on the main window object
+    opRefXml->get_widget_derived("PtgMainWindow",opMainWin);
+    // Start the editor
+    if( opMainWin )
+      kit.run(*opMainWin);
+  }
+  // Finished
   return (0);
 }
