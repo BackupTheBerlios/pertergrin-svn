@@ -3,11 +3,11 @@
  *
  * GTK (Gimp Tool Kit) Map Edit gadget class including possibility to select
  * mappieces so you can also create a "GetPiece" gadget.
- * It is FREEWARE. Usage is restricted. Please refer to the included
- * MapEditClass.readme for more information. By using this class you
- * automatically agree to the License in the MapEditClass.readme file.
- * (Short note: The GNU Library General Public License Version 2 applies
- *  to this code as well for freeware programmers).
+ * It is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License,  or (at your option) any later
+ * version. You should have received a copy of the GNU General Public License
+ * along with this program. If not contact one the AUTHORS.
  */
 
 #include <sys/types.h>
@@ -29,14 +29,14 @@
 
 extern char *getLogfile();
 guint  MapEditClassGetType(void);
-GtkWidget *MapEditClassNew(GtkArg **args, guint num_args);
-static void MapEditClassSet( GtkObject *obj, GtkArg *arg );
+static void MapEditClassSet( GtkObject *obj, GtkArg *arg, guint arg_id );
+static void MapEditClassGet( GtkObject *obj, GtkArg *arg, guint arg_id );
 static void MapEditClassRealize (GtkWidget *widget);
 static gint MapEditClassRender( GtkWidget *widget, GdkEventExpose *event );
 static void MapEditClassSizeReq (GtkWidget *widget,
 				 GtkRequisition *requisition);
-static void MapEditClassDimensions( GtkWidget *widget, 
-				    GtkAllocation *allocation );
+//static void MapEditClassNotifyDimensions( GtkWidget *widget, 
+//				    GtkAllocation *allocation );
 static void InitMapEditClass( GtkMapEditClass *class );
 static void MapEditInit( MD *md );
 
@@ -47,23 +47,22 @@ GtkWidgetClass *mapedit_parent_class = NULL;
 #define NOWARNING 0
 #define NOINFO 0
 #define DEBUG 1     // Set to 1 to enable debugging
-#define DEBUGLEV 5       /* 1: Informations only,
-			  * 2: Add Error messages
-			  * 3: Add Warning messages
-			  * 4: Add entry and exit messages
-			  * 5: Add important variables output
-			  * 6: Add most variables output
-			  * 7: Add several function calls outside
-			  * 8: Add all variables output
-			  * 9: Add all function calls outside
-			  * 10: Add all kind of silly output
+#define DEBUGLEV 5       /* I: Informations only,
+			  * E: Add Error messages
+			  * W: Add Warning messages
+			  * 1: Add entry and exit messages
+			  * 2: Add important variables output
+			  * 3: Add most variables output
+			  * 4: Add several function calls outside
+			  * 5: Add all variables output
+			  * 6: Add all function calls outside
+			  * 7: Add all kind of silly output
 			  */
-enum mapmsg_types { MAPINFO, MAPERROR, MAPWARNING, MAPDEBUG1, MAPDEBUG2,
-		    MAPDEBUG3, MAPDEBUG4, MAPDEBUG5, MAPDEBUG6, MAPPARANOIA };
+
 /*
 **  Simple type-cast.
 **/
-#define GAD(x)      (( struct Widget * )x)
+#define GAD(x)      (( GtkWidget * )x)
 
 #define MINROW 4
 #define MINCOL 4
@@ -132,6 +131,9 @@ void errormsg(short type, char *errmsg, ...)
       if (DEBUGLEV>4) sprintf(prmsg,"Debug5: ");
       else return;
       break;
+    case MAPMSG:
+      if (DEBUGLEV<=4) return;
+      break;
     case MAPDEBUG6:
       if (DEBUGLEV>5) sprintf(prmsg,"Debug6: ");
       else return;
@@ -142,7 +144,8 @@ void errormsg(short type, char *errmsg, ...)
       break;
   }
   strcat(prmsg,errmsg);
-  strcat(prmsg,"\n");
+  if (type!=MAPMSG) 
+      strcat(prmsg,"\n");
   if (prmsg[0])
   {
     va_list argp;
@@ -175,7 +178,7 @@ static BOOL MakeMap(UBYTE mkcopy, struct MCMap *dmap, MD *md,
     errormsg(MAPDEBUG1,"MakeMap start");
 
 #if DEBUGLEV > 1
-    errormsg(MAPDEBUG2,"MakeMap: mkcopy=%d dmap=%x, md=%x, smap=%",mkcopy,
+    errormsg(MAPDEBUG2,"MakeMap: mkcopy=%d dmap=%x, md=%x, smap=%x",mkcopy,
 	      dmap,md,smap);
 #endif    
     do // Iterate through all layers
@@ -430,13 +433,14 @@ static void MapEditInit(MD *md)
   md->md_Default                    = NULL;
   md->md_Select.x = md->md_Select.y = md->md_Select.l = 0;
   md->md_FrameToggle                = md->md_Select;
+  md->md_ScaleWidth = md->md_ScaleHeight = 100; // 100% scaled
   errormsg(MAPDEBUG1,"MapEditInit: Finished setting up md structure");
 }
 
 /*
 **  Create a new mapedit object.
 **/
-GtkWidget *MapEditClassNew(GtkArg **args, guint num_args)
+GtkWidget *MapEditClassNew(GtkArg *args, guint num_args)
 {
     MD              *md =  gtk_type_new GTK_TYPE_MAPEDIT;
     GdkPixbuf       *bm;
@@ -449,16 +453,16 @@ GtkWidget *MapEditClassNew(GtkArg **args, guint num_args)
     /*
     **  Setup the instance data.
     **/
+    errormsg(MAPDEBUG3,"MapEditClassNew: args=%x, num_args=%d",args, num_args);
+
     for (arg = 0 ; arg < num_args ; arg++)
     {
-        // Failure when one argument is incorrectly initialised
-        if (args[arg]==NULL) return NULL;
-
-        // Check all the arguments
 #if DEBUGLEV > 2
-	errormsg(MAPDEBUG3,"args[%d}=%x",arg,args[arg]);
+	errormsg(MAPDEBUG3,"args[%d]=%x, args[%d]->type=%d",arg,args[arg],
+		 arg,args[arg].type);
 #endif
-	switch ( args[arg]->type )
+        // Check all the arguments
+	switch ( args[arg].type )
 	{
 	    case MAPEDIT_NoCopy:
 	        errormsg(MAPINFO,"MapEditClassNew: Nocopy is set");
@@ -466,7 +470,7 @@ GtkWidget *MapEditClassNew(GtkArg **args, guint num_args)
 	        errormsg(MAPDEBUG2,"MapEditClassNew: md->md_Copy=%d",
 			 md->md_Copy);
 #endif
-		if (GTK_VALUE_BOOL(*args[arg]) && md->md_Copy)
+		if (GTK_VALUE_BOOL(args[arg]) && md->md_Copy)
 		{
 #if DEBUGLEV > 2
 		    errormsg(MAPDEBUG3,"MapEditClassNew: md->md_MapPieces=%x",
@@ -482,12 +486,12 @@ GtkWidget *MapEditClassNew(GtkArg **args, guint num_args)
 		    }
 		    md->md_MapPieces = NULL;
 		}
-		md->md_Copy=!GTK_VALUE_BOOL(*args[arg]);
+		md->md_Copy=!GTK_VALUE_BOOL(args[arg]);
 		break;
 
 	    case MAPEDIT_MapPieces:
 		errormsg(MAPINFO,"MapEditClassNew: MapPieces is set");
-		bm = (GdkPixbuf *) GTK_VALUE_POINTER(*args[arg]);
+		bm = (GdkPixbuf *) GTK_VALUE_POINTER(args[arg]);
 		if (md->md_Copy) {
 		    if (md->md_MapPieces) gdk_pixbuf_unref(md->md_MapPieces);
 		    md->md_MapPieces = NULL;
@@ -502,97 +506,97 @@ GtkWidget *MapEditClassNew(GtkArg **args, guint num_args)
 
 	    case MAPEDIT_PWidth:
                 errormsg(MAPINFO,"MapEditClassNew: PWidth is set");
-		md->md_PWidth = GTK_VALUE_UINT(*args[arg]);
+		md->md_PWidth = GTK_VALUE_UINT(args[arg]);
 		break;
 
             case MAPEDIT_PLength:
                 errormsg(MAPINFO,"MapEditClassNew: PLength is set");
-		md->md_PLength = GTK_VALUE_UINT(*args[arg]);
+		md->md_PLength = GTK_VALUE_UINT(args[arg]);
 		break;
 
 	    case MAPEDIT_Map:
                 errormsg(MAPINFO,"MapEditClassNew: Map is set");
-		amap = (struct MCMap *) GTK_VALUE_POINTER(*args[arg]);
+		amap = (struct MCMap *) GTK_VALUE_POINTER(args[arg]);
 		if (amap->mm_Copy) mkcopy = TRUE;
 		break;
 
 	    case MAPEDIT_MapWidth:
                 errormsg(MAPINFO,"MapEditClassNew: MapWidth is set");
-		mapx = GTK_VALUE_UINT(*args[arg]);
+		mapx = GTK_VALUE_UINT(args[arg]);
 		break;
 
 	    case MAPEDIT_MapLength:
                 errormsg(MAPINFO,"MapEditClassNew: MapLength is set");
-		mapy = GTK_VALUE_UINT(*args[arg]);
+		mapy = GTK_VALUE_UINT(args[arg]);
 		break;
 
 	    case MAPEDIT_MapLayer:
                 errormsg(MAPINFO,"MapEditClassNew: MapLayer is set");
-		mapl = GTK_VALUE_UCHAR(*args[arg]);
+		mapl = GTK_VALUE_UCHAR(args[arg]);
 		break;
 
 	    case MAPEDIT_GetPieces:
                 errormsg(MAPINFO,"MapEditClassNew: GetPieces is set");
-		md->md_GetPieces = GTK_VALUE_BOOL(*args[arg]);
+		md->md_GetPieces = GTK_VALUE_BOOL(args[arg]);
 		break;
 
 	    case MAPEDIT_Frame:
                 errormsg(MAPINFO,"MapEditClassNew: Frame is set");
-		md->md_Frame = GTK_VALUE_BOOL(*args[arg]);
+		md->md_Frame = GTK_VALUE_BOOL(args[arg]);
 		break;
 
 	    case MAPEDIT_FrameSpace:
                 errormsg(MAPINFO,"MapEditClassNew: FrameSpace is set");
-		md->md_FrameSpace = GTK_VALUE_UCHAR(*args[arg]);
+		md->md_FrameSpace = GTK_VALUE_UCHAR(args[arg]);
 		break;
 
 	    case MAPEDIT_CurrPiece:
                 errormsg(MAPINFO,"MapEditClassNew: CurrPiece is set");
-		md->md_CurrPiece.mp_Number = ((struct MapPiece *)GTK_VALUE_POINTER(*args[arg]))->mp_Number;
-		md->md_CurrPiece.mp_PixbufNumber = ((struct MapPiece *)GTK_VALUE_POINTER(*args[arg]))->mp_PixbufNumber;
-		md->md_CurrPiece.mp_PBCoord = ((struct MapPiece *)GTK_VALUE_POINTER(*args[arg]))->mp_PBCoord;
-		md->md_CurrPiece.mp_Size = ((struct MapPiece *)GTK_VALUE_POINTER(*args[arg]))->mp_Size;
-		md->md_CurrPiece.mp_User = ((struct MapPiece *)GTK_VALUE_POINTER(*args[arg]))->mp_User;
+		md->md_CurrPiece.mp_Number = ((struct MapPiece *)GTK_VALUE_POINTER(args[arg]))->mp_Number;
+		md->md_CurrPiece.mp_PixbufNumber = ((struct MapPiece *)GTK_VALUE_POINTER(args[arg]))->mp_PixbufNumber;
+		md->md_CurrPiece.mp_PBCoord = ((struct MapPiece *)GTK_VALUE_POINTER(args[arg]))->mp_PBCoord;
+		md->md_CurrPiece.mp_Size = ((struct MapPiece *)GTK_VALUE_POINTER(args[arg]))->mp_Size;
+		md->md_CurrPiece.mp_User = ((struct MapPiece *)GTK_VALUE_POINTER(args[arg]))->mp_User;
                 break;
 
 	    case MAPEDIT_Default:
                 errormsg(MAPINFO,"MapEditClassNew: Default is set");
-		md->md_Default = (struct MapPiece *) GTK_VALUE_POINTER(*args[arg]);
+		md->md_Default = (struct MapPiece *) GTK_VALUE_POINTER(args[arg]);
 		break;
 
 	    case MAPEDIT_Grid:
                 errormsg(MAPINFO,"MapEditClassNew: Grid is set");
-		md->md_Grid = GTK_VALUE_BOOL(*args[arg]);
+		md->md_Grid = GTK_VALUE_BOOL(args[arg]);
 		break;
 
 	    case MAPEDIT_GridPen:
                 errormsg(MAPINFO,"MapEditClassNew: GridPen is set");
-		md->md_GridPen = GTK_VALUE_UCHAR(*args[arg]);
+		md->md_GridPen = GTK_VALUE_UCHAR(args[arg]);
 		break;
 
 	    case MAPEDIT_SelectX:
 	        errormsg(MAPINFO,"MapEditClassNew: SelectX is set");
-		md->md_Select.x = GTK_VALUE_UINT(*args[arg]);
+		md->md_Select.x = GTK_VALUE_UINT(args[arg]);
 		break;
 
 	    case MAPEDIT_SelectY:
 	        errormsg(MAPINFO,"MapEditClassNew: SelectY is set");
-		md->md_Select.y = GTK_VALUE_UINT(*args[arg]);
+		md->md_Select.y = GTK_VALUE_UINT(args[arg]);
 		break;
 
 	    case MAPEDIT_SelectL:
 	        errormsg(MAPINFO,"MapEditClassNew: SelectL is set");
-		md->md_Select.l = GTK_VALUE_UCHAR(*args[arg]);
+		md->md_Select.l = GTK_VALUE_UCHAR(args[arg]);
 		break;
 
 	    case MAPEDIT_ScaleWidth:
 	        errormsg(MAPINFO,"MapEditClassNew: ScaleWidth is set");
-		md->md_ScaleWidth = GTK_VALUE_UCHAR(*args[arg]);
+		md->md_ScaleWidth = GTK_VALUE_UCHAR(args[arg]);
 		break;
 
 	    case MAPEDIT_ScaleHeight:
 	        errormsg(MAPINFO,"MapEditClassNew: ScaleHeight is set");
-		md->md_ScaleHeight = GTK_VALUE_UCHAR(*args[arg]);
+		md->md_ScaleHeight = GTK_VALUE_UCHAR(args[arg]);
 		break;
 	}
     }
@@ -678,7 +682,7 @@ GtkWidget *MapEditClassNew(GtkArg **args, guint num_args)
 			    md->md_Map->mm_Copy = COPYMAP; /* Important! We need this flag to free memory again! */
 			    mkcopy |= COPYLAYER;
 #if DEBUGLEV > 2
-			  errormsg(MAPDEBUG3,"kkcopy=%d,tmap=%x,md=%x,amap=%x",
+			  errormsg(MAPDEBUG3,"mkcopy=%d,tmap=%x,md=%x,amap=%x",
 				   mkcopy, tmap, md, amap);
 #endif
 			    ret=MakeMap(mkcopy,tmap,md,amap);
@@ -714,6 +718,7 @@ GtkWidget *MapEditClassNew(GtkArg **args, guint num_args)
 		        md->md_FrameToggle.x = ((struct MapPiece *)md->md_Map->mm_Columns[0])->mp_Coordinates.x;
 		        md->md_FrameToggle.y = ((struct MapPiece *)md->md_Map->mm_Columns[0])->mp_Coordinates.y;
 			md->md_FrameToggle.l = 0;
+			errormsg(MAPDEBUG1,"MapEditClassNew: Finished!");
 			return GTK_WIDGET ( md );
     
 		    }
@@ -721,6 +726,7 @@ GtkWidget *MapEditClassNew(GtkArg **args, guint num_args)
 	    }
 	}
     }
+    errormsg(MAPDEBUG1,"MapEditClassNew: Failed!");
     return NULL;
 }
 
@@ -768,7 +774,7 @@ static void MapEditClassDispose( GtkObject *obj )
 /*
 **  Get an attribute.
 */
-static void MapEditClassGet( GtkObject *obj, GtkArg *arg )
+static void MapEditClassGet( GtkObject *obj, GtkArg *arg, guint arg_id )
 {
     MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( obj );
     ULONG       i;
@@ -921,17 +927,35 @@ static void MapEditClassRealize (GtkWidget *widget)
     errormsg(MAPDEBUG1,"MapEditClassRealize finished");
 }
 
+/* 
+** Tell'm our minimum dimensions. (Compute real size of widget)
+** Attention: This is virtually ever larger than the size of the screen
+** which means that a viewport is required for using this widget!
+**/
 static void MapEditClassSizeReq (GtkWidget *widget,
 				 GtkRequisition *requisition)
 {
-    MD *md = GTK_MAPEDIT_SELECT(widget);
-    ULONG width=md->md_PWidth,height=md->md_PLength;
+    MD *md;
+    ULONG width=0, height=0, w=0, h=0;
 
     errormsg(MAPDEBUG1,"MapEditClassSizeReq entered");
+
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GTK_IS_MAPEDIT (widget));
+    g_return_if_fail (requisition != NULL);
 
 #if DEBUGLEV > 2
     errormsg(MAPDEBUG3,"widget=%x, width=%d, height=%d",widget,width,height);
 #endif
+    md = GTK_MAPEDIT_SELECT(widget);
+
+    // Basic: Width/Height + Frame
+    w = md->md_Frame ? widget->style->klass->xthickness+md->md_FrameSpace : 0;
+    h = md->md_Frame ? widget->style->klass->ythickness+md->md_FrameSpace : 0;
+    width = md->md_Map->mm_MapSize.x * (md->md_PWidth+w);
+    height = md->md_Map->mm_MapSize.y * (md->md_PLength+h);
+
+    // Scale factor (%)
     width=(width*md->md_ScaleWidth)/100;
     height=(height*md->md_ScaleHeight)/100;
 #if DEBUGLEV > 2
@@ -940,8 +964,8 @@ static void MapEditClassSizeReq (GtkWidget *widget,
     if ((width+MINCOL) > MINCOL) width-=MINCOL;
     if ((height+MINROW) > MINROW) height-=MINROW;
 
-    requisition->width = MINROW + width;
-    requisition->height = MINCOL + height;
+    requisition->width = MINROW + width + widget->style->klass->xthickness;
+    requisition->height = MINCOL + height + widget->style->klass->ythickness;
 
     errormsg(MAPDEBUG1,"MapEditClassSizeReq finished");
 }
@@ -971,6 +995,11 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     if (!amap) return FALSE;
     left = area->x + 1;
     top  = area->y + 1;
+    if (md->md_GetPieces && md->md_Frame)
+    {
+        left+=md->md_FrameSpace;
+        top+=md->md_FrameSpace;
+    }
 
 #if DEBUGLEV > 2
     errormsg(MAPDEBUG3,"RenderPixbuf: amap=%x, left=%d, top=%d",amap,left,top);
@@ -1099,16 +1128,17 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
             {
                 if (md->md_Frame)
                 {
-		    gdk_draw_rectangle(md->child->window, 
-				       md->child->style->black_gc,
-				       FALSE, left+xpos, top+ypos,
-				       md->md_PWidth, md->md_PLength);
-
 		    gtk_paint_shadow (md->child->style, md->child->window,
 				      GTK_STATE_NORMAL, GTK_SHADOW_IN,
 				      NULL, md->child, "text",
 				      left+xpos, top+ypos,
 				      md->md_PWidth, md->md_PLength);
+
+		    gdk_draw_rectangle(md->child->window, 
+				       md->child->style->black_gc,
+				       FALSE, left+xpos, top+ypos,
+				       md->md_PWidth, md->md_PLength);
+
                     xpos+=fw;
                     ypos+=fh;
                 }
@@ -1344,7 +1374,7 @@ static ULONG DrawTFrame( MD *md, COORD newpiece, BOOL state)
 /*
 **  Set attributes.
 **/
-static void MapEditClassSet( GtkObject *obj, GtkArg *arg )
+static void MapEditClassSet( GtkObject *obj, GtkArg *arg, guint arg_id )
 {
     MD              *md = ( MD * ) GTK_MAPEDIT_SELECT( obj );
     struct MapPiece *npiece;
@@ -1742,7 +1772,7 @@ static gint MapEditClassGoInactive( GtkWidget *widget, GdkEventButton *event)
 }
 
 // Move around in the widget
-static gint MapEditClassNotifyMove(GtkWidget *widget, GdkEventMotion *event)
+/* static gint MapEditClassNotifyMove(GtkWidget *widget, GdkEventMotion *event)
 {
     MD          *md;
     gint         x,y,mask;
@@ -1771,16 +1801,15 @@ static gint MapEditClassNotifyMove(GtkWidget *widget, GdkEventMotion *event)
     // ToDo: Scroll the map mapedit widget when right or bottom is reached
 
     return FALSE;
-}
+} */
 
 /*
-**  Tell'm our minimum dimensions.
+**  Notification about size changes
 **/
-static void MapEditClassDimensions( GtkWidget *widget, 
+/* static void MapEditClassNotifyDimensions( GtkWidget *widget, 
 				    GtkAllocation *allocation )
 {
     MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
-    ULONG       width=md->md_PWidth,height=md->md_PLength;
 
     g_return_if_fail (widget != NULL);
     g_return_if_fail (GTK_IS_MAPEDIT (widget));
@@ -1790,21 +1819,12 @@ static void MapEditClassDimensions( GtkWidget *widget,
 
     if (GTK_WIDGET_REALIZED (widget))
     {
-        width=(width*md->md_ScaleWidth)/100;
-	height=(height*md->md_ScaleHeight)/100;
-
-	if ((width+MINCOL) > MINCOL) width-=MINCOL;
-	if ((height+MINROW) > MINROW) height-=MINROW;
-
 	gdk_window_move_resize (widget->window,
 				allocation->x, allocation->y,
-				allocation->width /* + (MINROW + width) */, 
-				allocation->height /* + (MINCOL + height) */);
+				allocation->width, 
+				allocation->height);
     }
-
-    //*( dim->grmd_MinSize.Width  ) += (MINROW + width);
-    //*( dim->grmd_MinSize.Height ) += (MINCOL + height);
-}
+} */
 
 /*
 ** Get map piece number from Map position
@@ -1920,9 +1940,9 @@ static ULONG SetMapPiece( GtkObject *obj, struct mapSelect * msl )
 ** Fill map section with one map piece
 ** Do not forget to test if we are or get out of range (partial fill)
 */
-static ULONG FillMap( GtkObject *obj, struct mapSection * mst )
+static ULONG FillMap( GtkWidget *widget, struct mapSection * mst )
 {
-    MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( obj );
+    MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
     struct MCMap *amap = md->md_Map;
     ULONG i,j, sw, sl;
 
@@ -1964,7 +1984,7 @@ static ULONG FillMap( GtkObject *obj, struct mapSection * mst )
     }
 
     //DoMethod(obj, GM_RENDER, mst->mstInfo, rp, GREDRAW_REDRAW);
-    RenderPixbuf(md, &md->md_GraphBox);
+    RenderPixbuf(md, &widget->allocation);
     return MAPERR_Ok;
 }
 
@@ -2027,6 +2047,8 @@ static void InitMapEditClass( GtkMapEditClass *class )
     GtkObjectClass  *ocl = (GtkObjectClass *) class;
     GtkWidgetClass  *wcl = (GtkWidgetClass *) class;
 
+    errormsg(MAPDEBUG1,"InitMapEditClass: Entered");
+
     mapedit_signals[MAPEDIT_CURRPIECE_SIGNAL] = 
       gtk_signal_new ("mapedit_currpiece", GTK_RUN_LAST, ocl->type,
 		      GTK_SIGNAL_OFFSET (GtkMapEditClass, currpiece),
@@ -2059,9 +2081,8 @@ static void InitMapEditClass( GtkMapEditClass *class )
 
     // Replace destroy function
     ocl->destroy = MapEditClassDispose;
-    // Shouldn't be necessary, see MapEditClassGetType()
-    //ocl->set_arg = MapEditClassSet;
-    //ocl->get_arg = MapEditClassGet;
+    ocl->set_arg = MapEditClassSet;
+    ocl->get_arg = MapEditClassGet;
 
     mapedit_parent_class = gtk_type_class(GTK_TYPE_WIDGET);
 
@@ -2078,16 +2099,18 @@ static void InitMapEditClass( GtkMapEditClass *class )
     wcl->realize = MapEditClassRealize;
     wcl->expose_event = MapEditClassRender;
     wcl->size_request = MapEditClassSizeReq; // Replaces MAPEDIT_BoxWidth ?
-    wcl->size_allocate = MapEditClassDimensions;
+    //wcl->size_allocate = MapEditClassDimensions;
     wcl->button_press_event = MapEditClassGoActive;
     wcl->button_release_event = MapEditClassGoInactive;
-    wcl->motion_notify_event = MapEditClassNotifyMove;
-    //wcl->enter_notify_event = MapEditClassGoActive;
-    //wcl->leave_notify_event = MapEditClassGoInactive;
+    //wcl->motion_notify_event = MapEditClassNotifyMove;
+    //wcl->enter_notify_event = MapEditClassEntered;
+    //wcl->leave_notify_event = MapEditClassLeft;
     /*
     **  Setup dispatcher.
     **/
     //cl->cl_Dispatcher.h_Entry = ( HOOKFUNC )MapEditClassDispatch;
+
+    errormsg(MAPDEBUG1,"InitMapEditClass: Finished");
 }
 
 /*
@@ -2096,6 +2119,8 @@ static void InitMapEditClass( GtkMapEditClass *class )
 guint  MapEditClassGetType(void)
 {
     static guint me_type = 0;
+
+    errormsg(MAPDEBUG1,"MapEditClassGetType: Entered");
 
     if (!me_type)
     {
@@ -2106,10 +2131,11 @@ guint  MapEditClassGetType(void)
 	    sizeof (GtkMapEditClass),
 	    (GtkClassInitFunc) InitMapEditClass,
 	    (GtkObjectInitFunc) MapEditInit,
-	    (GtkArgSetFunc) MapEditClassGet,
-	    (GtkArgGetFunc) MapEditClassSet
+	    NULL, NULL, (GtkClassInitFunc) NULL
 	};
 	me_type = gtk_type_unique (gtk_widget_get_type(), &me_info);
     }
+
+    errormsg(MAPDEBUG1,"MapEditClassGetType: Finished");
     return me_type;
 }

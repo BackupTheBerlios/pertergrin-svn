@@ -1,7 +1,7 @@
 #ifndef MAPEDITCLASS_H
 #define MAPEDITCLASS_H
 /*
-**  $VER: mapeditclass.h 0.0.1 (08.10.2000)
+**  $VER: mapeditclass.h 0.0.2 (10.04.2001)
 **  C Header file for the Map Edit Widget Class.
 **
 **  (C) 2000/2001 by Reinhard Katzmann
@@ -77,8 +77,8 @@ typedef struct _GtkMapData {
     BOOL              md_Grid;         /* If TRUE Grid around map pieces     */
     UBYTE             md_GridPen;      /* Selected GridPen.                  */
     COORD             md_Select;       /* Selected map position              */
-    UWORD             md_BoxWidth;     /* current width of the object        */
-    UWORD             md_BoxHeight;    /* current height of the object       */
+//  UWORD             md_BoxWidth;     /* current width of the object        */
+//  UWORD             md_BoxHeight;    /* current height of the object       */
     UBYTE             md_ScaleWidth;   /* show width percentage of the map   */
     UBYTE             md_ScaleHeight;  /* show height percentage of the map  */
     struct MCMap     *md_UndoBuffer;   /* UndoBuffer, for application        */
@@ -104,6 +104,7 @@ typedef struct _GtkMapEditClass
 /* GtkArg Arguments The commentary show when the args can be used */
 /* I: new, S: set_arg, G: get_arg, S: set_arg, N: Notify, U: Update */
 enum {
+  MAPEDIT_NULL,
   MAPEDIT_MapPieces,   /* I---- */
   MAPEDIT_MapWidth,    /* I-G-- */
   MAPEDIT_MapLength,   /* I-G-- */
@@ -132,6 +133,12 @@ enum {
 #define GTK_TYPE_MAPEDIT         (MapEditClassGetType())
 #define GTK_MAPEDIT_SELECT(obj)  (GTK_CHECK_CAST((obj), GTK_TYPE_MAPEDIT, MD)) 
 #define GTK_IS_MAPEDIT(obj)      (GTK_CHECK_TYPE((obj), GTK_TYPE_MAPEDIT))
+enum mapmsg_types { MAPINFO, MAPERROR, MAPWARNING, MAPDEBUG1, MAPDEBUG2,
+		    MAPDEBUG3, MAPDEBUG4, MAPDEBUG5, MAPMSG, MAPDEBUG6, 
+		    MAPPARANOIA };
+
+void errormsg(short type, char *errmsg, ...);
+GtkWidget *MapEditClassNew(GtkArg *args, guint num_args);
 
 /* Methods */
 
