@@ -22,6 +22,18 @@
 PtgWorld::PtgWorld(int iXSize, int iYSize, Glib::ustring oName, 
                    int iTileWidth, int iTileHeight)
 {
+  msWorldData.oName = "";
+  msWorldData.oDescription = "";
+  msWorldData.oWorldType = "";
+  msWorldData.iXSize = 0;
+  msWorldData.iYSize = 0;
+  msWorldData.oStartDate = "";
+  msWorldData.iRegionX = 0;
+  msWorldData.iRegionY = 0;
+  msWorldData.iRegionXSize = 0;
+  msWorldData.iRegionYSize = 0;	
+  msWorldData.iTileWidth = 0;
+  msWorldData.iTileHeight = 0;
   setSize(iXSize, iYSize);
   setName(oName);
 
@@ -31,8 +43,8 @@ PtgWorld::PtgWorld(int iXSize, int iYSize, Glib::ustring oName,
   if( iTileHeight < 10 )
     iTileHeight = 10;
 
-  msWorldData.iWidth = iTileWidth;
-  msWorldData.iHeight = iTileHeight;
+  msWorldData.iTileWidth = iTileWidth;
+  msWorldData.iTileHeight = iTileHeight;
 
   // Default selected region (nothing selected)
   mapClearRegion();
@@ -70,8 +82,7 @@ void PtgWorld::mapClear()
 void PtgWorld::mapSet(int iXPos, int iYPos, plpart_t sLPart)
 {
   // Get reference to row of the world map
-  vector<plpart_t> &vecoRow = msWorldData.vecoWorldMap[iXPos];
-  vecoRow[iYPos] = sLPart;
+  msWorldData.vecoWorldMap[iXPos+iYPos*msWorldData.iXSize] = sLPart;
 }
 
 // Get a landscape map part from a given position
@@ -83,8 +94,7 @@ void PtgWorld::mapSet(int iXPos, int iYPos, plpart_t sLPart)
 plpart_t &PtgWorld::mapGet(int iXPos, int iYPos)
 {
   // Get copy of row of the world map (so map cannot be directly modified)
-  vector<plpart_t> vecoRow = msWorldData.vecoWorldMap[iXPos];
-  return vecoRow[iYPos];
+  return msWorldData.vecoWorldMap[iXPos+iYPos*msWorldData.iXSize];
 }
 
 void PtgWorld::mapMove(int iDestXPos, int iDestYPos, int iSourceXPos, int SourceYPos, 
@@ -110,12 +120,10 @@ void PtgWorld::mapFill(int iXPos, int iYPos, int iWidth, int iHeight, plpart_t s
     iWidth = msWorldData.iYSize - iYPos;
   for( iXC=iXPos; iXC < iWidth; iXC++ )
   {
-    // Get reference to row of the world map
-    vector<plpart_t> &vecoRow = msWorldData.vecoWorldMap[iXC];
     for( iYC=iYPos; iYC < iHeight; iYC++ )
     {
       // Copy the landscape part data
-      vecoRow[iYC] = sLPart;
+      msWorldData.vecoWorldMap[iXC+iYC*msWorldData.iXSize] = sLPart;
     }
   }
 }
@@ -207,12 +215,7 @@ void PtgWorld::setSize(int iXSize, int iYSize)
   // Reserve size so vectors do not reallocate all the time
   // Attention: for real size maps > 1000 you may not use the complete
   // size but only the size which fits in memory!
-  msWorldData.vecoWorldMap.reserve(iXSize);
-  for(int i=0; i<iXSize; i++)
-  {
-    vector<plpart_t> &vecoRow = msWorldData.vecoWorldMap[i];
-    vecoRow.reserve(iYSize);
-  }  
+  msWorldData.vecoWorldMap.reserve(iXSize*iYSize);
 }
 
 // Get the size of the world
@@ -280,6 +283,6 @@ Glib::ustring &PtgWorld::getWorldType()
 // iHeight  -  Height of all the graphic tiles
 void PtgWorld::getTileSize(int &iWidth, int &iHeight)
 {
-  iWidth = msWorldData.iWidth;
-  iHeight = msWorldData.iHeight;
+  iWidth = msWorldData.iTileWidth;
+  iHeight = msWorldData.iTileHeight;
 }
