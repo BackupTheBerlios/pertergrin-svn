@@ -1,0 +1,48 @@
+               Drawing of maps
+               ===============
+
+General
+-------
+
+This document describes how the mainwindow of Pertergrin 
+(PTGMainWindow) interacts with the three map editors of
+Pertergrin: World, Town, Dungeon. In Practice more editors
+could be added for special RPGs but I hope this won't be
+necessary (like house/castle: Base is Dungeon).
+
+MapDrawArea
+-----------
+There is a module being able to create and store maps. It is
+called CWMapDrawArea. It is a custom widget for gtkmm. It uses
+one or several tile sets. When you set a tile on the map you
+have to define which one and from which tileset (optionally,
+if undefined the current tileset is used).
+This class draws the map on the screen. The map consists only
+of the tiles and size information. The tiles themselves only
+consists of a name and positions inside the tiles. All other
+information concering the map is not stored in this class.
+
+Editing
+-------
+
+The user can edit a region of the map. This region can
+be completely deleted, copied and pasted.
+
+Integration
+-----------
+
+As there is a lot of abstraction inside the program to be
+considered even the dungeon and town editor can be optional
+components only available with certain game types. So the
+mainwindow and the world only consists of one map (types).
+The other maps and their content have to be done through
+the abilities model. To make the thing a bit easier we
+define a map module doing the work of managing the map
+content and the draw content for us. When the user switches
+to another map type the module gets activated.
+
+Module Town
+-----------
+
+The town module consists like the mainwindow of a map and
+the map being drawn on the screen. 
