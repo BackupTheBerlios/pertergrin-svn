@@ -226,12 +226,8 @@
 	      <property name="shadow_type">GTK_SHADOW_IN</property>
 
 	      <child>
-		<widget class="Custom" id="custom2">
+		<widget class="GtkDrawingArea" id="drawingarea1">
 		  <property name="visible">True</property>
-		  <property name="creation_function">mapedit_create_new</property>
-		  <property name="int1">0</property>
-		  <property name="int2">0</property>
-		  <property name="last_modification_time">Wed, 16 May 2001 18:11:36 GMT</property>
 		</widget>
 	      </child>
 	    </widget>
