@@ -32,6 +32,7 @@ typedef struct cw_tile_pos
   Glib::ustring   oName;             /* Name of the graphic tile        */
   int             iXPos;             /* X-Position inside tiles graphic */
   int             iYPos;             /* Y-Position inside tiles graphic */
+  int          iTileset;             /* Tileset to be used              */
 } cwtpos_t;
 
 typedef struct cw_tile_map
@@ -46,11 +47,13 @@ typedef struct cw_tile_map
 /// Custom Widget Map (with Tiles) Draw Area
 /// To use it you need to have one or several tile sets.
 /// You need to have a map which defines where the tiles are places
+/// You also need to load or create the pixbuf(s) being used as tiles
 /// You don't need to define the whole map at once
 class CWMapDrawArea : public Gtk::DrawingArea
 {
 public:
   CWMapDrawArea(Glib::RefPtr<Gdk::Pixbuf> &opTileset, 
+
               int &iXTileSize, int &iYTileSize);
   void setMap(cwtmap_t &oTilesMap, int iXSize=0, int iYSize=0);
   void changeMap(int iWidth, int iHeight, int iXPos=0, int iYPos=0);
@@ -59,17 +62,19 @@ public:
   void setDefaultTile(cwtpos_t &oTile);
   void setTilesetsSize(int iNum);
   void addTileset(Glib::RefPtr<Gdk::Pixbuf> &opTileset, int iPos);
-  void removeTileset(Glib::RefPtr<Gdk::Pixbuf> &opTileset, int iPos);
+  void removeTileset(int iPos);
   void clearTilesets();
 
 protected:
   bool on_map_area_expose (GdkEventExpose *event);
   bool on_map_area_value_changed();
+  bool on_set_scroll_adjustments();
 
   void adjust_scrollbars (void);
 
 private:
   Glib::RefPtr<Gdk::Pixbuf> &mopDefaultTileset;
+  Glib::RefPtr<Gdk::Pixbuf> moDrawPB;
   Gtk::ScrolledWindow       moScrollPane;
   Gtk::DrawingArea          moDrawingArea;
   vector< Glib::RefPtr<Gdk::Pixbuf> > mopTilesets;
