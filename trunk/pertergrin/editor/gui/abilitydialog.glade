@@ -1,0 +1,586 @@
+<?xml version="1.0" standalone="no"?> <!--*- mode: xml -*-->
+<!DOCTYPE glade-interface SYSTEM "http://glade.gnome.org/glade-2.0.dtd">
+
+<glade-interface>
+<requires lib="gnome"/>
+
+<widget class="GtkWindow" id="AbilityDialog">
+  <property name="border_width">2</property>
+  <property name="title" translatable="yes">Ability Options</property>
+  <property name="type">GTK_WINDOW_TOPLEVEL</property>
+  <property name="window_position">GTK_WIN_POS_NONE</property>
+  <property name="modal">False</property>
+  <property name="resizable">True</property>
+  <property name="destroy_with_parent">False</property>
+
+  <child>
+    <widget class="GtkTable" id="EditAbilityTable">
+      <property name="visible">True</property>
+      <property name="n_rows">8</property>
+      <property name="n_columns">2</property>
+      <property name="homogeneous">False</property>
+      <property name="row_spacing">0</property>
+      <property name="column_spacing">0</property>
+
+      <child>
+	<widget class="GtkLabel" id="ABNameLabel">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Ability Name: </property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">3</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">0</property>
+	  <property name="bottom_attach">1</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkCombo" id="ABNameCombo">
+	  <property name="visible">True</property>
+	  <property name="value_in_list">False</property>
+	  <property name="allow_empty">True</property>
+	  <property name="case_sensitive">False</property>
+	  <property name="enable_arrow_keys">True</property>
+	  <property name="enable_arrows_always">False</property>
+
+	  <child internal-child="entry">
+	    <widget class="GtkEntry" id="ABNameComboEntry">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="editable">True</property>
+	      <property name="visibility">True</property>
+	      <property name="max_length">0</property>
+	      <property name="text" translatable="yes"></property>
+	      <property name="has_frame">True</property>
+	      <property name="invisible_char" translatable="yes">*</property>
+	      <property name="activates_default">False</property>
+	    </widget>
+	  </child>
+
+	  <child internal-child="list">
+	    <widget class="GtkList" id="combo-list12">
+	      <property name="visible">True</property>
+	      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="left_attach">1</property>
+	  <property name="right_attach">2</property>
+	  <property name="top_attach">0</property>
+	  <property name="bottom_attach">1</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="ABGroupLabel">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Group: </property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">1</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">1</property>
+	  <property name="bottom_attach">2</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkCombo" id="ABGroupCombo">
+	  <property name="visible">True</property>
+	  <property name="value_in_list">False</property>
+	  <property name="allow_empty">True</property>
+	  <property name="case_sensitive">False</property>
+	  <property name="enable_arrow_keys">True</property>
+	  <property name="enable_arrows_always">False</property>
+
+	  <child internal-child="entry">
+	    <widget class="GtkEntry" id="ABGroupComboEntry">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="editable">True</property>
+	      <property name="visibility">True</property>
+	      <property name="max_length">0</property>
+	      <property name="text" translatable="yes"></property>
+	      <property name="has_frame">True</property>
+	      <property name="invisible_char" translatable="yes">*</property>
+	      <property name="activates_default">False</property>
+	    </widget>
+	  </child>
+
+	  <child internal-child="list">
+	    <widget class="GtkList" id="combo-list13">
+	      <property name="visible">True</property>
+	      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+
+	      <child>
+		<widget class="GtkListItem" id="listitem5633">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">RaceAbilities</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="listitem5634">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">BasicNPCAbilities</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="listitem5635">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">BasicExtraPCAbilities</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="listitem5636">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">ExtendedNPCAbilities</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="listitem5637">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">ExtendedExtraPCAbilities</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="listitem5638">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">EquipmentAbilities</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="listitem5639">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">MagicAbilities</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="listitem5640">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">WeaponAbilities</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="listitem5641">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">ArmourAbilities</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="listitem5642">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">MiscAbilities</property>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="left_attach">1</property>
+	  <property name="right_attach">2</property>
+	  <property name="top_attach">1</property>
+	  <property name="bottom_attach">2</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="ABTypeLabel">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Type: </property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">3</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">2</property>
+	  <property name="bottom_attach">3</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkCombo" id="ABTypeCombo">
+	  <property name="visible">True</property>
+	  <property name="value_in_list">False</property>
+	  <property name="allow_empty">True</property>
+	  <property name="case_sensitive">False</property>
+	  <property name="enable_arrow_keys">True</property>
+	  <property name="enable_arrows_always">False</property>
+
+	  <child internal-child="entry">
+	    <widget class="GtkEntry" id="ABTypeComboEntry">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="editable">False</property>
+	      <property name="visibility">True</property>
+	      <property name="max_length">0</property>
+	      <property name="text" translatable="yes"></property>
+	      <property name="has_frame">True</property>
+	      <property name="invisible_char" translatable="yes">*</property>
+	      <property name="activates_default">False</property>
+	    </widget>
+	  </child>
+
+	  <child internal-child="list">
+	    <widget class="GtkList" id="combo-list14">
+	      <property name="visible">True</property>
+	      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+
+	      <child>
+		<widget class="GtkListItem" id="BooleanListitem">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Boolean</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="IntegerListitem">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">Integer</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="StringListitem">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">String</property>
+		</widget>
+	      </child>
+
+	      <child>
+		<widget class="GtkListItem" id="StrSelektListitem">
+		  <property name="visible">True</property>
+		  <property name="can_focus">True</property>
+		  <property name="label" translatable="yes">String-Selektion</property>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="left_attach">1</property>
+	  <property name="right_attach">2</property>
+	  <property name="top_attach">2</property>
+	  <property name="bottom_attach">3</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="ABMinimumValueLabel">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Minimum Value: </property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">3</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">3</property>
+	  <property name="bottom_attach">4</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkSpinButton" id="ABMinimumValueSpinbutton">
+	  <property name="visible">True</property>
+	  <property name="can_focus">True</property>
+	  <property name="climb_rate">1</property>
+	  <property name="digits">0</property>
+	  <property name="numeric">False</property>
+	  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+	  <property name="snap_to_ticks">False</property>
+	  <property name="wrap">False</property>
+	  <property name="adjustment">1 0 1e+06 1 10 10</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">1</property>
+	  <property name="right_attach">2</property>
+	  <property name="top_attach">3</property>
+	  <property name="bottom_attach">4</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="ABMaximumValueLabel">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Maximum Value: </property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">3</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">4</property>
+	  <property name="bottom_attach">5</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkSpinButton" id="ABMaximumSpinbutton">
+	  <property name="visible">True</property>
+	  <property name="can_focus">True</property>
+	  <property name="climb_rate">1</property>
+	  <property name="digits">0</property>
+	  <property name="numeric">False</property>
+	  <property name="update_policy">GTK_UPDATE_ALWAYS</property>
+	  <property name="snap_to_ticks">False</property>
+	  <property name="wrap">False</property>
+	  <property name="adjustment">10 0 1e+06 1 10 10</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">1</property>
+	  <property name="right_attach">2</property>
+	  <property name="top_attach">4</property>
+	  <property name="bottom_attach">5</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="ABStringsLabel">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Selektion Strings: </property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">3</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">5</property>
+	  <property name="bottom_attach">6</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkCombo" id="ABStringsCombo">
+	  <property name="visible">True</property>
+	  <property name="value_in_list">False</property>
+	  <property name="allow_empty">True</property>
+	  <property name="case_sensitive">False</property>
+	  <property name="enable_arrow_keys">True</property>
+	  <property name="enable_arrows_always">False</property>
+
+	  <child internal-child="entry">
+	    <widget class="GtkEntry" id="ABStringsComboEntry">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="editable">True</property>
+	      <property name="visibility">True</property>
+	      <property name="max_length">0</property>
+	      <property name="text" translatable="yes"></property>
+	      <property name="has_frame">True</property>
+	      <property name="invisible_char" translatable="yes">*</property>
+	      <property name="activates_default">False</property>
+	    </widget>
+	  </child>
+
+	  <child internal-child="list">
+	    <widget class="GtkList" id="combo-list15">
+	      <property name="visible">True</property>
+	      <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="left_attach">1</property>
+	  <property name="right_attach">2</property>
+	  <property name="top_attach">5</property>
+	  <property name="bottom_attach">6</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="ABStringsEditableLabel">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Strings Editable: </property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">False</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">3</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">6</property>
+	  <property name="bottom_attach">7</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkCheckButton" id="StringsEditableCheckbutton">
+	  <property name="visible">True</property>
+	  <property name="can_focus">True</property>
+	  <property name="label" translatable="yes"></property>
+	  <property name="use_underline">True</property>
+	  <property name="relief">GTK_RELIEF_NORMAL</property>
+	  <property name="active">True</property>
+	  <property name="inconsistent">False</property>
+	  <property name="draw_indicator">True</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">1</property>
+	  <property name="right_attach">2</property>
+	  <property name="top_attach">6</property>
+	  <property name="bottom_attach">7</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkScrolledWindow" id="ABDescriptionScrolledwindow">
+	  <property name="visible">True</property>
+	  <property name="can_focus">True</property>
+	  <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
+	  <property name="vscrollbar_policy">GTK_POLICY_ALWAYS</property>
+	  <property name="shadow_type">GTK_SHADOW_IN</property>
+	  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
+
+	  <child>
+	    <widget class="GtkTextView" id="ABDescriptionTextview4">
+	      <property name="visible">True</property>
+	      <property name="can_focus">True</property>
+	      <property name="editable">True</property>
+	      <property name="justification">GTK_JUSTIFY_LEFT</property>
+	      <property name="wrap_mode">GTK_WRAP_NONE</property>
+	      <property name="cursor_visible">True</property>
+	      <property name="pixels_above_lines">0</property>
+	      <property name="pixels_below_lines">0</property>
+	      <property name="pixels_inside_wrap">0</property>
+	      <property name="left_margin">0</property>
+	      <property name="right_margin">0</property>
+	      <property name="indent">0</property>
+	      <property name="text" translatable="yes"></property>
+	    </widget>
+	  </child>
+	</widget>
+	<packing>
+	  <property name="left_attach">1</property>
+	  <property name="right_attach">2</property>
+	  <property name="top_attach">7</property>
+	  <property name="bottom_attach">8</property>
+	</packing>
+      </child>
+
+      <child>
+	<widget class="GtkLabel" id="ABDescriptionLabel">
+	  <property name="visible">True</property>
+	  <property name="label" translatable="yes">Description: </property>
+	  <property name="use_underline">False</property>
+	  <property name="use_markup">False</property>
+	  <property name="justify">GTK_JUSTIFY_LEFT</property>
+	  <property name="wrap">True</property>
+	  <property name="selectable">False</property>
+	  <property name="xalign">0</property>
+	  <property name="yalign">0.5</property>
+	  <property name="xpad">3</property>
+	  <property name="ypad">0</property>
+	</widget>
+	<packing>
+	  <property name="left_attach">0</property>
+	  <property name="right_attach">1</property>
+	  <property name="top_attach">7</property>
+	  <property name="bottom_attach">8</property>
+	  <property name="x_options">fill</property>
+	  <property name="y_options"></property>
+	</packing>
+      </child>
+    </widget>
+  </child>
+</widget>
+
+</glade-interface>
