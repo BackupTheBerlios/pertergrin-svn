@@ -198,9 +198,9 @@ GtkWidget *mapedit_create_new(gchar *widget_name, gchar *string1,
     mapedarg[0].type = MAPEDIT_MapPieces;
     GTK_VALUE_POINTER(mapedarg[0]) = mMapPieces;
     mapedarg[1].type = MAPEDIT_PWidth;
-    GTK_VALUE_UINT(mapedarg[1]) = 36;
+    GTK_VALUE_UINT(mapedarg[1]) = 37;
     mapedarg[2].type = MAPEDIT_PLength;
-    GTK_VALUE_UINT(mapedarg[2]) = 12;
+    GTK_VALUE_UINT(mapedarg[2]) = 13;
     mapedarg[3].type = MAPEDIT_Default;
     GTK_VALUE_POINTER(mapedarg[3]) = &mDefault;
     mapedarg[4].type = MAPEDIT_MapWidth;
@@ -280,7 +280,7 @@ void InitSelectGroup (struct MCMap *SelectGroup, gint start)
     for(i=0;i<SELYSIZE;i++)
     {
         SelectGroup->mm_Rows = g_malloc0(sizeof(struct MapPiece)*SELXSIZE);
-#if DEBUGLEV > 2
+#if DEBUGLEV > 5
 	errormsg(MAPDEBUG3,"InitSelectGroup: i=%d, SelectGroup->mm_Rows=%x",i,
 		 SelectGroup->mm_Rows);
 #endif
@@ -294,12 +294,12 @@ void InitSelectGroup (struct MCMap *SelectGroup, gint start)
 
         for(j=0;j<SELXSIZE;j++)
         {
-#if DEBUGLEV > 4
-	    errormsg(MAPDEBUG5,"InitSelectGroup: j=%d",j);
+#if DEBUGLEV > 5
+	    errormsg(MAPDEBUG6,"InitSelectGroup: j=%d",j);
 #endif
-            SelectGroup->mm_Rows[j].mp_Coordinates.x = j * 36;
-            SelectGroup->mm_Rows[j].mp_Coordinates.y = i * 12;
-            SelectGroup->mm_Rows[j].mp_Coordinates.l = 0;
+            SelectGroup->mm_Rows[j].mp_Coordinates.x = j * 37;
+            SelectGroup->mm_Rows[j].mp_Coordinates.y = i * 13;
+            SelectGroup->mm_Rows[j].mp_Coordinates.l = 1;
             SelectGroup->mm_Rows[j].mp_PixbufNumber = start+i*SELYSIZE+j;
             SelectGroup->mm_Rows[j].mp_Size = sizeof(struct MapPiece);
         }
