@@ -17,7 +17,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <mikmod.h> // only included for types, to lazy to extract them ;-)
 
 #include <glib.h>
 #include <gtk/gtkmain.h>
@@ -162,7 +161,7 @@ void errormsg(short type, char *errmsg, ...)
 /*
 ** MakeMap  - Allocates a new map and optionally makes a copy of another map
 **
-** UBYTE mkcopy        - If set, makes a copy of smap (and optionally its layers)
+** guchar mkcopy        - If set, makes a copy of smap (and optionally its layers)
 **                       when creating a new dmap.
 ** struct MCMap *dmap  - the map to be created.
 ** MD           *md    - pointer to object instance data.
@@ -170,11 +169,11 @@ void errormsg(short type, char *errmsg, ...)
 **
 ** Returns: TRUE on success, FALSE otherwise
 */
-static BOOL MakeMap(UBYTE mkcopy, struct MCMap *dmap, MD *md, 
+static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md, 
 		    struct MCMap *smap)
 {
-    UBYTE lnum = 0;
-    ULONG i,j;
+    guchar lnum = 0;
+    gulong i,j;
     errormsg(MAPDEBUG1,"MakeMap start");
 
 #if DEBUGLEV > 1
@@ -190,7 +189,7 @@ static BOOL MakeMap(UBYTE mkcopy, struct MCMap *dmap, MD *md,
 #if DEBUGLEV > 5
 	errormsg(MAPDEBUG6,"MakeMap: Allocating mm_Columns");
 #endif
-        dmap->mm_Columns = g_new0(ULONG,md->md_Map->mm_MapSize.y);
+        dmap->mm_Columns = g_new0(gulong,md->md_Map->mm_MapSize.y);
 #if DEBUGLEV > 2
 	errormsg(MAPDEBUG3,"MakeMap: dmap=%x, md=%x, smap=%x",dmap,md,smap);
 #endif
@@ -215,7 +214,7 @@ static BOOL MakeMap(UBYTE mkcopy, struct MCMap *dmap, MD *md,
                 if (dmap->mm_Rows)
                 {
                     // Store allocated row in current column
-                    dmap->mm_Columns[i] = (ULONG)dmap->mm_Rows;
+                    dmap->mm_Columns[i] = (gulong)dmap->mm_Rows;
                     for (j=0; j< md->md_Map->mm_MapSize.x;j++) // Finally put MapPieces in rows
                     {
                         dmap->mm_Rows[j].mp_Coordinates.x = j * md->md_PWidth;
@@ -359,7 +358,7 @@ static BOOL MakeMap(UBYTE mkcopy, struct MCMap *dmap, MD *md,
 */
 static BOOL RemoveMap( struct MCMap *amap, MD *md)
 {
-    UBYTE lnum = 0;
+    guchar lnum = 0;
     errormsg(MAPDEBUG1,"RemoveMap start");
 #if DEBUGLEV > 1
     errormsg(MAPDEBUG2,"RemoveMap: amap=%x, md=%x", amap, md);
@@ -445,7 +444,7 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args)
     MD              *md =  gtk_type_new GTK_TYPE_MAPEDIT;
     GdkPixbuf       *bm;
     struct MCMap    *amap=NULL;
-    ULONG           arg,i, mapx=0, mapy=0, mapl = 0;
+    gulong           arg,i, mapx=0, mapy=0, mapl = 0;
     BOOL            mkcopy = FALSE;
 
     errormsg(MAPDEBUG1,"MapEditClassNew: Creating New Widget");
@@ -634,7 +633,7 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args)
 #endif
 	    if (md->md_Map)
 	    {
-	        UWORD wtn, htn;
+	        guint wtn, htn;
 		BOOL ret=FALSE;
 
 		// Calculate pixbuf coordinates
@@ -692,7 +691,7 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args)
 		    {
 		        do // Iterate through all layers
 			{
-			    ULONG i,j;
+			    gulong i,j;
 			    for (i=0; i< md->md_Map->mm_MapSize.y;i++) // All columns have to be filled
 			    {
 			        amap->mm_Rows = (void *) amap->mm_Columns[i];
@@ -777,7 +776,7 @@ static void MapEditClassDispose( GtkObject *obj )
 static void MapEditClassGet( GtkObject *obj, GtkArg *arg, guint arg_id )
 {
     MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( obj );
-    ULONG       i;
+    gulong       i;
     struct MCMap *amap=NULL;
 
     /*
@@ -936,7 +935,7 @@ static void MapEditClassSizeReq (GtkWidget *widget,
 				 GtkRequisition *requisition)
 {
     MD *md;
-    ULONG width=0, height=0, w=0, h=0;
+    gulong width=0, height=0, w=0, h=0;
 
     errormsg(MAPDEBUG1,"MapEditClassSizeReq entered");
 
@@ -975,9 +974,9 @@ static void MapEditClassSizeReq (GtkWidget *widget,
 **/
 static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
 {
-    UWORD       colsize, rowsize;
-    UWORD       left, top, xpos, ypos, selx, sely; //, color=0;
-    ULONG       cx, cy, i, j, fw = 0, fh = 0, ysize;
+    guint       colsize, rowsize;
+    guint       left, top, xpos, ypos, selx, sely; //, color=0;
+    gulong       cx, cy, i, j, fw = 0, fh = 0, ysize;
     /* char zeile[256]; */
     GdkPixbuf *tmppb; /* temporary Pixbuf for scaling */
     static struct MCMap *amap = NULL;
@@ -1225,7 +1224,7 @@ static void NotifyAttrChange( GtkObject *obj, char *value )
 static gint MapEditClassRender( GtkWidget *widget, GdkEventExpose *event )
 {
     MD              *md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
-    //ULONG           fw = 0, fh = 0;
+    //gulong           fw = 0, fh = 0;
 
     g_return_val_if_fail (widget != NULL, FALSE);
     g_return_val_if_fail (GTK_IS_MAPEDIT (widget), FALSE);
@@ -1252,7 +1251,7 @@ static gint MapEditClassRender( GtkWidget *widget, GdkEventExpose *event )
 /*
 **  Draw a piece with the currently selected map piece.
 **/
-static ULONG DrawPiece( MD *md, GtkAllocation *area, COORD newpiece)
+static gulong DrawPiece( MD *md, GtkAllocation *area, COORD newpiece)
 {
     COORD ppos, len;
     struct MCMap *amap = md->md_Map;
@@ -1307,11 +1306,11 @@ static ULONG DrawPiece( MD *md, GtkAllocation *area, COORD newpiece)
 /*
 **  Draw a piece with the currently selected map piece.
 **/
-static ULONG DrawTFrame( MD *md, COORD newpiece, BOOL state)
+static gulong DrawTFrame( MD *md, COORD newpiece, BOOL state)
 {
     COORD ppos, len;
     static COORD opos;
-    ULONG fw, fh;
+    gulong fw, fh;
 
     if (!md->md_Frame)
         return(MAPERR_NoFrame);
@@ -1432,7 +1431,7 @@ static void MapEditClassSet( GtkObject *obj, GtkArg *arg, guint arg_id )
 	** Changes the color of the grid
 	*/
 	{
-	  UBYTE nGridPen;
+	  guchar nGridPen;
 
 	  if ( (nGridPen=GTK_VALUE_UCHAR(*arg)) != md->md_GridPen ) 
 	  {
@@ -1490,7 +1489,7 @@ static void MapEditClassSet( GtkObject *obj, GtkArg *arg, guint arg_id )
 	** Selected X pos changed?
 	*/
 	{
-	  UWORD nSelectX;
+	  guint nSelectX;
 
 	  if (!amap) return; //( rc | MAPERR_NoMap );
 
@@ -1513,7 +1512,7 @@ static void MapEditClassSet( GtkObject *obj, GtkArg *arg, guint arg_id )
 	** Selected Y pos changed?
 	*/
 	{
-	  UWORD nSelectY;
+	  guint nSelectY;
 
 	  if (!amap) return;//( rc | MAPERR_NoMap );
 	  if ( (nSelectY=GTK_VALUE_UINT(*arg)) != md->md_Select.y )
@@ -1534,7 +1533,7 @@ static void MapEditClassSet( GtkObject *obj, GtkArg *arg, guint arg_id )
 	** Selected Layer changed?
 	*/
 	{
-	  UBYTE nSelectL;
+	  guchar nSelectL;
 	  if (!amap) return;//( rc | MAPERR_NoMap );
 
 	  if ( (nSelectL=GTK_VALUE_UCHAR(*arg)) != md->md_Select.l) 
@@ -1560,7 +1559,7 @@ static gint MapEditClassGoActive( GtkWidget *widget, GdkEventButton *event )
 {
     MD          *md;
     gint         l, t;
-    UWORD        w, h;
+    guint        w, h;
     COORD        newpiece;
     static BOOL oldtoggle = FALSE;
 
@@ -1616,7 +1615,7 @@ static gint MapEditClassGoActive( GtkWidget *widget, GdkEventButton *event )
 		*/
 		if (md->md_GetPieces == TRUE)
 		{
-		    ULONG fret = 0;
+		    gulong fret = 0;
 		    DrawTFrame( md, newpiece, TRUE );
 		    if (oldtoggle)
 		    {
@@ -1689,7 +1688,7 @@ static gint MapEditClassGoActive( GtkWidget *widget, GdkEventButton *event )
 		          (md->md_Map->mm_MapSize.y*md->md_PLength) )
 		{
 		    COORD len;
-		    ULONG fw, fh;
+		    gulong fw, fh;
 		    //DoMethod( md->md_Frame, OM_GET, FRM_FrameWidth,  &fw );
 		    //DoMethod( md->md_Frame, OM_GET, FRM_FrameHeight, &fh );
 		    fw = md->child->style->klass->xthickness;
@@ -1830,11 +1829,11 @@ static gint MapEditClassGoInactive( GtkWidget *widget, GdkEventButton *event)
 ** Get map piece number from Map position
 ** Do not forget to test if we are out of range
 */
-static ULONG GetXYPiece( GtkObject *obj, struct mapSelect * msl )
+static gulong GetXYPiece( GtkObject *obj, struct mapSelect * msl )
 {
     MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( obj );
     struct MCMap *amap = md->md_Map;
-    ULONG t;
+    gulong t;
 
     if (!amap) return MAPERR_NoMap;
     if (msl->LayerNum && !md->md_Map->mm_MapSize.l)
@@ -1860,7 +1859,7 @@ static ULONG GetXYPiece( GtkObject *obj, struct mapSelect * msl )
     if (msl->Xpos > md->md_Map->mm_MapSize.x || msl->Ypos > md->md_Map->mm_MapSize.y)
         return MAPERR_OutOfBounds;
     amap->mm_Rows = (void *) amap->mm_Columns[msl->Ypos];
-    t= (ULONG) amap->mm_Rows + amap->mm_Rows->mp_Size * msl->Xpos;
+    t= (gulong) amap->mm_Rows + amap->mm_Rows->mp_Size * msl->Xpos;
     amap->mm_Rows = (struct MapPiece *)t;
     msl->PieceNum = amap->mm_Rows;
     return MAPERR_Ok;
@@ -1874,7 +1873,7 @@ static void ClearMap( GtkObject *obj )
 {
     MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( obj );
     struct MCMap *dmap = md->md_Map;
-    ULONG i,j;
+    gulong i,j;
 
     if (!dmap) return;
     do
@@ -1899,7 +1898,7 @@ static void ClearMap( GtkObject *obj )
 ** Set map piece number to Map position
 ** Do not forget to test if we are out of range
 */
-static ULONG SetMapPiece( GtkObject *obj, struct mapSelect * msl )
+static gulong SetMapPiece( GtkObject *obj, struct mapSelect * msl )
 {
     MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( obj );
     struct MCMap *amap = md->md_Map;
@@ -1940,11 +1939,11 @@ static ULONG SetMapPiece( GtkObject *obj, struct mapSelect * msl )
 ** Fill map section with one map piece
 ** Do not forget to test if we are or get out of range (partial fill)
 */
-static ULONG FillMap( GtkWidget *widget, struct mapSection * mst )
+static gulong FillMap( GtkWidget *widget, struct mapSection * mst )
 {
     MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
     struct MCMap *amap = md->md_Map;
-    ULONG i,j, sw, sl;
+    gulong i,j, sw, sl;
 
     if (!amap) return MAPERR_NoMap;
     if (mst->LayerNum && !md->md_Map->mm_MapSize.l)
