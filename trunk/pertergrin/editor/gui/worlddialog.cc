@@ -29,8 +29,8 @@
 
 // Empty default constructor
 PTGWorldDialog::PTGWorldDialog(BaseObjectType* pObject, 
-                               const Glib::RefPtr<Gnome::Glade::Xml>& oRefGlade)
-  : moRefGlade( oRefGlade), Gtk::Dialog(pObject)
+                               const Glib::RefPtr<Gnome::Glade::Xml>& opRefGlade)
+  : Gtk::Dialog(pObject), mopRefGlade( opRefGlade)
 {
   // Sets the border width of the window.
   set_border_width(2);
@@ -38,20 +38,30 @@ PTGWorldDialog::PTGWorldDialog(BaseObjectType* pObject,
   // Set new parent widget to this window
   //moRefGlade->reparent_widget("EditWorldTable", *this);
 
-  mopVariablesMap = new Gnome::Glade::VariablesMap(moRefGlade);
+  mopVariablesMap = new Gnome::Glade::VariablesMap(mopRefGlade);
   // Connect values of widgets to members
   //mopVariablesMap->connect_widget("entry", mStrEntry);
   //mopVariablesMap->connect_widget("checkbox", mbCheckBox);
+
+  // Get all input widgets from Libglade generated dialog
+  mopRefGlade->get_widget("WorldNameEntry",mpoWorldName);
+  mopRefGlade->get_widget("WorldStartDateEntry",mpoWorldStartDate);
+  mopRefGlade->get_widget("WorldXSizeSpinbutton",mpoWorldXSize);
+  mopRefGlade->get_widget("WorldYSizeSpinbutton",mpoWorldYSize);
+  mopRefGlade->get_widget("WorldXSizeRegionSpinbutton",mpoWorldXSizeRegion);
+  mopRefGlade->get_widget("WorldYSizeRegionSpinbutton",mpoWorldYSizeRegion);
+  mopRefGlade->get_widget("WorldTypeCombo",mpoWorldType);
+  mopRefGlade->get_widget("WorldDescriptionTextview",mpoWorldDescription);
 
   // Connect complex widgets to the dialog read method
   //Object_Connect( "complex_object", on_complex_object );
 
   // Slots for Ok/Cancel
   Gtk::Button* pButton = 0;
-  moRefGlade->get_widget("WorldDialogOkButton",pButton);
+  mopRefGlade->get_widget("WorldDialogOkButton",pButton);
   if( pButton )
     Button_Connect( pButton, on_dialog_ok );
-  moRefGlade->get_widget("WorldDialogCancelButton",pButton);
+  mopRefGlade->get_widget("WorldDialogCancelButton",pButton);
   if( pButton )
     Button_Connect( pButton, on_dialog_cancel );
 
@@ -68,12 +78,50 @@ PTGWorldDialog::~PTGWorldDialog()
 {
 }
 
-void PTGWorldDialog::getOptions()
+// Read all the options from the world dialog
+// Output parameter:
+// oWorldData  -  World Options read from the world dialog
+void PTGWorldDialog::getOptions(pworld_t &oWorldData)
 {
+  if( mpoWorldName )
+    oWorldData.oName = mpoWorldName->get_text();
+  if( mpoWorldDescription )
+    oWorldData.oDescription = mpoWorldDescription->get_buffer()->get_text();
+  if( mpoWorldType )
+    oWorldData.oWorldType = mpoWorldType->get_entry()->get_text();
+  if( mpoWorldStartDate )
+    oWorldData.oStartDate = mpoWorldStartDate->get_text();
+  if( mpoWorldXSize )
+	oWorldData.iXSize = mpoWorldXSize->get_value_as_int();
+  if( mpoWorldYSize )
+	oWorldData.iYSize = mpoWorldYSize->get_value_as_int();
+  if( mpoWorldXSizeRegion )
+	oWorldData.iRegionXSize = mpoWorldXSizeRegion->get_value_as_int();
+  if( mpoWorldYSizeRegion )
+	oWorldData.iRegionYSize = mpoWorldYSizeRegion->get_value_as_int();
 }
 
-void PTGWorldDialog::setOptions()
+// Set all options to the world dialog
+// Input parameters:
+// oWorldData  -  World options to be shown in the world dialog
+void PTGWorldDialog::setOptions(pworld_t oWorldData)
 {
+  if( mpoWorldName )
+    mpoWorldName->set_text( oWorldData.oName );
+  if( mpoWorldDescription )
+    mpoWorldDescription->get_buffer()->set_text( oWorldData.oDescription );
+  if( mpoWorldType )
+    mpoWorldType->get_entry()->set_text( oWorldData.oWorldType );
+  if( mpoWorldStartDate )
+    mpoWorldStartDate->set_text( oWorldData.oStartDate );
+  if( mpoWorldXSize )
+	mpoWorldXSize->set_value( oWorldData.iXSize );
+  if( mpoWorldYSize )
+	mpoWorldYSize->set_value( oWorldData.iYSize );
+  if( mpoWorldXSizeRegion )
+	mpoWorldXSizeRegion->set_value( oWorldData.iRegionXSize );
+  if( mpoWorldYSizeRegion )
+	mpoWorldYSizeRegion->set_value( oWorldData.iRegionYSize );
 }
 
 void PTGWorldDialog::on_dialog_ok()

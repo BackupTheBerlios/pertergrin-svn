@@ -25,6 +25,7 @@
 #include <libglademm.h>
 #include <libglademm/variablesmap.h>
 #include <gtkmm.h>
+#include "world.h"
 
 // defines
 
@@ -35,7 +36,7 @@ class PTGWorldDialog : public Gtk::Dialog
 
 public:
   PTGWorldDialog(BaseObjectType* cobject, 
-                 const Glib::RefPtr<Gnome::Glade::Xml>& oRefGlade);
+                 const Glib::RefPtr<Gnome::Glade::Xml>& opRefGlade);
   virtual ~PTGWorldDialog();
 
   // Slot which reacts on Ok / Cancel pressed
@@ -43,13 +44,22 @@ public:
   void on_dialog_cancel();
 
   // fetch values being set by the user in the dialog
-  void getOptions();
+  void getOptions(pworld_t &oWorldData);
   // set the default values for the dialog
-  void setOptions();
+  void setOptions(pworld_t oWorldData);
 
 protected:
-  Glib::RefPtr<Gnome::Glade::Xml> moRefGlade;
+  Glib::RefPtr<Gnome::Glade::Xml> mopRefGlade;
   Gnome::Glade::VariablesMap* mopVariablesMap;
+
+  Gtk::Entry *mpoWorldName;
+  Gtk::Entry *mpoWorldStartDate;
+  Gtk::SpinButton *mpoWorldXSize;
+  Gtk::SpinButton *mpoWorldYSize;
+  Gtk::SpinButton *mpoWorldXSizeRegion;
+  Gtk::SpinButton *mpoWorldYSizeRegion;
+  Gtk::Combo *mpoWorldType;
+  Gtk::TextView *mpoWorldDescription;  
 };
 
 #endif // PGTWORLDDIALOG_H
