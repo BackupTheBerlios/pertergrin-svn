@@ -19,7 +19,7 @@
 #include "app.h"
 
 // Empty default constructor
-PtgApp::PtgApp()
+PtgApp::PtgApp() : mpoWorld( 0 )
 {
 }
 
@@ -28,9 +28,16 @@ PtgApp::PtgApp()
 // sWorldData  -  Definition of the world
 void PtgApp::createWorld(pworld_t sWorldData)
 {
-  auto_ptr<PtgWorld> poWorld(new PtgWorld(sWorldData.iXSize, sWorldData.iYSize, 
-                                          sWorldData.oName, sWorldData.iWidth, 
-                                          sWorldData.iHeight));
+  // Have we already created a world ?
+  if( mpoWorld.get() != 0 )
+    mpoWorld.reset();
+  
+  auto_ptr<PtgWorld> poWorld(new PtgWorld(sWorldData.iXSize, 
+                                          sWorldData.iYSize, 
+                                          sWorldData.oName,
+                                          sWorldData.iTileWidth, 
+                                          sWorldData.iTileHeight)
+	                        );
 
   // Transfer Pointer
   mpoWorld = poWorld;
@@ -42,8 +49,8 @@ void PtgApp::createWorld(pworld_t sWorldData)
 
 // Gets the world
 // Return parameter:
-// Instance of the world
-auto_ptr<PtgWorld> &PtgApp::getWorld()
+// Instance of the world (const, so it cannot be destroyed accidently)
+const auto_ptr<PtgWorld> &PtgApp::getWorld()
 {
   return mpoWorld;
 }
