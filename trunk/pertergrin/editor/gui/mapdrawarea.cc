@@ -34,7 +34,6 @@ CWMapDrawArea::CWMapDrawArea(Glib::RefPtr<Gdk::Pixbuf> &opTileset,
 {
   // First pixbuf
   mopTilesets[0] = opTileset;
-  //moTempTile = (cwtpos_t)moDefaultTile;
 }
 
 /// Set the complete map
@@ -70,6 +69,11 @@ void CWMapDrawArea::setMap(cwtmap_t &oTilesMap, int iXSize, int iYSize)
     moTilesMap.vecoRows.reserve(iYSize);
   }  
   moTilesMap = oTilesMap;
+}
+
+void CWMapDrawArea::changeMap(int iWidth, int iHeight, int iXPos, int iYPos)
+{
+  changeMap( iWidth, iHeight, iXPos, iYPos, moDefaultTile );
 }
 
 /// Changes a part map
@@ -118,7 +122,7 @@ void CWMapDrawArea::addTileset(Glib::RefPtr<Gdk::Pixbuf> &opTileset, int iPos)
 void CWMapDrawArea::removeTileset(Glib::RefPtr<Gdk::Pixbuf> &opTileset, 
                                   int iPos)
 {
-  //mopTilesets.erase(iPos);
+  mopTilesets.erase(mopTilesets.begin()+iPos);
 }
   
 void CWMapDrawArea::clearTilesets()
