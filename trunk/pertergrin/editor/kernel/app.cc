@@ -35,8 +35,11 @@ void PtgApp::createWorld(pworld_t sWorldData)
   auto_ptr<PtgWorld> poWorld(new PtgWorld(sWorldData.iXSize, 
                                           sWorldData.iYSize, 
                                           sWorldData.oName,
-                                          sWorldData.iTileWidth, 
-                                          sWorldData.iTileHeight)
+					  sWorldData.oWorldType,
+                                          sWorldData.iTileWidth,
+                                          sWorldData.iTileHeight,
+					  sWorldData.iRegionXSize,
+					  sWorldData.iRegionYSize)
 	                        );
 
   // Transfer Pointer
