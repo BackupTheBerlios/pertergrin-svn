@@ -1,5 +1,5 @@
-#LyX 1.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 218
+#LyX 1.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 220
 \textclass scrartcl
 \begin_preamble
 %\usepackage{a4wide}
@@ -19,6 +19,8 @@
 \paperpackage a4
 \use_geometry 0
 \use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
 \paperorientation portrait
 \secnumdepth 2
 \tocdepth 2
@@ -85,6 +87,16 @@ Even though every map has a fixed size it still possible to make it larger.
  left upper edge.
 \layout Standard
 
+As the Pertergrin Editor can be used for other RPGs as well it is possible
+ to select a RPG type.
+ The default one is of course Pertergrin which should ideally support all
+ features the editor offers.
+ Some other RPGs like FreeDroidRPG does only support a subset of features.
+ When you select it you cannot use certain features.
+ Also it is not possible to change the RPG type after you have created the
+ world.
+\layout Standard
+
 The world consists of different types of landscapes.
  Additionally you can create borders for differen countries.
  The Pertergrin world is actually only one country of several in this world.
@@ -97,14 +109,47 @@ The world consists of different types of landscapes.
  grassland, jungles, steppes, roads, towns, dungeons, castles, ...
 \layout Standard
 
-For every landscape part you can define several parameters.
+As the world view is only a zoomed view of the landscape you have to define
+ the size of a world section as well.
+ This defines the maximum size for a town as well and can only be defined
+ once.
+ You can easily have a huge map by having a large world map and large landscape
+ parts, so it is recommanded to avoid to large values.
+ If you have choosen a to small value and don't want to throw away your
+ work later, that is not a problem, you can make town parts of a huge town
+ named Holom (like North-Holom, South-Holom etc.).
+ The dungeons don't have this restriction for magical reason (houses are
+ inside often larger than they look from the outside and dungeons are undergroun
+d so they are not connected directly to the landscape size; still it useful
+ to avoid overlapping here).
+ 
+\layout Standard
+
+You have three possibilities to create a town: First you can set it directly
+ in the world, so the town is not explizitely marked as a town.
+ Second you can define a town and place it in a world section.
+ Third you can set a dungeon and place your town inside the dungeon.
+ This has the disadvantage that it is not marked as a town but as a dungeon.
+ Currently it is not possible to edit world section directly mainly because
+ I want to avoid mixing the concept of a large landscape view (all the details
+ can be seen in the world editor) and a small landscape view (details are
+ hidden in town and dungeon editor).
+ Of course you can also define a town as a landscape or dungeon so you can
+ still make a very detailed game when using the small landscape view.
+ The Pertergrin game uses the small landscape view concept for that reason.
+\layout Standard
+
+For every part of the landscape you can define several parameters.
  You can define if there is a NPC encounter on this part, if this part is
  a town, dungeon (which means that it can be entered).
  You have to create a town or dungeon before you can add it to the world.
  You can also define exits for this part (default: all 8 exits are possible).
- The game takes itself care of mountain/sea etc.
- exits where a character has to swim or to climb.
+ You can also taje care of mountain/sea etc.
+ exits where a character has to swim or to climb using an attribute and
+ its minimum value for using the exit.
  You can also define special exits leading to another part of the world.
+ You can also edit the basic characteristics of a town or dungeon here (name,
+ description).
 \layout Standard
 
 When you create a new landscape part you have to define the height, if it
@@ -112,8 +157,8 @@ When you create a new landscape part you have to define the height, if it
  it (for example for high mountains you need the climbing ability and correspond
 ing tools for crossing it).
  You can also define the default available exits.
- For your new part you have to define a name and a piece number which can
- be selected by using the graphic tile list.
+ For your new part you have to define a name and a graphic tile to be selected
+ by using the graphic tile list.
  Finally you can select if there is a random NPC encounter by default (often
  yielding to a fight, not recommanded) and the list of NPCs which are used
  for the random encounters.
@@ -139,7 +184,7 @@ Every adventure usually starts in a town.
 \layout Standard
 
 Editing towns, dungeons and the world should be quite easy.
- You simply selecta map piece from the selection window which gets marked
+ You simply select a map piece from the selection window which gets marked
  and then you can start drawing with the selected map piece.
  Double clicking on a part of the map enables you to edit the attributes
  of this part while double clicking on a map piece in the selection enables
@@ -154,16 +199,26 @@ The town consists of buildings, roads, rivers, gardens and other objects.
  leave the town and explore the world.
  It is possible to create special exits which only open if something special
  has happened (like the player has reached a level or solved an adventure).
- A part of the can also have an item or a NPC.
- It is not recommanded to leave around a huge pile of pleron coins or dragons
- in front of the guild which eat every new party.
+ A part of the town can also have an item or a NPC.
+ It is NOT recommanded to leave around a huge pile of pleron coins or dragons
+ in front of the guild eating every newly created party :-).
+\layout Standard
+
+Every entrance to a dungeon is marked as an exit which can be used inside
+ the dungeon to go back to the town.
+ To be able to connect to a dungeon you need to create either a entrance
+ to the town or create an exit item from the dungeon (see below).
+ Contrary the connection from the world to the town is done from one of
+ the exits at the border of the town.
+ This way it you can easily prevent entering a town from one side or prevent
+ entering it at all if you wish to make it difficult to reach.
 \layout Standard
 
 The buildings of towns can be either standard (either empty or inhabited)
- or special (like shops).
+ or special (like shops, smith, bank, guild, pub, hotel, temple).
  Special buildings can be either part of an adventure or have another function
  which can be edited by you.
- (ToDo: Closer description of defining special buildings, ideas: buidling
+ (ToDo: Closer description of defining special buildings, ideas: building
  inventory, building actions).
  Exits of buildings have to be defined here as well (default: no exits!)
  as most buildings have only one exit.
@@ -183,10 +238,37 @@ Currently towns are only 2 dimensional (as opposed to dungeons).
 \layout Standard
 
 (Good Idea?? You can define to create a random town where you define only
- which special building appear in the town, and NPC, item lists containing
+ which special building appear <<in the town, and NPC, item lists containing
  a probability value to define if something appears at a non-building place.
  These towns get only created once and not everytime a player enters the
  town.)
+\layout Section*
+
+2.1 Special Buildings
+\layout Standard
+
+These are houses which have one certain purpose.
+ A shop might want to sell you stuff or buy it.
+ A smith might be able to repair your equipment or even improve it.
+ A bank might protect your money or manage it in some way but that costs
+ you something.
+ A guild master might train you in certain (special) abilities like Alchemy,
+ Archery, Practice in certain weapons, Climbing, Trap abilities (Finding,
+ Disarming Practice), Haggling, Music Lore.
+ In a temple a priest might heal you or teach you in abilities like Converting,
+ Casting Healing/Priest Spells, Dress Wounds, Explore Items.
+ In a hotel a clerk might serve you so you can sleep (probably by restoring
+ astral power and life points), eat or drink (similar to sleep, mabye by
+ restoring endurance points ?).
+\layout Standard
+
+To achieve this the building describes in the description what services
+ it offers.
+ The service is realized by actions and the amount of money the service
+ costs (of course the cost can be 0 for certtain actions like selling/bying).
+ If you create a shop you also need to define a shop inventory.
+ These are a list of items (maybe item types) and the amount available (by
+ defining -1: This item never sells out).
 \layout Section*
 
 
@@ -328,7 +410,7 @@ light: items which can be lit
 instruments: items which can be played 
 \layout Itemize
 
-armour: gloves, shoes, clothes, cloaks, hats, girdles 
+armour: shields, gloves, shoes, clothes, cloaks, hats, girdles
 \layout Itemize
 
 bracelets: items which can be worn around the wrist 
@@ -337,7 +419,7 @@ bracelets: items which can be worn around the wrist
 headbands: items which can be worn around the head 
 \layout Itemize
 
-eapon: swords, axes, maces, knives, bows, thrown-weapons, missiles etc.
+weapon: swords, axes, maces, knives, bows, thrown-weapons, missiles etc.
  
 \layout Itemize
 
@@ -748,6 +830,16 @@ Many actions already exist in the game, especially concerning all the abilities,
 \layout Section*
 
 11.
+ Dialogues
+\layout Standard
+
+Principially both NPCs and fake NPCs are able to talk with the PC(s).
+ The dialogue is a kind of action but a bit more complicated as it can have
+ dependencies on previous dialogues or actions or other things (like having
+ a certain item or gained a certain ability).
+\layout Section*
+
+12.
  Abilities - States - Attributes
 \layout Standard
 
@@ -760,11 +852,14 @@ The basic abilities and characteristic values cannot be changed with the
  Even for adventure worlds playing in the present or future these basic
  abilities and characteristic values should not need to be changed.
 \layout Standard
-
+\noindent 
 All other abilities are special abilities.
- All the default special abilities are defined in a module and you should
- avoid changing them (which means you would have to rewrite a part of this
- module).
+ All the default special abilities are defined in a module and 
+\begin_inset Formula $ $
+\end_inset 
+
+you should avoid changing them (which means you would have to rewrite a
+ part of this module).
  You can examine the attributes of these abilities but not change them inside
  the editor.
  There are other special abilities defined as well which can be manipulated
@@ -820,7 +915,7 @@ The other attributes concern things like the default attributes life points,
 
 
 \family roman 
-12.
+13.
  Graphic Tiles
 \layout Standard
 
@@ -861,4 +956,70 @@ The next chapter starts with technical topics.
  If you're developer you should at least read the sections about the data
  structure and basic functions which will be used in the Pertergrin game
  server as well as the editor.
+\layout Section*
+
+14.
+ Prototype of the Editor
+\layout Standard
+
+This chapter described brievly how the prototype will look like.
+ I don't go into details about the GUI, menu's etc.
+ because I use glade for creating them and it is better to simply load the
+ glade(2) file with your glade2 and inspect it yourself.
+\layout Standard
+
+It is my goal to create an editor which is easy to use yet powerful.
+ I'm not only aimed at a single role playing server (as the Pertergrin Server)
+ but also want to be able that it can be used for other role playing systems
+ (like worldforge).
+ To achieve this goal I need to create an abstract layer between the editor
+ and the file(s) or database(s) used as the game base.
+\layout Standard
+
+All methods which create, change or do something else will be implemented
+ in (probably several) modules.
+ The default is of course Pertergrin itself which should support all features
+ offered by the editor.
+ In the first step is necessary to create a feature list which looks similar
+ to the menu entries found in the editor (create World, create Town, create
+ Dungeon, create Weapon, ...).
+ 
+\layout Standard
+
+When modules are created for an existing role playing system it will be
+ first necessary to define the feature list supported.
+ The next step is to implement the modules (e.g.
+ a createWorld method).
+ The modules can be written in both C and C++ as the object handling of
+ these things is done inside the editor itself.
+\layout Standard
+
+If the role playing game supports already default objects (NPC, PC, items,
+ actions etc.) there has to be a way to integrate these into the editor without
+ having to actually create them as new with the editor (this would actually
+ create new objects in the role playing system).
+ These will probably read-only data (which of course can be copied for your
+ own purpose).
+ Concept for this idea would be sufficient for the prototype.
+\layout Standard
+
+Concerning the prototype I want to create a simple module layer based on
+ (probably compressed) XML files.
+ As soon as the database is in a useable state for the editor (and the modules
+ are implemented) I want to switch.
+ I haven't decided if I want to keep the XML modules, it could be useful
+ for exporting the whole game.
+\layout Standard
+
+Converting an edited game to a different role playing system should not
+ be a problem as long as no special features for one system are used.
+ It seems oppositely necessary to have a base list of features which have
+ to be supported by a role playing system to be able to convert games.
+\layout Standard
+
+I want to make use of the tools offered by worldforge (like the wonderful
+ 3D editor).
+ I currently don't know how easy it can be integrated into the GTK environment,
+ but it is very useful as a playable test environment, so even if it does
+ not fit for the editor itself, it should be used for the preview mode.
 \the_end
