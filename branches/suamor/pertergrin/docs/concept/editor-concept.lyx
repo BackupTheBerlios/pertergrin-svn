@@ -1,0 +1,864 @@
+#LyX 1.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 218
+\textclass scrartcl
+\begin_preamble
+%\usepackage{a4wide}
+\usepackage[a4paper]{geometry}
+\geometry{margin=70pt, head=10pt, headsep=10pt, foot=10pt}
+%\usepackage[german]{babel}
+%\usepackage[T1]{fontenc}
+%\usepackage[latin1]{inputenc}
+\end_preamble
+\language english
+\inputencoding latin1
+\fontscheme palatino
+\graphics default
+\paperfontsize 12
+\spacing single 
+\papersize a4paper
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\paperorientation portrait
+\secnumdepth 2
+\tocdepth 2
+\paragraph_separation skip
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Part*
+
+
+\family roman 
+Part 2: Concept Of Pertergrin Editor 
+\layout Standard
+
+This chapter describes the editor from the user point.
+ It contains many details about how the working of the Pertergrin world.
+ It does not contained detailed information about the data structure of
+ the different object which can be created using the editor.
+ This will be part of the last chapter.
+ If you've read the chapter about spells carefully, you will see that I've
+ tried to keep a certain balance on spells.
+ Powerful spell are usually expensive and can sucessfully be cast only by
+ powerful characters (be it that they cost much astral power or that the
+ deductions are to high).
+ The editor itself cannot pay attention to the game balance so it is up
+ to you to keep it.
+ The best thing for an adventure is to let it test by as many players as
+ possible to find out the weak sides.
+\layout Section*
+
+
+\family roman 
+1.
+ The World Pertergrin
+\layout Standard
+
+The first step you have to do when using the editor is to select a world.
+ This can be a saved or a new one.
+ For starters I recommand to use the Pertergrin world.
+ It contains (will contain) several example towns, dungeons and adventures.
+ It is a lot work to create a whole new world (consider religion, countries,
+ history, birth places of races, all the towns, rivers, mountains, forests,
+ ...) and I'd like to expand the Pertergrin world itself.
+ There is much room for creating an own region inside this world.
+ Though it is not possible to use several worlds in the game currently,
+ it is still sort of possible to create multiple worlds (like moons, spheres
+ or whatever).
+ This is done by creating unreachable parts in the map.
+\layout Standard
+
+Even though every map has a fixed size it still possible to make it larger.
+ There is an option for resizing the world, which might be somewhat time
+ consuming (depending on the complexity of the already created world).
+ This way you can add such unreachable parts in a map in a later time even
+ when you first did not want to add it.
+ Also you can shrink the size of the world this way (this will produce a
+ warning message because once done, you cannot get back the lost data of
+ the parts).
+ For sizing you specify not only the size but one coordinate pair for the
+ left upper edge.
+\layout Standard
+
+The world consists of different types of landscapes.
+ Additionally you can create borders for differen countries.
+ The Pertergrin world is actually only one country of several in this world.
+ They are divided either by boundary stones or by natural borders like beaches
+ or coasts.
+ Else it is up to you what landscape types you use.
+ As there are many default one available I recommand using them and explore
+ their attributes before creating own landscape types.
+ Typical examples for landscape types are forest, river, sea, desert, mountain,
+ grassland, jungles, steppes, roads, towns, dungeons, castles, ...
+\layout Standard
+
+For every landscape part you can define several parameters.
+ You can define if there is a NPC encounter on this part, if this part is
+ a town, dungeon (which means that it can be entered).
+ You have to create a town or dungeon before you can add it to the world.
+ You can also define exits for this part (default: all 8 exits are possible).
+ The game takes itself care of mountain/sea etc.
+ exits where a character has to swim or to climb.
+ You can also define special exits leading to another part of the world.
+\layout Standard
+
+When you create a new landscape part you have to define the height, if it
+ is dungeon or town and if there are any abilities needed to cross/enter
+ it (for example for high mountains you need the climbing ability and correspond
+ing tools for crossing it).
+ You can also define the default available exits.
+ For your new part you have to define a name and a piece number which can
+ be selected by using the graphic tile list.
+ Finally you can select if there is a random NPC encounter by default (often
+ yielding to a fight, not recommanded) and the list of NPCs which are used
+ for the random encounters.
+ Other option might come from additional modules.
+\layout Section*
+
+
+\family roman 
+2.
+ The towns
+\layout Standard
+
+Every adventure usually starts in a town.
+ Especially the birth places of players are in a town.
+ This does not necessarily mean that they have not moved out of town when
+ the player creates a new character (else it would be much more difficult
+ to create parties for a player).
+ So every new game starts in a town.
+ In your world you have to define at least one town or the game is unplayable.
+ Inside the town the starting place of a new game can be freely defined.
+ It is recommanded to use an adventurer guild though, as this is the only
+ useful place where new characters should be created.
+\layout Standard
+
+Editing towns, dungeons and the world should be quite easy.
+ You simply selecta map piece from the selection window which gets marked
+ and then you can start drawing with the selected map piece.
+ Double clicking on a part of the map enables you to edit the attributes
+ of this part while double clicking on a map piece in the selection enables
+ you to edit the properties of that map piece.
+\layout Standard
+
+The town consists of buildings, roads, rivers, gardens and other objects.
+ It can also have an entrance to an dungeon (which can be a simple building,
+ a complex dungeon, a castle or whatever comes to your mind).
+ This dungeon has to be defined before you can create it in the town.
+ You have to define exits of the town as well if you want that players can
+ leave the town and explore the world.
+ It is possible to create special exits which only open if something special
+ has happened (like the player has reached a level or solved an adventure).
+ A part of the can also have an item or a NPC.
+ It is not recommanded to leave around a huge pile of pleron coins or dragons
+ in front of the guild which eat every new party.
+\layout Standard
+
+The buildings of towns can be either standard (either empty or inhabited)
+ or special (like shops).
+ Special buildings can be either part of an adventure or have another function
+ which can be edited by you.
+ (ToDo: Closer description of defining special buildings, ideas: buidling
+ inventory, building actions).
+ Exits of buildings have to be defined here as well (default: no exits!)
+ as most buildings have only one exit.
+\layout Standard
+
+Like in the world you can create your own town part.
+ You have to define if this is a building type or another type.
+ You have to select a map piece from the graphic tile list as well.
+ You can define special buildings here as well (useful when you want to
+ create a specific building type like the default shop, guild, temple, library,
+ town hall).
+\layout Standard
+
+Currently towns are only 2 dimensional (as opposed to dungeons).
+ For really large cities it might be useful to have a third dimension so
+ you can create hills, bridges etc.
+\layout Standard
+
+(Good Idea?? You can define to create a random town where you define only
+ which special building appear in the town, and NPC, item lists containing
+ a probability value to define if something appears at a non-building place.
+ These towns get only created once and not everytime a player enters the
+ town.)
+\layout Section*
+
+
+\family roman 
+3.
+ The Dungeons
+\layout Standard
+
+Though parts of adventure can play in the town as well the most interesting
+ aspects of adventuring are the exploration of dungeons.
+ The term dungeon should not be treated literally but like a super term
+ for dungeon, castle, tower, house.
+ Contrary to the map types you know by now, the landscape (or the world)
+ and towns, this one has three dimensions.
+ You can only edit one dimension at a time and exits of one dimension (or
+ better level) can lead to a town, the world or to another level of the
+ dungeon.
+ These exits can be trapdoors, doors, down/upstairs or whatever other exit
+ comes to your mind.
+\layout Standard
+
+The dungeon mainly consists out of passages, (secret) doors and rooms.
+ Like in towns every part of the dungeon can have items and NPCs.
+ Additonally you can find traps, trapdoors, boulders (things that can not
+ be passed automatically), light (torches, lamps etc.
+ at walls or ceilings), furniture (which cannot be taken away, special item
+ type), rivers/fountains, walls, windows, curtains.
+ Also one dungeon part may have a description which is shown only once or
+ every time (if the player did not choose to only show messages once).
+ Additionally you can create actions which are triggered when the player
+ enters this place or if he uses a certain ability or actions in conjunctions
+ with items (like climbing on a chair, swimming in the river, lighting a
+ candle at the wall, opening the drawer of a desk, moving or destroying
+ the boulder which is in the way).
+\layout Standard
+
+Every action can yield experience points.
+ Currently every action yield only experience points the first time it is
+ triggered (this will be a problem with multi user play!).
+ I recommand several levels of experience points.
+ The highest should be the use of an ability for solving a problem, the
+ next level trying an action in combination with an item.
+ (maybe: counter for action trials on one item: If a player tried too long,
+ experience points go down to 0).
+ It is also possible to set the experience points to 0 if the player does
+ something totally wrong (like attacking an NPC though he should talk with
+ him).
+ You can define that a (door) exit leads to a (special) building (so you
+ can create shops or guilds in dungeons).
+\layout Standard
+
+Like in the previous sections the dungeon parts can be edited and new dungeon
+ parts added as well.
+ You simply have to choose a name and the graphic tile you want to use.
+ You can define a special exit which you want to use more than once, floor
+ parts, room parts, furniture parts, things in the way, wall parts, special
+ building and special parts which may require an successfull against an
+ ability (or checks against some basic attributes) so the player can cross
+ it.
+\layout Standard
+
+Though you can place items anywhere across a dungeon I recommand to hide
+ most of them or protect them (by using a trap...).
+ The situation gets much more interesting when you just found some very
+ interesting items in a cupboard when suddenly the mighty enchanter enters
+ his room only to find out you just tried to rob him.
+ You shouldn't make it too easy to find the really powerful items even when
+ they are needed to solve a part of the adventure.
+\layout Standard
+
+(Good Idea ??: You can define to create a random dungeon.
+ You need to define a danger factor, some list of npcs you might meet in
+ the dungeon, special items (in combination with some protection like traps
+ or special NPCs) or special NPCs.
+ You can define if rooms should have furniture and the possibility that
+ a furniture contains an item (chosen randomly from item lists).
+ Those are only created once and don't get recreated when the player enters
+ them again.)
+\layout Section*
+
+
+\family roman 
+4.
+ Equipment Items
+\layout Standard
+
+Items can be divided into several parts.
+ The game-basic chapter has shown that there are armour, weapon and other
+ item types.
+ There are more item types available, which I will list now:
+\layout Itemize
+
+rings: items being worn on the left or right hand 
+\layout Itemize
+
+amulets: items being worn around the neck 
+\layout Itemize
+
+enchanted sticks: items which have charges of one spell (or from random
+ list of spells) 
+\layout Itemize
+
+magic rods: items like above which charge themself over a time 
+\layout Itemize
+
+sorcerer staff: items which have a list spells but require mana to be used
+ (for non-magic hero types or special spells or spells which cannot be casted
+ by a certain enchanter) 
+\layout Itemize
+
+potions: items which can be drunk 
+\layout Itemize
+
+scrolls: items which can be read but contain barely information 
+\layout Itemize
+
+books: items which can be read and contain much information 
+\layout Itemize
+
+herbs: spicy ingredient for food which sometimes has special effects 
+\layout Itemize
+
+food: items which can be eaten 
+\layout Itemize
+
+(drink holder: items which can carry water) 
+\layout Itemize
+
+furniture: items which cannot be moved but may carry other items 
+\layout Itemize
+
+container: items which can be moved and carry other items (usually a knapsack
+ or a money belt) 
+\layout Itemize
+
+light: items which can be lit 
+\layout Itemize
+
+instruments: items which can be played 
+\layout Itemize
+
+armour: gloves, shoes, clothes, cloaks, hats, girdles 
+\layout Itemize
+
+bracelets: items which can be worn around the wrist 
+\layout Itemize
+
+headbands: items which can be worn around the head 
+\layout Itemize
+
+eapon: swords, axes, maces, knives, bows, thrown-weapons, missiles etc.
+ 
+\layout Itemize
+
+tools: items for abilities (like climbing, reading & writing, unlock, cooking)
+ 
+\layout Itemize
+
+gems and metals: items which glitter 
+\layout Itemize
+
+(material to create armour/wepon) 
+\layout Itemize
+
+ships: items for moving on the river or sea 
+\layout Itemize
+
+probably I've forgot some important type
+\layout Standard
+
+The tools type is the type which should be used for new types if there are
+ not that many different types available.
+ You cannot (?? really ??) create new types from within the editor but only
+ with the help from an add-on module.
+ If you have an great idea but you cannot program yourself post in on the
+ pertergrin user mailing list (recommanded) or in a pertergrin forum.
+\layout Standard
+
+There should be already many items created so before creating a new equipment
+ item you should look at one of the default one to get a feeling on the
+ balance of the items.
+ The most useful items are those special items which usually are used in
+ quests.
+ Other ones are artifacts but those are items which the player should only
+ find very rarely as these are really powerful items.
+ As with the map parts you can copy an object and use it as a base for your
+ own creation.
+ If you decide to create a new one you should must select the item type.
+\layout Standard
+
+If you have selected the type you can set the data for this type which strongly
+ depends on the type itself (f.e.
+ gems have a value, armours have a protection power, light items have a
+ lasting time, food a nourishing value, furniture has a container).
+ General attributes are value, weight, size details.
+ You can also show messages when an item is picked up or dropped.
+ If your item has the tools type, you can select an ability which requires
+ this item.
+ You can also define an action on some types of items (for example turning
+ a ring, furniture actions, ship actions, activating an item).
+\layout Section*
+
+
+\family roman 
+5.
+ NPC - Non Player Characters
+\layout Standard
+
+NPCs are similar to PCs.
+ They have basic attributes and abilities, though the number of abilities
+ usually is much smaller.
+ They can carry armour and weapon as well as items and coins.
+ All basic values (like hit/protection power, life points, endurance points,
+ astral power) are defined in a NPC as well.
+ It's not a simple task to create a balanced NPC.
+ Except the obvious problem not to make the character too strong or weak
+ you have to pay attention to that it does not carry to powerful items.
+ This is because many items are not used when you use no extra add-on module
+ for NPCs.
+\layout Standard
+
+When you define a new NPC you have to select a race first.
+ Races are described in detail in the next section.
+ This selection sets several of the above values to a standard one which
+ is defined inside the race.
+ After that you can select a hero type (default is adventurer is you select
+ nothing).
+ Again this changes the default values.
+ After having selected these types you can start editing the other values.
+ WARNING: If you change race or hero type afterwards, all values and abilities
+ are reset to the standard ones.
+ The game notices changes by you and asks you if you really want to do such
+ a race/hero type change.
+\layout Standard
+
+As NPCs mainly depend on the race and on the hero type you cannot create
+ base NPC types.
+ For balance you can either choose that some abilities or that some of the
+ values of the abilities vary.
+ As this can be defined in races as well you can select a race type with
+ random values and adopt it to your needs.
+ Also you are able to use one of those many NPCs as a base to create your
+ own one (f.e.
+ if you want an ancient multihued dragon you could use the dragon as a base).
+\layout Standard
+
+The Editor does not make any distinction between race types and hero types
+ for player characters and non player characters, so there is no problem
+ choosing a race and hero type and creating a NPC which has similar attributes
+ like a PC.
+ There is one speciality about NPCs: You can define that a NPC can be used
+ as a transport vehicle (usually animals like horses or dragons).
+\layout Section*
+
+
+\family roman 
+6.
+ Fake Items and Fake NPC
+\layout Standard
+
+Sometimes it can happen that you don't want to create items or NPCs but
+ the player should think that such an object exists.
+ This is normal for special buildings like shops or guilds with the correspondin
+g shopkeeper and guildmaster.
+ Also you might want to add descriptive items to buildings or other objects
+ which don't really exist.
+ This all can be done by using fake NPC and items.
+\layout Standard
+
+When you define a fake NPC you create a description of the NPC, behaviour
+ (f.e.
+ output of messages, PC<->NPC conversation) and an graphic tile.
+ This NPC cannot be attacked or robbed and is mainly useful for atmosphere
+ or a help in solving adventures and also for the NPCs which are in special
+ buildings.
+ Event inhabitants of normal buildings can be done in this way.
+ Contrary to normal NPCs you can create standard fake NPCs where you only
+ define different names or descriptive details.
+\layout Standard
+
+Fake items are useful in various places.
+ You can create various descriptive items for buildings, gardens and other
+ objects.
+ In dungeons you can add various decorative items without the need to define
+ complete items.
+ If you don't want to have a simple text description you can use graphic
+ tiles as well.
+ In the game a description is shown when the player moves with the mouse
+ pointer over it or if he tries an action on the object.
+ You can define action on fake items and even remove them if a certain action
+ has been triggered (the same is valid for fake NPCs).
+\layout Standard
+
+Defining a new fake NPC type or fake item type is similar to defining a
+ real one.
+ You only have to submit a useful name for an fake NPC or item group and
+ define your attributes you want to have.
+ Like in the map parts you can fix certain attributes so that they cannot
+ be changed afterwards.
+\layout Section*
+
+
+\family roman 
+7.
+ Races
+\layout Standard
+
+The base of every being of Pertergrin is the race.
+ This describes the characteristic influence on the basic and start abilities
+ for the (N)PC.
+ Usually this is not a fixed value but lies within a range.
+ Even when a race is known for e.g.
+ its intelligent there will be some less intelligent beings of this race.
+ When you create a new race you should set the lowest value of such attributes
+ high but not too high.
+ (?? Alternatively you can base the starting special attributes values on
+ a combination of basic attributes and characteristic values ??) Also you
+ should keep in mind that an intelligent race has preference on special
+ abilities which require intelligence (so they probably wouldn't chose bodybuild
+ing or swimming but convincing and explore items).
+\layout Standard
+
+When creating a new race you have to name it, set the basic attributes,
+ choose maximum 2 special abilities which are especially favoured and the
+ other abilities which are the base for new (N)PC.
+ You can change the number of genders, number of arms, feets, heads, if
+ the race has wings and the skin type.
+ Additionally every race has a description.
+ Next you have to decide if the race is selectable for a PC or only useable
+ by a NPC.
+ Finally you can manipulate the states for a NPC.
+ Default ones are sleeping/awake, paralyzed, stoned, dead, poisoned, blind,
+ ill/healthy.
+ Other attributes might be added as well if they are defined.
+\layout Standard
+
+As with the other objects you should look at the races being already in
+ the game and explore how they were balanced before you create your own
+ race.
+ You should also consider that there may be mixed races (like the mixture
+ between terranians and elves or deminians) where you will find quite some
+ potential.
+ The races which exist are mainly basic races and only a low number of mixed
+ ones were additionally created (also remember that the mixed races should
+ be "compatible", as we do not do any gene experiments.
+ Exceptions could be possible when you create a realistic background story
+ :)
+\layout Section*
+
+
+\family roman 
+8.
+ New Hero Types
+\layout Standard
+
+The game basic chapter describes several mainly basic hero types.
+ These are the professions the PC learn while they grow up.
+ In a similar way the NPCs learned some profession as well.
+ Very often you will find adventurer among the NPCs which means an average
+ not closer described profession.
+ Interesting about hero types is the fact that you can choose a more specific
+ hero type later in the game, many of them require some experience levels
+ before they can be practised.
+ These are the advanced hero types.
+\layout Standard
+
+When you create a new hero type you have to decide at which level a (N)PC
+ can start practising it.
+ A level of 1 means that the hero type is a basic hero type.
+ A level of 5 (minimum) or above means that this is an advanced hero type.
+ Independent of this is the choice of basic attributes.
+ Here you set the minimum values which are required for practising the professio
+n.
+ Next you have to decide about the fighting, generic and magic skills.
+ This is similar like when you create races, i.e.
+ you should set a range between the basic values lie.
+ (?? Like above you can alternatively choose basic attributes values and
+ characteristic values to form the base value of an special attribute).
+ Finally you have to decide for an advanced hero type on which hero type
+ he bases.
+ This can be an advanced hero type as well, but the difference between the
+ experience levels must be at least 5 and you cannot base it upon an advanced
+ hero type which already was based on an advanced hero type.
+ I recommand not to go above level 15 for advanced hero types.
+\layout Standard
+
+As always before you create your first new hero type you should look at
+ the existing hero types to get a feeling how they were balanced.
+ It's very important that you don't make a hero type which is both superb
+ in fighting and casting as this would extremely unbalance the game.
+ The maximum number of casting abilities is always two for the basic hero
+ types and one for the advanced hero types.
+ A player can get maximum of four (4) casting abilities during game play.
+ If he still needs other additional spells he has to use magic items to
+ gain them.
+\layout Standard
+
+You should keep in mind that every hero type you create can be used by both
+ PC and NPC.
+ As it is possible to make a random choice of hero types when creating a
+ random NPC, it is easily possible to create very strong enemies for a party.
+ Creating hero types should mainly be used for a special kind of profession
+ which is still not in the game instead of creating powerful PC and NPCs.
+ Examples: Baker, Artist, Carpenter, Trader, Scribe.
+\layout Section*
+
+
+\family roman 
+9.
+ Magic and Spells
+\layout Standard
+
+Magic creates, changes or removes objects similar like you manipulate the
+ Pertergrin world.
+ As this is very fundemental it is relatively complicated to create a new
+ spell.
+ As you have seen in the game-basic chapter all spells have some basic attribute
+s.
+ These are the range, the duration, the cost (Ap) and the deduction against
+ the ability which determines if the spell fails or not (when using magic
+ items there is normally no such check).
+ You can decide if the magic you apply can be undone or not.
+ This is needed because several spells can break magic.
+ By default all spells can be undone.
+ The game behaves so that only the last magic applied to an item or NPC
+ can be undone.
+ Some magic like earthquakes, healing spells or energy spells shouldn't
+ be undoable.
+ Finally the effects are the most important thing and should be examined
+ closer.
+\layout Standard
+
+The "create" type effect creates items or NPC.
+ If this is the spell type you choose, you have to first decide for an item
+ (or a list of items) or for an NPC (list of NPC).
+ Next you have to decide where this item appears (randomly in range, player
+ selectable, in a container of the player (or hand if he doesn't have one)
+ or in a container/hand of an NPC chosen by the player (some combinations
+ do not make much sense like a NPC which appears in a money belt :).
+ These objects have to be created first of course, if they are not yet in
+ the game.
+\layout Standard
+
+The "change" type effect manipulates items or NPC.
+ At first you have to decide if the change is random, if there is a chance
+ that it can fail, if it always succeeds.
+ The next step is to decide what is to be manipulated.
+ For items you have to first select the item type and next the attribute
+ of the item to be changed.
+ For NPCs you have to select the ability or power to be changed.
+ This can also concern a state of a NPC.
+ These states are NPC attributes as described in the race section.
+ When you are changing the life points you should always additionally specify
+ a immunity type (especially concerning fire, acid, energy etc.
+ damage).
+ Additionally you can specify which race and hero type is affected by the
+ spell (so you are able to create magic items which e.g.
+ only affect dragons).
+ Even the position of an item or NPC can be manipulated this way.
+\layout Standard
+
+The "destroy" type effect also affects items or NPC.
+ Usually you should avoid using it alone, but only in combination with another
+ effect (removing an NPC means that (s)he dies, removing an item means that
+ it is destroyed!!).
+ Again you have to decide which type of items (or a list of selected items)
+ are affected by the spell.
+ For NPC you can select a race or hero type (which means you could make
+ a sword of destroying bards)
+\layout Standard
+
+The "environment" type effect helps a PC to get information about it's environme
+nt.
+ Usually these are informations about where to find what (object location,
+ treasure location, map, trap location).
+ Therefore you can select the type of item (all items are possible) or the
+ race/hero type of NPC (all NPC are possible as well).
+ You can also select town part or dungeon part (all is possible as well
+ in both cases).
+ You can also create a list of items or NPC or whatever which will be shown
+ when you use this effect.
+\layout Standard
+
+A powerful magic effect is the manipulation of the environment.
+ It can be dangerous as well, f.e.
+ when you destroy too many fundamentals of a dungeon level, it collapses.
+ This way you can manipulate dungeon or town parts.
+ It can easily happen that the inhabitants of a town or a building are not
+ very amused when you try to change or even destroy their buildings.
+\layout Standard
+
+(?? It is possible to combain several effects, though there is a danger
+ to create to powerful magic.
+ This is needed for the polymorph or exchange spell types which f.e.
+ replace a NPC with a completely different one or change the content of
+ an item (like the transform water spell, which destroys the old item and
+ creates a new one).
+ ?? - Maybe "change" effect is still enough)
+\layout Standard
+
+Especially concerning magic you should very carefully compare and explore
+ the existing magic spells.
+ You should always keep in mind that the spells cannot only be casted but
+ also applied using magic tools.
+ This is an easy way to provide powerful magic without requiring a spell
+ chance or similar check.
+ When creating magic items you either should avoid spells which create or
+ destroy something or make them so expensive that the caster fails to use
+ the item as he does not have enough astral power.
+\layout Standard
+
+All spells are grouped in spell groups like the Nature Spells.
+ If you decide that your magic effect should be part of such a group, which
+ means that a (N)PC can learn and use it with a certain hero type, than
+ you should create a spell which uses this magic effect.
+ You can also create new spell groups but only if your spells really don't
+ fit in any category or if you intend to make a hero type which has several
+ interesting new aspects not found in other hero types.
+ Else you can create magic items using your magic effect.
+\layout Standard
+
+The main difference between magic and actions are the "magic" effect, i.e.
+ that magic can be undone (or better: broken with a Break Spell).
+\layout Section*
+
+
+\family roman 
+10.
+ Actions
+\layout Standard
+
+Actions are quite similar to the magic effects, but normally much less powerful.
+ Especially action which create object or actions which destroy objects
+ are unusual.
+ Nearly all actions manipulate attributes of items or NPC.
+ Actions are mainly used in dungeons or towns.
+ You should carefully avoid mixing abilities and actions.
+ A climbing action means that you have to climb here to succesfully complete
+ the action.
+ You can use the climbing ability to fulfill it.
+\layout Standard
+
+When defining an action you can define several possibilities how to succesfully
+ trigger an action.
+ This can be a simple automatic trigger which means that the action ist
+ always performed or that a check against an ability, state or attribute
+ is performed before the action will be performed.
+ You can also check against the existance of an item or a list of items
+ (including a message which tells the player to drop these types of items).
+\layout Standard
+
+Many actions already exist in the game, especially concerning all the abilities,
+ states and a variety of combinations of these.
+ So the main reason for adding a new action should be that you either added
+ a new ability or state or you require a combination of the abilities which
+ is not yet existant.
+ You can also change one of the existant action if you think that a certain
+ ability combination should trigger this action as well.
+\layout Section*
+
+11.
+ Abilities - States - Attributes
+\layout Standard
+
+The basic abilities and characteristic values cannot be changed with the
+ editor.
+ The main reason is to reduce the number of these abilities and to have
+ a base for other abilities.
+ When you decide to create a new base module for these attributes you should
+ keep in mind that many modules use them as a base.
+ Even for adventure worlds playing in the present or future these basic
+ abilities and characteristic values should not need to be changed.
+\layout Standard
+
+All other abilities are special abilities.
+ All the default special abilities are defined in a module and you should
+ avoid changing them (which means you would have to rewrite a part of this
+ module).
+ You can examine the attributes of these abilities but not change them inside
+ the editor.
+ There are other special abilities defined as well which can be manipulated
+ like your own abilities.
+ Usually these abilities are used by advanced hero types.
+ You cannot delete such an ability (including yours) if it is used somewhere.
+\layout Standard
+
+You can use actions to define what happens if the player uses his ability.
+ Several abilities like Bodybuilding or Sword Practice cannot be used directly.
+ They are used automatically.
+ Abilities like climbing are used automatically in normal cases but can
+ be used actively by the player in certain situations.
+ Usually you don't need to add an action for your ability in such cases.
+ The abilities not used automatically require the definition of one ore
+ more actions.
+ Examples are cooking, create traps, explore items.
+\layout Standard
+
+Attributes are values which don't fit in the aboce category.
+ These are either numeric or string values.
+ States are a special kind of attribute which apply to all NPC or items.
+ Typical NPC states were described in in the race section.
+ Similar several state exist for items.
+ When you create new items you can select if one of these states applies
+ to the new item.
+ You can also define if these states are visible by the default to a PC
+ or not.
+ Examples:
+\layout Standard
+
+item "states": 
+\layout Itemize
+
+(normal) - broken -> destroyed 
+\layout Itemize
+
+(normal) - rusty -> destroyed 
+\layout Itemize
+
+blessed - (normal) - cursed 
+\layout Itemize
+
+empty - full
+\layout Standard
+
+The other attributes concern things like the default attributes life points,
+ armour power, astral power of (N)PC or like the default attributes weight,
+ cost of items.
+ Normally you should avoid adding new attributes to keep make the game less
+ complex.
+\layout Section*
+
+
+\family roman 
+12.
+ Graphic Tiles
+\layout Standard
+
+The game uses several graphic tiles for defining the look of objects.
+ These are all pictures with a fixed tile size.
+ The tile size can be globally changed but you have to provide your own
+ tiles if you do that.
+ The number of tiles in a graphic file has no limitation.
+ The only problem you might get that the editor will slow down if the size
+ of the tile picture is to large.
+ Currently there is only one tile for the world map, one for the town map,
+ one for the dungeon map, one for the NPC and one for the items.
+\layout Standard
+
+These Tiles are not used in the game as the game is not 2D but 3D.
+ the perspective of the game is an isometric view to avoid difficulties
+ in going to the 3D view from the 2D view.
+ The disadvantage of course is that we need two sets of graphics, one for
+ the editor and another for the game.
+ UClient is one of the possible engines which probably will be used for
+ the game.
+ I don't know much about world forge and I hope there is enough difference
+ in the Pertergrin project to their efforts.
+ If it is easy enough it could happen that an isometric view of the editor
+ will be implemented as well, though it is harder to add your own tiles.
+ As you know from the world map you can define a height value.
+ Currently I plan not to make use of it except it's really easy to add the
+ third dimension.
+ I think that it is harder to create the maps and that it only make sense
+ if it is really used everywhere.
+ At the moment I want the main concentration on the game itself and not
+ the design.
+ I also hope that with the modular conept it should not be too difficult
+ to add a third dimension later if there is a big demand for it.
+\layout Standard
+
+The next chapter starts with technical topics.
+ If you're developer you should at least read the sections about the data
+ structure and basic functions which will be used in the Pertergrin game
+ server as well as the editor.
+\the_end
