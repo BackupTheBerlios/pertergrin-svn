@@ -1,4 +1,4 @@
-# Anjuta Version 1.1.97 
+# Anjuta Version 1.2.2 
 Compatibility Level: 1 
 
 <PROJECT_DESCRIPTION_START>
@@ -18,7 +18,7 @@ Per Terram Grinare. Pertergrin is a game developed for Amiga and Linux.
 <CONFIG_PROGS_START>
 <CONFIG_PROGS_END>
 <CONFIG_LIBS_START>
-PKG_CHECK_MODULES(LIBGLADEMM2, libglademm-2.0,, exit)
+PKG_CHECK_MODULES(LIBGLADEMM2, libglademm-2.0 >= 2.1.0,, exit)
 AC_SUBST(LIBGLADEMM2_LIBS)
 AC_SUBST(LIBGLADEMM2_CFLAGS)
 <CONFIG_LIBS_END>
@@ -37,14 +37,14 @@ AC_SUBST(LIBGLADEMM2_CFLAGS)
 
 props.file.type=project
 
-anjuta.version=1.1.97
+anjuta.version=1.2.2
 anjuta.compatibility.level=1
 
 project.name=Pertergrin
-project.type=GTKmm 2.0
+project.type=gtkmm 2.0
 project.target.type=EXECUTABLE
 project.version=0.1
-project.author=katzmann
+project.author=Reinhard Katzmann
 project.source.target=ptgeditor
 project.has.gettext=1
 project.gui.command=
@@ -72,7 +72,6 @@ preferences.make=make
 preferences.build.option.keep.going=1
 preferences.build.option.warn.undef=0
 preferences.autoformat.custom.style= -i8 -sc -bli0 -bl0 -cbi0 -ss
-preferences.autoformat.style=Style of Kangleipak
 preferences.indent.opening=0
 preferences.autoformat.disable=0
 preferences.indent.automatic=1
@@ -89,8 +88,17 @@ module.source.name=./
 module.source.type=
 module.source.files=\
 	kernel/main.cc\
+	kernel/ptgtypes.h\
+	kernel/world.cc\
+	kernel/world.h\
+	kernel/app.cc\
+	kernel/app.h\
 	gui/mainwindow.cc\
-	gui/mainwindow.h
+	gui/mainwindow.h\
+	gui/worlddialog.cc\
+	gui/worlddialog.h\
+	gui/mapdrawarea.cc\
+	gui/mapdrawarea.h
 
 module.pixmap.name=pixmaps
 module.pixmap.type=
@@ -118,8 +126,8 @@ compiler.options.libraries=
 compiler.options.libraries.selected=
 compiler.options.defines=
 compiler.options.defines.selected=
-compiler.options.warning.buttons=0 0 1 1 1 1 1 1 1 1 1 0 1 1 0 1 
-compiler.options.optimize.buttons=0 1 0 0 
+compiler.options.warning.buttons=0 0 1 1 1 1 1 1 1 1 0 0 1 1 0 1 
+compiler.options.optimize.buttons=1 0 0 0 
 compiler.options.other.buttons=1 0 
 compiler.options.other.c.flags=
 compiler.options.other.l.flags=
