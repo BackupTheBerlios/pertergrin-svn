@@ -30,7 +30,7 @@
 // Empty default constructor
 PTGWorldDialog::PTGWorldDialog(BaseObjectType* pObject, 
                                const Glib::RefPtr<Gnome::Glade::Xml>& oRefGlade)
-  : moRefGlade( oRefGlade)
+  : moRefGlade( oRefGlade), Gtk::Dialog(pObject)
 {
   // Sets the border width of the window.
   set_border_width(2);
