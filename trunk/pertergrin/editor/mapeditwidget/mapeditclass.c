@@ -203,6 +203,11 @@ static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md,
             dmap->mm_MapSize = smap->mm_MapSize;
         else
             dmap->mm_MapSize = md->md_Map->mm_MapSize; // Set default value
+#if DEBUGLEV > 4
+	errormsg(MAPDEBUG5,"MakeMap: dmap: mm_MapSize.x=%d, mm_MapSize.y=%d",
+		 dmap->mm_MapSize.x, dmap->mm_MapSize.y);
+#endif
+
 #if DEBUGLEV > 5
 	errormsg(MAPDEBUG6,"MakeMap: Allocating mm_Columns");
 #endif
@@ -220,7 +225,8 @@ static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md,
 #if DEBUGLEV > 5
 	        errormsg(MAPDEBUG6,"MakeMap: Allocating mm_Rows");
 #endif
-                dmap->mm_Rows = g_malloc0(md->md_Default->mp_Size * md->md_Map->mm_MapSize.x );
+                dmap->mm_Rows = g_malloc0(md->md_Default->mp_Size * 
+					  md->md_Map->mm_MapSize.x );
 #if DEBUGLEV > 2
 		errormsg(MAPDEBUG3,"MakeMap: dmap=%x, md=%x, smap=%x", dmap,
 			 md, smap);
@@ -232,7 +238,8 @@ static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md,
                 {
                     // Store allocated row in current column
                     dmap->mm_Columns[i] = (gulong)dmap->mm_Rows;
-                    for (j=0; j< md->md_Map->mm_MapSize.x;j++) // Finally put MapPieces in rows
+                    for (j=0; j< md->md_Map->mm_MapSize.x;j++) 
+		    // Finally put MapPieces in rows
                     {
                         dmap->mm_Rows[j].mp_Coordinates.x = j * md->md_PWidth;
                         dmap->mm_Rows[j].mp_Coordinates.y = i * md->md_PLength;
@@ -371,7 +378,7 @@ static BOOL MakeMap(guchar mkcopy, struct MCMap *dmap, MD *md,
 */
 static BOOL RemoveMap( struct MCMap *amap, MD *md)
 {
-    guchar lnum = 0;
+    guchar lnum = 1;
     errormsg(MAPDEBUG1,"RemoveMap start");
 #if DEBUGLEV > 1
     errormsg(MAPDEBUG2,"RemoveMap: amap=%x, md=%x", amap, md);
@@ -441,7 +448,8 @@ static void MapEditInit(MD *md)
   md->md_Map                        = NULL;
   md->md_Default                    = NULL;
   md->md_AllPieces                  = NULL;
-  md->md_Select.x = md->md_Select.y = md->md_Select.l = 0;
+  md->md_Select.x = md->md_Select.y = 0;
+  md->md_Select.l                   = 1;
   md->md_FrameToggle                = md->md_Select;
   md->md_ScaleWidth = md->md_ScaleHeight = 100; // 100% scaled
   md->md_UndoBuffer                 = NULL;
@@ -718,8 +726,8 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args)
 
 		    for (i=0;i<md->md_Default->mp_Number;i++)
 		    {
-		      md->md_AllPieces[i].mp_PBCoord.x = i%wtn;
-		      md->md_AllPieces[i].mp_PBCoord.y = i/wtn;
+		      md->md_AllPieces[i].mp_PBCoord.x = (i%wtn)*md->md_PWidth;
+		      md->md_AllPieces[i].mp_PBCoord.y = (i/wtn)*md->md_PLength;
 		    }
 
 		    if (!amap || mkcopy)
@@ -774,7 +782,7 @@ GtkWidget *MapEditClassNew(GtkArg *args, guint num_args)
 		    {
 		        md->md_FrameToggle.x = ((struct MapPiece *)md->md_Map->mm_Columns[0])->mp_Coordinates.x;
 		        md->md_FrameToggle.y = ((struct MapPiece *)md->md_Map->mm_Columns[0])->mp_Coordinates.y;
-			md->md_FrameToggle.l = 0;
+			md->md_FrameToggle.l = 1;
 			errormsg(MAPDEBUG1,"MapEditClassNew: Finished!");
 			return GTK_WIDGET ( md );
     
@@ -1036,7 +1044,7 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     guint       left, top, xpos, ypos, selx, sely; //, color=0;
     gulong       cx, cy, i, j, fw = 0, fh = 0, ysize;
     GdkPixbuf *tmppb; /* temporary Pixbuf for scaling */
-    static struct MCMap *amap = NULL;
+    /* static */ struct MCMap *amap = NULL; // Hmm, why did I want it static ??
 
 
     errormsg(MAPDEBUG1,"RenderPixbuf: Entered");
@@ -1053,7 +1061,7 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     /*
     **  Get initial left and top offset.
     **/
-    if (!amap) amap = md->md_Map;
+    if (!amap) amap = md->md_Map; // This makes of course only sense if static
     if (!amap) return FALSE;
     left = area->x + 1;
     top  = area->y + 1;
@@ -1097,6 +1105,7 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
         {
             cx = (area->width/md->md_PWidth)*md->md_PWidth;
             cy = (area->height/md->md_PLength)*md->md_PLength;
+	    fw = fh = 1;
 #if DEBUGLEV > 3
     errormsg(MAPDEBUG4,"Renderpixbuf: cx=%u, cy=%u", cx, cy);
 #endif
@@ -1106,6 +1115,7 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     {
         cx = (area->width/(md->md_PWidth+(md->md_Grid ? 1 : 0)))*(md->md_PWidth+(md->md_Grid ? 1 : 0));
         cy = (area->height/(md->md_PLength+(md->md_Grid ? 1 : 0)))*(md->md_PLength+(md->md_Grid ? 1 : 0));
+	if (md->md_Grid) fw = fh = 1;
 #if DEBUGLEV > 3
     errormsg(MAPDEBUG4,"Renderpixbuf: cx=%u, cy=%u", cx, cy);
 #endif
@@ -1131,7 +1141,7 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
         if (lnum > ((struct MapPiece *)amap->mm_Columns[0])->mp_Coordinates.l)
         {
             amap = md->md_Map;
-            lnum = 0;
+            lnum = 1;
         }
         while (lnum!=md->md_Map->mm_MapSize.l)
         {
@@ -1149,7 +1159,6 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
 	errormsg(MAPDEBUG4,"Renderpixbuf: layer=%u, amap=%x", lnum, amap);
 #endif
     }
-
     /*
     **  Calculate absolute selected map position
     */
@@ -1171,7 +1180,7 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
     if (colsize > amap->mm_MapSize.y) colsize = amap->mm_MapSize.y;
 #if DEBUGLEV > 3
     errormsg(MAPDEBUG4,"Renderpixbuf: rowsize=%u, colsize=%u, mapx=%u, mapy=%u"
-	     , rowsize, colsize, md->md_Map->mm_MapSize.x, amap->mm_MapSize.y);
+	     , rowsize, colsize, amap->mm_MapSize.x, amap->mm_MapSize.y);
 #endif
 
     /*
@@ -1183,26 +1192,35 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
         amap->mm_Rows = (void *) (amap->mm_Columns[i] + ysize);
         for(j=md->md_Select.x;j<rowsize;j++)
         {
-            xpos = amap->mm_Rows[j].mp_Coordinates.x - selx;
-            ypos = amap->mm_Rows[j].mp_Coordinates.y - sely;
+            xpos = amap->mm_Rows[j].mp_Coordinates.x - selx + j*2*fw;
+            ypos = amap->mm_Rows[j].mp_Coordinates.y - sely + i*2*fh;
+
+#if DEBUGLEV > 5
+	    errormsg(MAPDEBUG4,"Renderpixbuf: i=%u, j=%u, xc=%u, yc=%u, xp=%u,"
+		     "yp=%u", i, j, md->md_Map->mm_Rows[j].mp_PBCoord.x, 
+		     amap->mm_Rows[j].mp_PBCoord.y, xpos, ypos);
+#endif
+	    /*gdk_pixbuf_copy_area(md->md_MapPieces,
+				 md->md_Map->mm_Rows[j].mp_PBCoord.x,
+				 amap->mm_Rows[j].mp_PBCoord.y, md->md_PWidth,
+				 md->md_PLength, tmppb, xpos, ypos);*/
+
+	    gdk_pixbuf_render_to_drawable(md->md_MapPieces, md->child.window,
+                                  md->child.style->fg_gc[GTK_STATE_NORMAL],
+                                  md->md_Map->mm_Rows[j].mp_PBCoord.x,
+                                  amap->mm_Rows[j].mp_PBCoord.y, xpos, ypos,
+                                  md->md_PWidth, md->md_PLength, 
+                                  GDK_RGB_DITHER_NORMAL, xpos, ypos);
 
             if (md->md_GetPieces)
             {
                 if (md->md_Frame)
                 {
 		    gtk_paint_shadow (md->child.style, md->child.window,
-				      GTK_STATE_NORMAL, GTK_SHADOW_IN,
+				      GTK_STATE_NORMAL, GTK_SHADOW_OUT,
 				      NULL, &md->child, "text",
-				      left+xpos, top+ypos,
+				      xpos, ypos,
 				      md->md_PWidth, md->md_PLength);
-
-		    gdk_draw_rectangle(md->child.window, 
-				       md->child.style->black_gc,
-				       FALSE, left+xpos, top+ypos,
-				       md->md_PWidth, md->md_PLength);
-
-                    xpos+=fw;
-                    ypos+=fh;
                 }
 
             }
@@ -1211,6 +1229,7 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
                 /* Draw Grid if wished */
                 if (md->md_Grid)
                 {
+		    errormsg(MAPINFO,"Grid");
                     if (!xpos%cx) 
 		        gdk_draw_rectangle(md->child.window, 
 					   md->child.style->black_gc,
@@ -1222,10 +1241,6 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
 					   md->child.style->black_gc,
 					   TRUE, xpos, top,
 					   xpos, top+area->height-1);
-
-		    xpos ++; /* Destination position x */
-		    ypos ++; /* Destination position y */
-
 #if DEBUGLEV > 3
 		    errormsg(MAPDEBUG4,"Renderpixbuf: Grid at %u,%u-%u,%u and"
 			     " %u,%u-%u,%u", left, ypos, left+area->width-1, 
@@ -1233,22 +1248,13 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
 #endif
                 }
             }
-#if DEBUGLEV > 3
-	    errormsg(MAPDEBUG4,"Renderpixbuf: xc=%u, yc=%u, xp=%u, yp=%u", 
-		     md->md_Map->mm_Rows[j].mp_PBCoord.x, 
-		     amap->mm_Rows[j].mp_PBCoord.y, xpos+fw, ypos+fh);
-#endif
-	    gdk_pixbuf_copy_area(md->md_MapPieces,
-				 md->md_Map->mm_Rows[j].mp_PBCoord.x,
-				 amap->mm_Rows[j].mp_PBCoord.y, md->md_PWidth,
-				 md->md_PLength, tmppb, xpos+fw, ypos+fh);
         }
     }
-    gdk_pixbuf_render_to_drawable(tmppb, md->child.window,
+    /* gdk_pixbuf_render_to_drawable(tmppb, md->child.window,
 				  md->child.style->fg_gc[GTK_STATE_NORMAL],
 				  0, 0, left, top, cx, cy, 
 				  GDK_RGB_DITHER_NORMAL,
-				  left, top);
+				  left, top); */
 
     // Draw the toggle gadget
     if ( md->md_Frame && md->md_FrameToggle.l == md->md_Select.l &&
@@ -1259,14 +1265,14 @@ static BOOL RenderPixbuf( MD *md, GtkAllocation *area)
         **  Render the "frame" so it looks like a toggled widget.
         **/
         gdk_draw_rectangle(md->child.window, md->child.style->black_gc,
-			   FALSE, left+md->md_FrameToggle.x-selx, 
-			   top+md->md_FrameToggle.y-sely,
+			   FALSE, md->md_FrameToggle.x-selx, 
+			   md->md_FrameToggle.y-sely,
 			   md->md_PWidth, md->md_PLength);
 
 	gtk_paint_shadow (md->child.style, md->child.window,
 			  GTK_STATE_NORMAL, GTK_SHADOW_OUT, NULL, &md->child,
-			  "text", left+md->md_FrameToggle.x-selx,
-			  top+md->md_FrameToggle.y-sely,
+			  "text", md->md_FrameToggle.x-selx,
+			  md->md_FrameToggle.y-sely,
 			  md->md_PWidth, md->md_PLength);
     }
     /*
@@ -1338,7 +1344,7 @@ static gulong DrawPiece( MD *md, GtkAllocation *area, COORD newpiece)
     if (!amap) return( MAPERR_NoMap );
     if (md->md_Map->mm_MapSize.l)
     {
-        int lnum = 0;
+        int lnum = 1;
         while (lnum!=md->md_Select.l)
         {
             if (amap->mm_NextLayer)
@@ -1882,7 +1888,7 @@ static gint MapEditClassGoInactive( GtkWidget *widget, GdkEventButton *event)
 static void MapEditClassNotifyDimensions( GtkWidget *widget, 
 				    GtkAllocation *allocation )
 {
-    MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
+    //MD          *md = ( MD * ) GTK_MAPEDIT_SELECT( widget );
 
     errormsg(MAPDEBUG1,"MapEditNotifyDimensions: Entered");
 
@@ -1906,7 +1912,7 @@ static void MapEditClassNotifyDimensions( GtkWidget *widget,
 				allocation->height);
 
 	// Render with new size
-	RenderPixbuf(md, allocation);
+	//RenderPixbuf(md, allocation);
     }
 
     errormsg(MAPDEBUG1,"MapEditNotifyDimensions: Finished");
@@ -1929,7 +1935,7 @@ static gulong GetXYPiece( GtkObject *obj, struct mapSelect * msl )
         return MAPERR_UnknownLayer;
     else
     {
-        int lnum = 0;
+        int lnum = 1;
         while (lnum!=msl->LayerNum)
         {
             if (amap->mm_NextLayer)
@@ -1997,7 +2003,7 @@ static gulong SetMapPiece( GtkObject *obj, struct mapSelect * msl )
         return MAPERR_UnknownLayer;
     else
     {
-        int lnum = 0;
+        int lnum = 1;
         while (lnum!=msl->LayerNum)
         {
             if (amap->mm_NextLayer)
@@ -2039,7 +2045,7 @@ static gulong FillMap( GtkWidget *widget, struct mapSection * mst )
         return MAPERR_UnknownLayer;
     else
     {
-        int lnum = 0;
+        int lnum = 1;
         while (lnum!=mst->LayerNum)
         {
             if (amap->mm_NextLayer)
