@@ -1,7 +1,7 @@
-Datenstruktur von Pertergrin - Entwurf März 2001
-================================================
+Data Model of Pertergrin - Design of Mai 2001
+=============================================
 
-1) Data Struktures (or object types as database term)
+1) Data Structures (or object types as database term)
 
 Hero - Player character with all character possibilities
 NPC  - Non player character with reduced character possibilities
@@ -12,47 +12,88 @@ Magic item - special equipment item with one ore more defined tasks
 Range Type - for calculating the range how far an item can be thrown
 Moveable item - NPC or item which enables moving in a region (or between)
 Race - defines the look of the players and some abilities
-Character Type - defines the profession of the players and its abilities
+Hero Type - defines the profession of the players and its abilities
+NPC Type - defines the profession of the NPCs and its abilities
+Fake Items & NPC - an item or npc which does not really exist (descritive)
 Spell - a magic expression which results in a task
 Task - a specific action (= function) in the game (e.g. attack, teleport)
-Module - additional part of the game or editor to enhaces it
+Module - additional part of the game or editor to enhace it
 Town - a place with buildings, streets, shops, marketplace and citizens
 Geography - a place with regions, divided by borders (aka a world map)
 Region - a place with towns, hills, mountains, rivers, forests and more
-Building - a place with one or more levels, rooms and cooridors or tunnels 
-Fitting - a part of a building or town like doors, chairs, fountain, bridge
-Adventure -
+Dungeon - a place with one or more levels, rooms and cooridors or tunnels 
+Fitting - a part of a dungeon or town like doors, chairs, fountain, bridge
+Adventure - a collection of places, actions etc. leading to a specific goal
+Action - a task which can be executed by a NPC or player
+Attribute - a variable value (either boolean, integer, string or double)
+State - a boolean attribute belonging to one or several items. It's
+        applicability depends on other attributes of the item
 
 2) Modularity
 
-With the help of hooks the game can be expanded as well as the editor.
-In the game the hooks are related to the Tasks. Most things in the
+With the help of handlers the game can be expanded as well as the editor.
+In the game the handlers are related to the Tasks. Most things in the
 editor are defined through the data in the data basis (even the modules
 for the game), so what to expand here ? (Even SciFi RPG with several
 geographies (i.e. worlds, moons, spheres etc. is thinkable).
 
-3) Attributes of the data struktures / object types
+To achieve this modularity, the objects and attributes are highly
+abstracted. This means that no structure contains any statically
+defined names / values / descriptions of attributes as it is usually
+done in structures. The reason is simple: expansion of the game. It
+is much easier to just add or change an attribute as data than to add
+or chage it in the code. It gives you even the possibility to define
+different sorts of object types simply by adding or removing some
+of its attributes. To make a destinction between these sorts of objects
+a "base" attribute can be defined in the objects if needed as done in
+the NPC object. If you set it to true this means it wiil be used by
+the program or module code for generating the graphical using interface 
+and similar base tasks.
+
+To reduce the complexity (especially concerning handlers and the base
+attribute) additional complex attributes can be defined which consist 
+themselves again of attributes. Also simple objects can be defined
+which either do not need specific function or which are used for base
+objects (like a group of map pieces which can be selected for editing
+the map). This way you can simply define arrays of similar type of
+"subobjects" like abilities or states. Also programmers can add 
+functionality in forms of additional modules to objects or subobjects
+without needing to even modify a line in the database.
+
+To use a module, you "load" it with the Pertergrin editor (it is installed
+in a way that the server has access to the module). The init function
+of the module delievers all the operations (handlers) the module contains.
+These are added to the list of available operations but still it will
+be visible that this is a module operation. The server has to make
+sure that a game can only be started when all the modules the game
+needs are available.
+
+3) Attributes of the data struktures / object types (concrete)
+
+These are the attributes defined and handled in the basic modules 
+of the "Pertergrin" (demonstration) game
 
 a) Hero or Player Character (see documentation, part I, section 1)
-- characterising values (vector field ?)
-- attributes (vector field ?)
-- life points, endurance points, astral force, psi force, ... (vector field ?)
-- special abilities (vector field)
-- race
-- hero type
-- equipment (including coins, arrows (which are vector fields!))
+- name, description (type: text)
+- characterising values (type: attributes)
+- attributes (type: what do you think ? :-)
+- life points, endurance points, astral force, psi force, ... (attributes)
+- special abilities (complex attributes)
+- race (object type, reference)
+- hero type (object type, reference)
+- equipment (including coins, arrows) (object type, reference)
 
 b) Non Player Character (see documentation, part II, section ?)
-- attributes (vector field ?)
-- life points, endurance points, astral force, psi force, ... (vector field ?)
-- special abilities (vector field, only standard except magic)
-- race (much wider than PC)
-- npc type
-- equipment ?
+- name, description (type: text)
+- attributes (type: *scratch*)
+- life points, endurance points, astral force, psi force, ... (attributes)
+- special abilities (complex attributes))
+- race (much wider choice than PC) (object type, reference)
+- npc type (object type, reference)
+- equipment (object type, reference)
 
 c) Special Ability (see documentation, part I, section 5)
-- Name
-- Description
+- name, description (text)
 - maximum value - current maximum value, based on formula
 - current value - valid value changed through items or certain actions
 - Task
@@ -106,30 +147,43 @@ h) moveable item
 - terrain type (land, water, fire, air/space) (vector ?)
 
 i) race
+- name, description (text)
+- characteristic values (base modifiers) (attributes)
+- abilities (base/level modifiers) (attributes)
+- special abilities (complex attributes)
+- ? special abilities modifiers ? (attributes)
 
-j) character Type
+j) hero type
+currently like i)
 
-k) spell
+k) NPC type
+currently like k) (could be redundant)
 
-l) task
+l) spell
 
-m) module
+m) task
 
-n) town
+n) module
 
-o) geography
+o) town
 
-p) region
+p) geography
 
-q) building
+q) region
 
-r) fitting
+r) dungeon
 
-s) adventure
+s) fitting
+currently like e) except a "carryable" flag
+(could be redundant)
+
+t) fake items & NPC
+
+u) adventure
 - modules needed for playing the adventure
 - minimum player level
 - maximum player level
 - description
 - place (fitting) - place where to get the description
 - start point - place (fitting ?) where the adventure starts
-- tasks to be done (this may include items/npcs to be found)
+- tasks to be done (this may include items/NPC to be found)
