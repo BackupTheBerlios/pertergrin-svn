@@ -49,6 +49,7 @@ PTGMainWindow::PTGMainWindow(BaseObjectType* opObject,
 
   // Define menu names (is there any way to get them from the glade file ?!?)
   moMItem[MI_FileNew].oName = "new_world";
+  moMItem[MI_FileChange].oName = "change_world";
   moMItem[MI_FileOpen].oName = "open_world";
   moMItem[MI_FileSave].oName = "save_world";
   moMItem[MI_FileSaveAs].oName = "save_world_as";
@@ -87,12 +88,16 @@ PTGMainWindow::PTGMainWindow(BaseObjectType* opObject,
 
   // Define menu methods (read the handlers from the glade file ?)
   moMItem[MI_FileNew].vpMethod = &PTGMainWindow::on_file_new;
+  moMItem[MI_FileChange].vpMethod = &PTGMainWindow::on_file_change;
   moMItem[MI_FileQuit].vpMethod = &PTGMainWindow::on_quit;
 
-  // If all menu items can be accessed the next two blocks are in a foor loop
+  // If all menu items can be accessed the next two blocks are in a for loop
   // Get menu items from glade file
   mopRefGlade->get_widget(moMItem[MI_FileNew].oName,moMItem[MI_FileNew].opGItem);
+  mopRefGlade->get_widget(moMItem[MI_FileChange].oName,moMItem[MI_FileChange].opGItem);
   mopRefGlade->get_widget(moMItem[MI_FileQuit].oName,moMItem[MI_FileQuit].opGItem);
+
+  moMItem[MI_FileChange].opGItem->set_sensitive( false );
 
   // Connect all menu items to slots (see macro above)
   if ( moMItem[MI_FileQuit].opGItem )
@@ -101,6 +106,9 @@ PTGMainWindow::PTGMainWindow(BaseObjectType* opObject,
   if ( moMItem[MI_FileNew].opGItem )
     Menu_Connect( moMItem[MI_FileNew].opGItem, moMItem[MI_FileNew].vpMethod );
 
+  if ( moMItem[MI_FileChange].opGItem )
+    Menu_Connect( moMItem[MI_FileChange].opGItem, moMItem[MI_FileChange].vpMethod );
+  
   // Create application kernel
   
   // Finally show our window
@@ -133,11 +141,78 @@ void PTGMainWindow::on_file_new()
 
   if( mopWorldDialog )
   {
+    pworld_t sWorldData;
+
+    // Already created the world ?
+    if( moApp.getWorld().get() != 0 )
+    {
+      // Display warning
+      Gtk::MessageDialog oDestroyWarn("Really destroy the current world?", 
+                                      Gtk::MESSAGE_WARNING,
+                                      Gtk::BUTTONS_YES_NO
+		                             );
+      if( oDestroyWarn.run() != Gtk::RESPONSE_YES )
+        return;
+    }
     iRes = mopWorldDialog->run();
-    fprintf(stderr,"Res: %d\n",iRes);
     mopWorldDialog->hide();
     // If Ok was pressed, fetch the world options
-    if( iRes )
-      mopWorldDialog->getOptions();
+    if( iRes == Gtk::RESPONSE_ACCEPT || iRes == Gtk::RESPONSE_OK )
+    {
+      // Read world options from dialog
+      mopWorldDialog->getOptions(sWorldData);
+      moApp.createWorld(sWorldData);
+      // Load Tiles
+      LoadTilesMap();
+      // Show change menu item
+      moMItem[MI_FileChange].opGItem->set_sensitive( true );
+      // Show argh does not work so easily....
+    }
+	// Done reading, mopWorldDialog will be deleted
+	mopWorldDialog = 0;
   }
+}
+
+void PTGMainWindow::on_file_change()
+{
+  int iRes = 0;
+  Glib::RefPtr<Gnome::Glade::Xml> opRefGlade;
+  opRefGlade = Gnome::Glade::Xml::create(Glib::ustring(GUI_DIRECTORY) +
+                                         Glib::ustring("/worlddialog.glade"));
+  // Open world dialog
+  if( !mopWorldDialog )
+    opRefGlade->get_widget_derived("WorldDialog", mopWorldDialog);
+
+  if( mopWorldDialog )
+  {
+    pworld_t sWorldData;
+
+    // Already created the world ?
+    if( moApp.getWorld().get() == 0 )
+      return; // Nothing to do
+    // Read current world data
+    sWorldData = moApp.getWorld()->getWorldData();
+    // Show options of world data in dialog
+    mopWorldDialog->setOptions( sWorldData );
+    // Show world options
+    iRes = mopWorldDialog->run();
+    mopWorldDialog->hide();
+    // If Ok was pressed, fetch the world options
+    if( iRes == Gtk::RESPONSE_ACCEPT || iRes == Gtk::RESPONSE_OK )
+    {
+      // Read world options from dialog
+      mopWorldDialog->getOptions(sWorldData);
+      moApp.setWorldData( sWorldData );
+    }
+	// Done reading, mopWorldDialog will be deleted
+	mopWorldDialog = 0;
+  }
+}
+
+bool PTGMainWindow::LoadTilesMap()
+{
+  mopTilesMap = Gdk::Pixbuf::create_from_file( PTGTileMapFile );
+  if( mopTilesMap != 0 )
+    return true;
+  return false;
 }
