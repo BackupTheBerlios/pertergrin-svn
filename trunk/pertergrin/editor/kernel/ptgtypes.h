@@ -105,16 +105,16 @@ typedef struct ptg_world
   Glib::ustring              oName;        /* Name of the world                   */
   Glib::ustring              oDescription; /* Description of the world            */
   Glib::ustring              oWorldType;   /* World type of the world             */
-  int                        iXSize;       /* Number of Columns in the world map  */
-  int                        iYSize;       /* Number of Rows in the world map     */
-  vector< vector<plpart_t> > vecoWorldMap; /* Consists of rows of landscape parts */
+  int                        iXSize;       /* Number of Rows in the world map     */
+  int                        iYSize;       /* Number of Columns in the world map  */
+  vector<plpart_t>           vecoWorldMap; /* All landscape parts                 */
   Glib::ustring              oStartDate;   /* Start date (cannot be a date type!) */
-  int                        iRegionX;     /* Selected region column              */
-  int                        iRegionY;     /* Selected region row                 */
-  int                        iRegionXSize; /* Number of Columns in a region       */
-  int                        iRegionYSize; /* Number of Rows in a region          */
-  int                        iWidth;       /* width of one graphic tile           */
-  int                        iHeight;      /* height of one graphic tile          */
+  int                        iRegionX;     /* Selected region row                 */
+  int                        iRegionY;     /* Selected region column              */
+  int                        iRegionXSize; /* Number of Rows in a region          */
+  int                        iRegionYSize; /* Number of Columns in a region       */
+  int                        iTileWidth;   /* width of one graphic tile           */
+  int                        iTileHeight;  /* height of one graphic tile          */
 } pworld_t;
 
 #endif // PTG_TYPES_H
