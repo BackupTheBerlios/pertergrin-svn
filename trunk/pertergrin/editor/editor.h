@@ -1,0 +1,3 @@
+// Prototypes
+
+void CloseAll(void);

@@ -1,0 +1,8 @@
+mapeditwidget
+-------------
+
+Due to the face that scrolling gets horrible slow when
+using standard methods I optimized the function to only
+render only the visible part of the viewport where the 
+mapeditwidget is embedded. This requires the parent class
+to be a viewport else the widget won't work.
