@@ -86,6 +86,7 @@ typedef struct ptg_gtile
   Glib::ustring   oName;          /* Name of the graphic tile        */
   int             iXPos;          /* X-Position inside tiles graphic */
   int             iYPos;          /* Y-Position inside tiles graphic */
+  int          iTileset;          /* Tileset to be used              */
 } pgtile_t;
 
 // A landscape part (part of the region)
