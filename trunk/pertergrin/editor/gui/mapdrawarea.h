@@ -36,8 +36,11 @@ typedef struct cw_tile_pos
 
 typedef struct cw_tile_map
 {
-  vector<cwtpos_t>           vecoRows;    /* Columns store all rows    */
-  vector< vector<cwtpos_t> > vecoColumns; /* Rows store the map itself */
+  int                        iXSize;   /* Number of Columns in the map  */
+  int                        iYSize;   /* Number of Rows in the map     */
+  vector< vector<cwtpos_t> > &vecoMap; /* Stores the graphic tiles      */
+  int                    iXTileSize;   /* X Size of a tile              */
+  int                    iYTileSize;   /* Y Size of a tile              */
 } cwtmap_t;
 
 /// Custom Widget Map (with Tiles) Draw Area
@@ -71,10 +74,6 @@ private:
   Gtk::DrawingArea          moDrawingArea;
   vector< Glib::RefPtr<Gdk::Pixbuf> > mopTilesets;
   cwtmap_t moTilesMap;
-  int iMapXSize;
-  int iMapYSize;
-  int miXTileSize;
-  int miYTileSize;
   cwtpos_t moDefaultTile;
 };
 

@@ -29,11 +29,12 @@
 /// iXTileSize  -  Y size of a tile graphic
 CWMapDrawArea::CWMapDrawArea(Glib::RefPtr<Gdk::Pixbuf> &opTileset, 
                              int &iXTileSize, int &iYTileSize)
-  : mopDefaultTileset( opTileset ), miXTileSize( iXTileSize ), 
-    miYTileSize( iYTileSize )
+  : mopDefaultTileset( opTileset )
 {
   // First pixbuf
   mopTilesets[0] = opTileset;
+  moTilesMap.iXTileSize = iXTileSize;
+  moTilesMap.iXTileSize = iYTileSize;
 }
 
 /// Set the complete map
@@ -57,18 +58,18 @@ void CWMapDrawArea::setMap(cwtmap_t &oTilesMap, int iXSize, int iYSize)
   if( iYSize < 10 )
     iYSize = 10;
 
-  iMapXSize = iXSize;
-  iMapYSize = iYSize;
+  moTilesMap.iXSize = iXSize;
+  moTilesMap.iYSize = iYSize;
   // Reserve size so vectors do not reallocate all the time
   // Attention: for real size maps > 1000 you may not use the complete
   // size but only the size which fits in memory!
-  moTilesMap.vecoColumns.reserve(iXSize);
+  moTilesMap.vecoMap.reserve(iXSize);
   for(int i=0; i<iXSize; i++)
   {
-    moTilesMap.vecoRows = moTilesMap.vecoColumns[i];
-    moTilesMap.vecoRows.reserve(iYSize);
+    // Copy part of the map
+    moTilesMap.vecoMap[i] = oTilesMap.vecoMap[i];
   }  
-  moTilesMap = oTilesMap;
+  //moTilesMap = oTilesMap;
 }
 
 void CWMapDrawArea::changeMap(int iWidth, int iHeight, int iXPos, int iYPos)
@@ -89,10 +90,10 @@ void CWMapDrawArea::changeMap(int iWidth, int iHeight, int iXPos, int iYPos,
   int iXC, iYC;
   for( iXC=iXPos; iXC<iWidth; iXC++ )
   {
-    moTilesMap.vecoRows = moTilesMap.vecoColumns[iXC];
+    vector<cwtpos_t> &vecoRow = moTilesMap.vecoMap[iXC];
     for( iYC=iYPos; iYC < iHeight; iYC++ )
       // Copy the tile data
-      moTilesMap.vecoRows[iYC] = oTile;
+      vecoRow[iYC] = oTile;
   }
 }
 
