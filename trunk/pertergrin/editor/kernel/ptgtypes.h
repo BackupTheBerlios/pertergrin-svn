@@ -109,6 +109,8 @@ typedef struct ptg_world
   vector< vector<plpart_t> > vecoColumns;  /* Columns consist of rows             */
   vector<plpart_t>           vecoRows;     /* Rows consist of landscape parts     */
   Glib::ustring              oStartDate;   /* Start date (cannot be a date type!) */
+  int                        iRegionX;     /* Selected region column              */
+  int                        iRegionY;     /* Selected region row                 */
   int                        iRegionXSize; /* Number of Columns in a region       */
   int                        iRegionYSize; /* Number of Rows in a region          */
   int                        iWidth;       /* width of one graphic tile           */

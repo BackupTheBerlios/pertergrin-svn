@@ -29,14 +29,17 @@ public:
   // Methods changing the map directly
   void mapClear(int iXPos, int iYPos, int iWidth, int iHeight);
   void mapClear(int iWidth, int iHeight);
+  void mapClear();
   void mapSet(int iXPos, int iYPos, plpart_t sLPart);
   plpart_t &mapGet(int iXPos, int iYPos);
   void mapMove(int iDestXPos, int iDestYPos, int iSourceXPos, int SourceYPos, 
                int iWidth=1, int iHeight=1);
   void mapFill(int iXPos, int iYPos, int iWidth, int iHeight, plpart_t sLPart);
   void mapFill(int iWidth, int iHeight, plpart_t sLPart);
+  void mapFill(plpart_t sLPart);
   void mapSetClearDefault(plpart_t sLPart);
-  //void mapSelect(int iXPos, int iYPos, int iWidth, int iHeight);
+  void mapSelect(int iX, int iY, int iXSize, int iYSize);
+  void mapClearRegion();
   //void mapUndo();
   //void mapRedo();
 
@@ -48,7 +51,6 @@ public:
   void setDescription(Glib::ustring oDescription);
   Glib::ustring &getDescription();
   //setWorldType(pworldtype_t eType);
-  //setRegionSize(int iRegionXSize, int iRegionYSize);
   //setStartDate(Glib::ustring oStartDate);
 
   // Read-Only methods
