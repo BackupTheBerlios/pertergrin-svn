@@ -180,19 +180,21 @@ GtkWidget *mapedit_create_new(gchar *widget_name, gchar *string1,
     struct MapPiece mDefault = {50, 0, { 0, 0, 0 }, { 0, 0, 0 }, 0, NULL};
     errormsg(MAPDEBUG1,"mapedit_create_new: Entered");
 
-    mapeditmap = g_malloc0(sizeof(struct MCMap));
-    mapeditmap->mm_NextLayer = g_malloc0(sizeof(struct MCMap));
-    if (!mapeditmap || !mapeditmap->mm_NextLayer)
+    if (int1!=MPEDIT)
     {
-        printf("Could not allocate memory for mapeditmap\n");
-        CloseAll();
-        exit(20);
+	mapeditmap = g_malloc0(sizeof(struct MCMap));
+	if (!mapeditmap)
+	{
+	    printf("Could not allocate memory for mapeditmap\n");
+	    CloseAll();
+	    exit(20);
+	}
     }
 #if DEBUGLEV > 2
     errormsg(MAPDEBUG3,"mapedit_create_new: widget_name=%s=%x, int1=%d, "
-	     "mapeditmap=%x, mapeditmap->mm_NextLayer=%x",widget_name, 
-	     widget_name, int1, mapeditmap, mapeditmap->mm_NextLayer);
+	     "mapeditmap=%x ",widget_name, widget_name, int1, mapeditmap);
 #endif
+
     mapedarg[0].type = MAPEDIT_MapPieces;
     GTK_VALUE_POINTER(mapedarg[0]) = mMapPieces;
     mapedarg[1].type = MAPEDIT_PWidth;
@@ -206,7 +208,7 @@ GtkWidget *mapedit_create_new(gchar *widget_name, gchar *string1,
     mapedarg[5].type = MAPEDIT_MapLength;
     GTK_VALUE_UINT(mapedarg[5]) = SELYSIZE;
     mapedarg[6].type = MAPEDIT_MapLayer;
-    GTK_VALUE_UCHAR(mapedarg[6]) = 2;
+    GTK_VALUE_UCHAR(mapedarg[6]) = 1;
     mapedarg[7].type = MAPEDIT_Map;
     GTK_VALUE_POINTER(mapedarg[7]) = mapeditmap;
     mapedarg[8].type = MAPEDIT_GetPieces;
@@ -234,12 +236,14 @@ GtkWidget *mapedit_create_new(gchar *widget_name, gchar *string1,
 	    InitSelectGroup(mapeditmap,SELXSIZE*SELYSIZE*2);
 	    TestMEdWindowObjs[WO_MPGRP3]=MapEditClassNew(args, 11);
 	    mapwidget=TestMEdWindowObjs[WO_MPGRP3];
+	    break;
         case MPEDIT:
 	    mapedarg[4].type = MAPEDIT_MapWidth;
 	    GTK_VALUE_UINT(mapedarg[4]) = 40;
 	    mapedarg[5].type = MAPEDIT_MapLength;
 	    GTK_VALUE_UINT(mapedarg[5]) = 80;
-	    TestMEdWindowObjs[WO_EDIT]=MapEditClassNew(args, 6);
+	    GTK_VALUE_UCHAR(mapedarg[6]) = 2; // 2 Layers!
+	    TestMEdWindowObjs[WO_EDIT]=MapEditClassNew(args, 7);
 	    mapwidget=TestMEdWindowObjs[WO_EDIT];
 	    break;
     }
@@ -260,42 +264,34 @@ void InitSelectGroup (struct MCMap *SelectGroup, gint start)
     SelectGroup->mm_MapSize.l = 2;
     SelectGroup->mm_Copy = FALSE;
     SelectGroup->mm_Size = sizeof(struct MCMap);
-    SelectGroup->mm_NextLayer->mm_MapSize.x = SELXSIZE;
-    SelectGroup->mm_NextLayer->mm_MapSize.y = SELYSIZE;
-    SelectGroup->mm_NextLayer->mm_MapSize.l = 1; // Important!
-    SelectGroup->mm_NextLayer->mm_Copy = FALSE;
-    SelectGroup->mm_NextLayer->mm_Size = sizeof(struct MCMap);
+    SelectGroup->mm_NextLayer = NULL;
     SelectGroup->mm_Columns = g_malloc0(sizeof(gulong)*SELYSIZE);
-    SelectGroup->mm_NextLayer->mm_Columns = g_malloc0(sizeof(gulong)*SELYSIZE);
-    if (!SelectGroup->mm_Columns||!SelectGroup->mm_NextLayer->mm_Columns)
+    if (!SelectGroup->mm_Columns)
     {
       printf("Could not allocate memory for SelectGroup\n");
       CloseAll();
       exit(20);
     }
 #if DEBUGLEV > 2
-    errormsg(MAPDEBUG3,"InitSelectGroup: SelectGroup->mm_Columns=%x, "
-	     "SelectGroup->mm_NextLayer->mm_Columns=%x",
-	     SelectGroup->mm_Columns, SelectGroup->mm_NextLayer->mm_Columns);
+    errormsg(MAPDEBUG3,"InitSelectGroup: SelectGroup->mm_Columns=%x, ",
+	     SelectGroup->mm_Columns);
 #endif
 
     for(i=0;i<SELYSIZE;i++)
     {
         SelectGroup->mm_Rows = g_malloc0(sizeof(struct MapPiece)*SELXSIZE);
-        SelectGroup->mm_NextLayer->mm_Rows = g_malloc0(sizeof(struct MapPiece)*SELXSIZE);
 #if DEBUGLEV > 2
-	errormsg(MAPDEBUG3,"InitSelectGroup: i=%d, SelectGroup->mm_Rows=%x, "
-		 "SelectGroup->mm_NextLayer->mm_Rows=%x",i,
-		 SelectGroup->mm_Rows, SelectGroup->mm_NextLayer->mm_Rows);
+	errormsg(MAPDEBUG3,"InitSelectGroup: i=%d, SelectGroup->mm_Rows=%x",i,
+		 SelectGroup->mm_Rows);
 #endif
-        if (!SelectGroup->mm_Rows && SelectGroup->mm_NextLayer->mm_Rows)
+        if (!SelectGroup->mm_Rows)
         {
             printf("Could not allocate memory for SelectGroup\n");
             CloseAll();
             exit(20);
         }
         SelectGroup->mm_Columns[i] = (gulong)SelectGroup->mm_Rows;
-        SelectGroup->mm_NextLayer->mm_Columns[i] = (gulong)SelectGroup->mm_NextLayer->mm_Rows;
+
         for(j=0;j<SELXSIZE;j++)
         {
 #if DEBUGLEV > 4
@@ -304,13 +300,8 @@ void InitSelectGroup (struct MCMap *SelectGroup, gint start)
             SelectGroup->mm_Rows[j].mp_Coordinates.x = j * 36;
             SelectGroup->mm_Rows[j].mp_Coordinates.y = i * 12;
             SelectGroup->mm_Rows[j].mp_Coordinates.l = 0;
-            SelectGroup->mm_NextLayer->mm_Rows[j].mp_Coordinates.x = j * 36;
-            SelectGroup->mm_NextLayer->mm_Rows[j].mp_Coordinates.y = i * 12;
-            SelectGroup->mm_NextLayer->mm_Rows[j].mp_Coordinates.l = 1;
-            SelectGroup->mm_Rows[j].mp_PixbufNumber = start+i*(j+1);
+            SelectGroup->mm_Rows[j].mp_PixbufNumber = start+i*SELYSIZE+j;
             SelectGroup->mm_Rows[j].mp_Size = sizeof(struct MapPiece);
-            SelectGroup->mm_NextLayer->mm_Rows[j].mp_PixbufNumber = start+i*(j+1)+(SELXSIZE*SELYSIZE);
-            SelectGroup->mm_NextLayer->mm_Rows[j].mp_Size = sizeof(struct MapPiece);
         }
     }
 
@@ -397,7 +388,7 @@ int main( int argc, char **argv )
 
     if (!(WO_Window=InitTestMEdWindow()))
     {
-        printf("Did not get Window pointer.\n");
+        printf("Did not get a Window pointer. Continuing anyway..\n");
         //CloseAll();
         //exit(20);
     }
