@@ -22,11 +22,53 @@
 #define GUI_DIRECTORY "gui"
 
 // includes
+#include <libglademm.h>
 #include <libglademm/variablesmap.h>
-#include <gtkmm/button.h>
-#include <gtkmm/window.h>
+#include <gtkmm.h>
+
+#include "worlddialog.h"
 
 // defines
+typedef enum
+{
+  MN_FileNew = 0,
+  MN_FileOpen,
+  MN_FileSave,
+  MN_FileSaveAs,
+  MN_FilePrintWorld,
+  MN_FileQuit,
+  MN_EditCut,
+  MN_EditCopy,
+  MN_EditPaste,
+  MN_EditClear,
+  MN_EditSelectAll,
+  MN_EditMove,
+  MN_EditRefresh,
+  MN_EditUndo,
+  MN_EditRedo,
+  MN_ViewWorldEditor,
+  MN_ViewTownEditor,
+  MN_ViewDungeonEditor,
+  MN_ViewCurrentMapPart,
+  MN_ComponentsLandscapePart,
+  MN_ComponentsTownPart,
+  MN_ComponentsDungeonPart,
+  MN_ComponentsCGroup,
+  MN_ComponentsComponent,
+  MN_ComponentsActionGroup,
+  MN_ComponentsAction,
+  MN_ComponentsAbilityGroup,
+  MN_ComponentsAbility,
+  MN_SettingsPreferences,
+  MN_SettingsGameOptions,
+  MN_SettingsPluginOptions,
+  MN_SettingsSave,
+  MN_SettingsLoad,
+  MN_HelpManual,
+  MN_HelpOnlineHelp,
+  MN_HelpAbout,
+  MN_MenuAnz
+} menu_t;
 
 // class declaration
 
@@ -37,12 +79,23 @@ public:
   PTGMainWindow();
   virtual ~PTGMainWindow();
 
+  // Slots for menus
+  void on_file_new();
+  void on_quit();
+
 protected:
   // Signal handlers
   //virtual void on_button_clicked
   
   Glib::RefPtr<Gnome::Glade::Xml> moRefGlade;
   Gnome::Glade::VariablesMap* mopVariablesMap;
+
+  // Menus
+  Gtk::MenuItem *mopMenuItem[MN_MenuAnz];
+  Glib::ustring moMenuName[MN_MenuAnz];
+
+  // Dialogs
+  PTGWorldDialog *mopWorldDialog;
 
   // Variables
   //Glib::ustring moStrEntry;
