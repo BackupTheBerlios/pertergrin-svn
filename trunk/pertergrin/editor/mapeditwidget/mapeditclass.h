@@ -63,7 +63,7 @@ typedef struct MCMap
 **  MapEditClass object instance data.
 **/
 typedef struct _GtkMapData {
-    GtkWidget        *child;           /* object data */
+    GtkWidget         child;           /* object data */
     struct MCMap     *md_Map;          /* map data (2D, BMap-like w. layers) */
     GdkPixbuf        *md_MapPieces;    /* PixBuf containing all map pieces   */
     guint             md_PWidth;       /* Width of one map piece             */
