@@ -30,7 +30,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glade/glade.h>
 
-#include <widgets/mapeditclass.h>
+#include "mapeditclass.h"
 
 #define SELXSIZE 4
 #define SELYSIZE 4
@@ -64,6 +64,7 @@ GtkMapEditClass *MapEditClass;
 GtkWidget *TestMEdWindowObjs[WO_NUMGADS], *WO_Window;;
 GtkFileSelection *filereq;
 GdkPixbuf *mMapPieces = NULL;
+struct MapPiece mDefault = {50, 0, { 0, 0, 0 }, { 0, 0, 0 }, 0, NULL};
 
 guchar *WO_MXGAD1Labels[] =
 {
@@ -177,7 +178,6 @@ GtkWidget *mapedit_create_new(gchar *widget_name, gchar *string1,
     GtkWidget *mapwidget=NULL;
     GtkArg mapedarg[11], *args = mapedarg;
 
-    struct MapPiece mDefault = {50, 0, { 0, 0, 0 }, { 0, 0, 0 }, 0, NULL};
     errormsg(MAPDEBUG1,"mapedit_create_new: Entered");
 
     if (int1!=MPEDIT)
