@@ -35,6 +35,10 @@ CWMapDrawArea::CWMapDrawArea(Glib::RefPtr<Gdk::Pixbuf> &opTileset,
   mopTilesets[0] = opTileset;
   moTilesMap.iXTileSize = iXTileSize;
   moTilesMap.iXTileSize = iYTileSize;
+  // Connect to expose event
+  signal_expose_event().connect( slot(*this, 
+                                 &CWMapDrawArea::on_map_area_expose) );
+  adjust_scrollbars();
 }
 
 /// Set the complete map
@@ -104,14 +108,14 @@ void CWMapDrawArea::setDefaultTile(cwtpos_t &oTile)
   moDefaultTile = oTile;
 }
 
-/// Sets the size of the tilesets
-/// iNum  -  Number of tilesets
+/// Sets the size of the tileset vector
+/// iNum  -  Number of tilesets in the vector
 void CWMapDrawArea::setTilesetsSize(int iNum)
 {
   mopTilesets.reserve(iNum);
 }
 
-/// Adds a tileset to the tilesets
+/// Adds a tileset to the tileset vector
 /// opTileset  -  New tileset
 /// iPos  -  Position in the tilesets
 void CWMapDrawArea::addTileset(Glib::RefPtr<Gdk::Pixbuf> &opTileset, int iPos)
@@ -120,25 +124,53 @@ void CWMapDrawArea::addTileset(Glib::RefPtr<Gdk::Pixbuf> &opTileset, int iPos)
   mopTilesets[iPos] = opTileset;
 }
 
-void CWMapDrawArea::removeTileset(Glib::RefPtr<Gdk::Pixbuf> &opTileset, 
-                                  int iPos)
+/// Removes a tileset from the tileset vector
+/// iPos  -  Position of the tileset to be removed
+void CWMapDrawArea::removeTileset(int iPos)
 {
   mopTilesets.erase(mopTilesets.begin()+iPos);
 }
-  
+
+/// Removes all tilesets from the tileset vector
 void CWMapDrawArea::clearTilesets()
 {
   mopTilesets.clear();
 }
 
+/// Draws the map area on the screen
+/// event  -  event data
 bool CWMapDrawArea::on_map_area_expose (GdkEventExpose *event)
 {
-  return false;
+  int iWidth = moDrawPB->get_width();
+  int iHeight = moDrawPB->get_height();
+
+  const Glib::RefPtr<Gdk::Drawable> oWindow = get_window();
+  const Glib::RefPtr<Gdk::GC> oGC = get_style()->get_fg_gc(Gtk::STATE_NORMAL);
+  // Draw part of the map not having been seen
+  // Draw complete pixbuf to screen
+  moDrawPB->render_to_drawable( oWindow, oGC, 0, 0, 0, 0, iWidth, iHeight, 
+                                Gdk::RGB_DITHER_NORMAL, iWidth, iHeight);
+  return true;
 }
 
 bool CWMapDrawArea::on_map_area_value_changed()
 {
   return false;
+}
+
+bool CWMapDrawArea::on_set_scroll_adjustments()
+{
+  int iXMoved = 0, iYMoved = 0, iWidth = 1, iHeight = 1;
+  int iDirection = 0; // 0: No move, unchanged!
+
+  // Move part of the map being visible
+  const Glib::RefPtr<Gdk::GC> oGC = get_style()->get_fg_gc(Gtk::STATE_NORMAL);
+  const Glib::RefPtr<Gdk::Drawable> oWindow = get_window();
+  if( iDirection >= 0 )
+    oWindow->draw_drawable(oGC, oWindow, 0, 0, iXMoved, iYMoved, iWidth, iHeight );
+  else
+    oWindow->draw_drawable(oGC, oWindow, iXMoved, iYMoved, 0, 0, iWidth, iHeight );
+  return true;
 }
 
 void CWMapDrawArea::adjust_scrollbars(void)
