@@ -1,0 +1,14 @@
+V0.1
+The first demo version of the editor is being ported to gtk2
+using libglademm2 (thus requiring gtkmm2). On my distribution
+I had to install a recent libsigc++ (1.2), and the above libs
+manually. Remember that this is only a first prototype, as soon
+as it evolves you could qualify it as a pre-alpha version.
+
+V0.0
+
+A first demo version of the editor should be available by now.
+You cannot save a game but you should get a feeling how the
+editor will look like. The only thing I would qualify as alpha
+is the mapeditor widget which is in the editor/mapeditwidget
+directory and which will somewhen released seperately.
