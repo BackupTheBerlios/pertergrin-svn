@@ -1,6 +1,6 @@
 /* mainwindow.h - Pertergrin Editor class declaration of main window
  *
- * Copyright (C) 2001-2002 Pertergrin development team
+ * Copyright (C) 2001-2003 Pertergrin development team
  *
  * It is free software; you can redistribute it and/or modify it under the
  * terms of the GNU General Public License as published by the Free Software
@@ -19,6 +19,8 @@
 #ifndef PGTMAINWINDOW_H
 #define PGTMAINWINDOW_H
 
+#define GUI_DIRECTORY "gui"
+
 // includes
 #include <libglademm/variablesmap.h>
 #include <gtkmm/button.h>
@@ -28,7 +30,7 @@
 
 // class declaration
 
-class PTGMainWindow
+class PTGMainWindow : public Gtk::Window
 {
 
 public:
