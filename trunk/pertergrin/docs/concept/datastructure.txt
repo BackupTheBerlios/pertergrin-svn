@@ -166,12 +166,35 @@ m) task
 n) module
 
 o) town
+- name
+- description
+- x size
+- y size
+- other abilities
 
 p) geography
+- name
+- description
+- x size - number of columns
+- y size - number of rows
+- world type (aka Pertergrin) - type of RPG you want to edit
+- start date  - optional start date for the game
+- x size of region - optional number of columns of a region
+- y size of region - optional number of rows of a region
 
-q) region
+q) region (currently optional, in Pertergrin part of the town or dungeon)
+- name
+- description ???
+- x size ???
+- y size ???
+- other abilities
 
 r) dungeon
+- name
+- description
+- x size
+- y size
+- other abilities
 
 s) fitting
 currently like e) except a "carryable" flag
