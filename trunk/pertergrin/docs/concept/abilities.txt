@@ -1,0 +1,293 @@
+                    Abilities of a RPG
+                    ==================
+
+This file describes the abilities of a RPG which could be supported.
+It is separated into the known sections World, Town, Dungeon, Special 
+Building, Item, NPC, Race, (Magic) Action, Ability, State, Attribute.
+
+1) World: WAB (World ABilities)
+-------------------------------
+
+- WABName
+  Define the name of the world (aka Pertergrin :-)
+
+- WABXSize, WABYSize
+  Defines the size of the world
+
+- WABXSizePart
+  Defines the X size of an landscape part
+  Attention: This defines the maximum X size of a town
+
+- WABXSizePart
+  Defines the Y size of an landscape part
+  Attention: This defines the maximum Y size of a town
+
+- WABDescription
+  Defines the description of the world
+
+- WABStartDate
+  Defines a date when the game starts (random ?)
+
+- WABPartExpandable
+  If set, it is possible to create user defined landscape parts.
+
+- WABPartEnableHeightEdit
+  If set, it is possible to define the height of a landscape part.
+
+- WABPartHeight
+  Defines the height of a landscape part (usually in meters)
+
+- WABPartEnableDungeon
+  If set, it is possible to enter a dungeon/castle/house from a world section
+  (Some RPG don't have dungeons, but only levels like moria, nethack)
+
+- WABPartDungeon
+  Defines the name of the dungeon on this part if any exists
+
+- WABPartEnableTown
+  If set, it is possible to enter a town/landscape from a world section
+  (Some RPG don't have towns, but only levels like moria, nethack)
+
+- WABPartTown
+  Defines the name of the town on this part if any exists
+
+- WABPartEnableSpeed
+  If set, it is possible to define the amount of time the PC requires
+  to travel along this map piece (usually in hours)
+  
+- WABPartSpeed
+  Defines the amount of time the PC requires to travel along this map piece 
+  (usually in hours)
+  
+- WABPartObstacle
+  If set, it is not possible to cross this landscape part
+
+- WABPartNPCList
+  Defines the NPC List to be used on this landscape part
+
+- WABPartItemList
+  Defines the Item List to be used on this landscape part
+
+- WABPartTile
+  Defines the graphic tile to be used for this landscape part
+
+- WABPartEnableEnterAttribute
+  If set, it is possible to define an attribute and minimum value for
+  entering this landscape part
+
+- WABPartEnterAttribute
+  Name of the Attribute so this landscape Part can be entered
+
+- WABPartEnterAttributeValue
+  Value of the Attribute so this landscape Part can be entered
+
+- WABPartExits
+  Defines which of the 8 possibly exits can be used.
+
+- WABPartListCustomName
+  Name of the custom ability (all custom abilities stored in a list)
+
+- WABPartListCustomType
+  Type of the custom ability (Boolean, String, Integer, String-Selektion)
+
+- WABPartListCustomValue
+  Value of the custom ability
+
+2) Town: TAB (Town ABilities)
+
+- TABName
+  Define the name of the town
+
+- TABXSize, TABYSize
+  Defines the size of the town
+
+- TABDescription
+  Defines the description of the town
+
+- TABPartExpandable
+  If set, it is possible to create user defined town parts.
+
+- TABPartEnableRandomEncounter
+  If set, it is possible to have a random encounter on a town part.
+
+- TABPartRandomEncounter
+  If set, a random encounter might happen
+
+- TABPartEncounterChance
+  Defines the probability to have an random encounter
+
+- TABPartEnableDungeon
+  If set, it is possible to enter a dungeon/castle/house from a town part
+  (Some RPG don't have dungeons, but only levels like moria, nethack)
+
+- TABPartDungeon
+  Defines the name of the dungeon entrance on this part if any exists
+
+- TABPartEnableBuilding
+  If set, it is possible to enter a special building from a town part
+  (Some RPGs don't have such buildings but act only through npcs)
+
+- TABPartBuilding
+  Defines the name of the building on this part if any exists
+
+- TABPartEnableSpeed
+  If set, it is possible to define the amount of time the PC requires
+  to travel along this map piece (usually in seconds)
+  
+- TABPartSpeed
+  Defines the amount of time the PC requires to travel along this map piece 
+  (usually in seconds)
+  
+- TABPartObstacle
+  If set, it is not possible to cross this town part
+
+- TABPartNPC
+  Defines a real or fake NPC on this town part (can be random!)
+
+- TABPartItemList
+  Defines the Item List to be used on this town part
+
+- TABPartTile
+  Defines the graphic tile to be used for this town part
+
+- TABPartEnableEnterAttribute
+  If set, it is possible to define an attribute and minimum value for
+  entering this town part
+
+- TABPartEnterAttribute
+  Name of the Attribute so this town Part can be entered
+
+- TABPartEnterAttributeValue
+  Value of the Attribute so this town Part can be entered
+
+- TABPartExits
+  Defines which of the 8 possibly exits can be used.
+
+- TABPartListCustomName
+  Name of the custom ability (all custom abilities stored in a list)
+
+- TABPartListCustomType
+  Type of the custom ability (Boolean, String, Integer, String-Selektion)
+
+- TABPartListCustomValue
+  Value of the custom ability
+
+3) Dungeon: DAB (Dungeon ABilities)
+
+- DABName
+  Define the name of the dungeon/castle/house
+
+- DABXSize, DABYSize
+  Defines the size of the dungeon
+
+- DABDescription
+  Defines the description of the dungeon
+
+- DABPartExpandable
+  If set, it is possible to create user defined dungeon parts.
+
+- DABPartRandomEncounter
+  If set, a random encounter might happen
+
+- DABPartEncounterChance
+  Defines the probability to have an random encounter
+
+- DABPartEnableDungeon
+  If set, it is possible to enter a dungeon/castle/house from a dungeon part
+  (Some RPG don't have dungeons, but only levels like moria, nethack)
+
+- DABPartDungeon
+  Defines the name of the dungeon on this part if any exists
+
+- DABPartEnableTown
+  If set, it is possible to enter a town from a dungeon part
+  (Some RPGs don't have such buildings but act only through npcs)
+
+- DABPartTown
+  Defines the name of the town entrance on this part if any exists
+
+- DABPartEnableSpeed
+  If set, it is possible to define the amount of time the PC requires
+  to travel along this map piece (usually in seconds)
+  
+- DABPartSpeed
+  Defines the amount of time the PC requires to travel along this map piece 
+  (usually in seconds)
+  
+- DABPartObstacle
+  If set, it is not possible to cross this dungeon part
+
+- DABPartNPC
+  Defines a real or fake NPC on this dungeon part (can be random!)
+
+- DABPartItemList
+  Defines the Item List to be used on this dungeon part
+
+- DABPartTile
+  Defines the graphic tile to be used for this dungeon part
+
+- DABPartEnableEnterAttribute
+  If set, it is possible to define an attribute and minimum value for
+  entering this dungeon part
+
+- DABPartEnterAttribute
+  Name of the Attribute so this dungeon Part can be entered
+
+- DABPartEnterAttributeValue
+  Value of the Attribute so this dungeon Part can be entered
+
+- DABPartExits
+  Defines which of the 8 possibly exits can be used.
+
+- DABPartListCustomName
+  Name of the custom ability (all custom abilities stored in a list)
+
+- DABPartListCustomType
+  Type of the custom ability (Boolean, String, Integer, String-Selektion)
+
+- DABPartListCustomValue
+  Value of the custom ability
+
+4) Special Building
+
+- TABPartBuildingOpen
+  Defines the time where a building at this place is open. The values can
+  be morning, aftermorning, noon, afternoon, evening, afterevening,
+  night, afternight (similar to exits in landscape part editiing)
+
+- TABPartBuildingType
+  Defines the type of the building on this part if any exists
+  Examples: Shop, Guild, Bank, Smith, Pub, Hotel, Temple
+
+- TABBuildingActions
+  Defines the list of actions to be used for this building type.
+  Examples: Buy, Sell, Heal, Train, Withdraw, Sleep, Repair, Drink, 
+
+- TABBuildingItems
+  Defines the list of item (types ?) to be sold/repaired if applicable
+
+5) NPC
+
+- NAB???Time
+  Defines the time where the NPC is at this place. The values can
+  be morning, aftermorning, noon, afternoon, evening, afterevening,
+  night, afternight (similar to exits in landscape part editiing)
+
+- NAB???Way
+  Defines a way the NPC is moving inbetween. You only need to define
+  a start and a ending point, the game calculates the rest of the
+  way ???
+
+- NAB???WayDelay
+  Defines the delay the NPC waits at the start and endpoint until he
+  he starts moving again (usuall in minutes)
+
+6) NPC List
+
+- NPC List
+
+- NPC Encounter List
+
+- NPC Encounter Chance
+
+- NPC Encounter Number
