@@ -1,3 +1,20 @@
+10 Aug 2004 - Reinhard Katzmann <reinhard@suamor.de>
+	- Concept: Dynamic GUI (UI modules)
+	- Concept: Integration of modules
+	- Concept: map drawing
+	- Resolve build problems with current automake (Mandrake 10)
+	- It is no longer allowed to use SOURCES from subdirectories
+	  -> Create static libraries for gui and kernel
+	- Makefile.am: Copy ptgeditor to main directory (this can lead
+	  to build problems on especially older system! Please report)
+	- New menu item: Change world (only active after creating a world)
+	- Fix ptgtypes.h: vector< vector<T> > -> vector<T> (linear)
+	- Adapt world.cc to the ptgtypes.h change
+	- mainwindow.cc: Read Options from worlddialog
+	- mainwindow.cc: Use moApp to allocate memory for the world
+	- mainwindow.cc: New method for menu item "Change World"
+	- worlddialog.cc: Get widgets from world dialog
+	- worlddialog.cc: Implemented set/getOptions method
 21 Aug 2003 - Reinhard Katzmann <reinhard@suamor.de>
 	- Start port to GTK2
 	- Checked in the current SQL database from October 2002 (sorry)
