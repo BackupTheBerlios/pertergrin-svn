@@ -6,6 +6,19 @@
 **  widget source or documentation for more informations.
 */
 
+/*
+#define USE_DMALLOC 1
+
+#define MALLOC(size){ (malloc(size)) }
+#define ALLOC(type,size) (malloc(sizeof(type)*size))
+#define REALLOC(mem,type,size) (realloc(mem, sizeof(type)*size))
+#define CALLOC(type,size) (calloc(sizeof(type), size))
+#define FREE(mem) (free(mem))
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/types.h>
 #include <memory.h>
 #include <glib.h>
@@ -17,16 +30,14 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <glade/glade.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include <widgets/mapeditclass.h>
 
 #define SELXSIZE 4
 #define SELYSIZE 4
 
 #define DEBUGLEV 5       /* Must be the same as in mapeditclass.c!!! */
+
+#define DELLOG 1
 
 /*
 **  Object IDs.
@@ -81,7 +92,7 @@ void CloseAll(void)
     if (mMapPieces) gdk_pixbuf_unref(mMapPieces);
     //if (filereq) DisposeObject( filereq);
     for (i=0; i<3; i++)
-      if (TestMEdWindowObjs[WO_MPGRP1+i])
+      if (!TestMEdWindowObjs[WO_MPGRP1+i])
       {
         mapedarg.type = MAPEDIT_Map;
         gtk_object_getv(GTK_OBJECT(TestMEdWindowObjs[WO_MPGRP1+i]), 1, 
@@ -177,9 +188,9 @@ GtkWidget *mapedit_create_new(gchar *widget_name, gchar *string1,
         exit(20);
     }
 #if DEBUGLEV > 2
-    errormsg(MAPDEBUG3,"mapedit_create_new: widget_name=%s, int1=%d, "
-	     "mapeditmap=%x, mapeditmap->mm_NextLayer=%x",widget_name, int1,
-	     mapeditmap, mapeditmap->mm_NextLayer);
+    errormsg(MAPDEBUG3,"mapedit_create_new: widget_name=%s=%x, int1=%d, "
+	     "mapeditmap=%x, mapeditmap->mm_NextLayer=%x",widget_name, 
+	     widget_name, int1, mapeditmap, mapeditmap->mm_NextLayer);
 #endif
     mapedarg[0].type = MAPEDIT_MapPieces;
     GTK_VALUE_POINTER(mapedarg[0]) = mMapPieces;
@@ -312,7 +323,7 @@ GtkWidget *InitTestMEdWindow( void )
 {
     GtkWidget *win=NULL, *frame=NULL;
     GladeXML *xml=NULL;
-    char *rootnode=NULL;
+    char *rootnode=NULL; // This is probably never needed
 
     errormsg(MAPDEBUG1,"InitTestMEdWindow: Entered");
 
@@ -328,7 +339,7 @@ GtkWidget *InitTestMEdWindow( void )
 	exit(20);
     }
 
-    if (rootnode) 
+    if (rootnode) // Probably never needed
     {
 	GtkWidget *wid = glade_xml_get_widget(xml, rootnode);
 	if (!GTK_IS_WINDOW(wid))
@@ -355,12 +366,22 @@ GtkWidget *InitTestMEdWindow( void )
     errormsg(MAPDEBUG3,"InitTestMEdWindow: win=%x now!",win);
 
     errormsg(MAPDEBUG1,"InitTestMEdWindow: Finished succesfully");
-    return win;
+    return win; // Problem: We never get a window pointer ?
 }
 
 int main( int argc, char **argv )
 {
+    printf("Hi\n");
+#ifdef DELLOG
+    {
+        FILE *fh;
+
+        fh=fopen(getLogfile(),"w");
+	fclose(fh);
+    }
+#endif
     gtk_init(&argc, &argv);
+    printf("Hi again!\n");
 
 #if DEBUGLEV > 4
     errormsg(MAPMSG,"main: Trying to load MapPieces Pixbuf...");
@@ -377,9 +398,9 @@ int main( int argc, char **argv )
 
     if (!(WO_Window=InitTestMEdWindow()))
     {
-        printf("Could not initialize Window.\n");
-        CloseAll();
-        exit(20);
+        printf("Did not get Window pointer.\n");
+        //CloseAll();
+        //exit(20);
     }
 #if DEBUGLEV > 4
     errormsg(MAPMSG,".Done\nMain Loop\n");
