@@ -3,39 +3,7 @@
 ## If you don't want it to overwrite it,
 ## 	Please disable it in the Anjuta project configuration
 
-SUBDIRS = intl po pixmaps
-
-INCLUDES = -Igui -Imodules \
-	$(LIBGLADEMM2_CFLAGS)
-
-ptgeditor_CFLAGS =\
-	 -Wall -Wimplicit -Wreturn-type -Wunused -Wswitch -Wcomment -Wuninitialized -Wparentheses -Wtraditional -Wpointer-arith -Wmissing-prototypes -Woverloaded-virtual\
-	 -O1\
-	 -g
-
-ptgeditor_CXXFLAGS =\
-	 -Wall -Wimplicit -Wreturn-type -Wunused -Wswitch -Wcomment -Wuninitialized -Wparentheses -Wtraditional -Wpointer-arith -Wmissing-prototypes -Woverloaded-virtual\
-	 -O1\
-	 -g
-
-bin_PROGRAMS = ptgeditor
-
-ptgeditor_SOURCES = \
-	kernel/main.cc \
-	kernel/app.cc \
-	kernel/world.cc \
-	gui/mainwindow.cc gui/mainwindow.h \
-	gui/worlddialog.cc gui/worlddialog.h \
-	gui/mapdrawarea.cc gui/mapdrawarea.h
-
-ptgeditor_LDFLAGS =
-
-ptgeditor_LDADD = \
-	$(LIBGLADEMM2_LIBS)
-
-ptgeditor_includedir = $(pkgincludedir)
-
-EXTRA_DIST = $(ptgeditordoc_DATA)
+SUBDIRS = intl po pixmaps gui kernel 
 
 ptgeditordocdir = ${prefix}/doc/Pertergrin
 ptgeditordoc_DATA = \
@@ -48,7 +16,12 @@ ptgeditordoc_DATA = \
 	TODO\
 	ABOUT-NLS
 
-# Copy all the spec files. Of cource, only one is actually used.
+EXTRA_DIST = $(ptgeditordoc_DATA)
+
+all-redirect: all-recursive-am
+	mv kernel/ptgeditor .
+
+# Copy all the spec files. Of course, only one is actually used.
 dist-hook:
 	for specfile in *.spec; do \
 		if test -f $$specfile; then \
